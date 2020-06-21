@@ -1,0 +1,16 @@
+<template>
+	<lightning-card title="Demo Date Shifter" icon-name="standard:event">
+		<lightning-layout>
+			<lightning-layout-item size="6" padding="around-medium">
+				<lightning-combobox name="object" label="Select an Object" options={objectList} value={objectApiName} placeholder="Select an object" onchange={onObjectChange}>
+				</lightning-combobox>
+				<br />
+				<lightning-combobox name="object" label="Select a Field" options={fieldList} value={fieldApiName} placeholder="Select a field" onchange={onFieldChange}>
+				</lightning-combobox>
+			</lightning-layout-item>
+			<lightning-layout-item size="6" padding="around-medium">
+				<lightning-input type="datetime" date-style="long"></lightning-input>
+			</lightning-layout-item>
+		</lightning-layout>
+	</lightning-card>
+</template>

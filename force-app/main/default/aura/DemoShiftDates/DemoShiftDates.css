@@ -1,0 +1,20 @@
+.THIS.iconRed {
+    background-color: red !important;
+}
+.THIS.iconRed svg {
+    fill: red !important;
+}
+.THIS .runningObject {
+    width: 20%;
+}
+.THIS .runningProgressBar {
+    width: 50%;
+}
+.THIS .runningRemaining {
+    width: 15%;
+    text-align: right;
+}
+.THIS .runningErrors {
+    width: 15%;
+    text-align: right;
+}
