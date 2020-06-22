@@ -1,0 +1,14 @@
+.runningObject {
+    width: 20%;
+}
+.runningProgressBar {
+    width: 50%;
+}
+.runningRemaining {
+    width: 15%;
+    text-align: right;
+}
+.runningErrors {
+    width: 15%;
+    text-align: right;
+}

@@ -22,6 +22,8 @@ public with sharing class DemoDateShifter {
         @AuraEnabled public Integer itemCount;
         @AuraEnabled public Integer itemRunningTotal;
         @AuraEnabled public Integer itemNumberOfErrors;
+        @AuraEnabled public Integer itemRemaining;
+        @AuraEnabled public Integer itemPercentage;
         @AuraEnabled public Boolean itemShiftFinished;
     }
 
@@ -72,7 +74,7 @@ public with sharing class DemoDateShifter {
         
     //  Get the list of the date shift objects to put into the list on the Lightning component.
         
-    @AuraEnabled
+    @AuraEnabled(cacheable=true)
     public static List<ObjectItem> getObjectItems () {
         List<ObjectItem> objectItems = new List<ObjectItem>();        
         List<Date_Shift_Object__c> dateShiftObjects = [SELECT Object_API_Name__c FROM Date_Shift_Object__c WHERE Active__c = true ORDER BY Object_API_Name__c ASC];
@@ -106,7 +108,7 @@ public with sharing class DemoDateShifter {
         
         List<Toast> toasts = new List<Toast>();        
         
-        DateTime demoDate = DateTime.valueOfGMT(dateOfDemo);
+        DateTime demoDate = DateTime.valueOfGMT(dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19));
         
         // Figure out what record we want to base the date and time off of.
         
@@ -195,6 +197,8 @@ public with sharing class DemoDateShifter {
                 item.itemCount = 0;
             }
             item.itemRunningTotal = 0;
+            item.itemRemaining = item.itemCount;
+            item.itemPercentage = 0;
             item.itemNumberOfErrors = 0;
             item.itemShiftFinished = false;
             return item;

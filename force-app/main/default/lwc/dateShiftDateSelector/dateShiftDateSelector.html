@@ -3,9 +3,10 @@
 		<lightning-spinner alternative-text="Retrieving org object list ..."></lightning-spinner>
 	</template>
 	<p class="slds-p-horizontal_medium">
-		This tool shifts all <code>Date</code> and <code>DateTime</code> fields in the objects you specify by exactly the same amount. To determine the amount of the shift, it
-		examines the most recent value in a <code>DateTime</code> field of the object you choose below and calculates how much time separates it from the date and time you choose
-		in the picker. Dates can be shifted backwards as well as forwards.
+		This tool shifts all <code>Date</code> and <code>DateTime</code> fields in the objects you specify by the same amount of time so that dates that lined up logically when
+		you first showed the demo can stay lined up when you do your demo again weeks or months later. To determine the amount of the shift, the tool examines the most recent
+		value in a <code>DateTime</code> field of the object that you choose below and calculates how much time separates it from the date and time you choose in the picker. Dates
+		can be shifted backwards as well as forwards.
 	</p>
 	<lightning-layout>
 		<lightning-layout-item size="6" padding="around-medium">
@@ -32,20 +33,37 @@
 			</lightning-combobox>
 		</lightning-layout-item>
 		<lightning-layout-item size="6" padding="around-medium">
-			<lightning-input type="datetime" date-style="long" value={dateOfDemo} onchange={handleDateChange}></lightning-input>
-			<br />
-			<template if:true={shiftAmountVisible}>
-				<section>
-					<p>
-						All <code>DateTime</code> fields in all records for each of the objects in the list will be shifted
-						&nbsp;<strong><lightning-formatted-text value={forBack}></lightning-formatted-text></strong> by
-						&nbsp;<span class="slds-text-color_destructive"><strong><lightning-formatted-number value={minutesToShift}></lightning-formatted-number></strong></span> minutes.
-						All <code>Date</code> fields in all records for each of the objects in the list will be shifted
-						&nbsp;<strong><lightning-formatted-text value={forBack}></lightning-formatted-text></strong> by
-						&nbsp;<span class="slds-text-color_destructive"><strong><lightning-formatted-number value={daysToShift}></lightning-formatted-number></strong></span> days.
-					</p>
-				</section>
-			</template>
+			<lightning-input
+				type="datetime"
+				date-style="long"
+				value={dateOfDemo}
+				onchange={handleDateChange}
+				label="Choose a date and time for your demo. You can choose any date and time in the past, present, or future."
+			></lightning-input>
 		</lightning-layout-item>
 	</lightning-layout>
+	<template if:true={shiftAmountVisible}>
+		<div class="slds-p-horizontal_medium">
+			<section class="slds-box slds-theme_shade">
+				<ul class="slds-list_dotted">
+					<li>
+						All <code>DateTime</code> fields in all records for each of the objects in the list will be shifted <strong> {forBack} </strong>
+						<span>
+							by <strong> <lightning-formatted-number value={minutesToShift} class="slds-text-color_destructive"></lightning-formatted-number> </strong> minutes.
+						</span>
+						<span> If the <strong> Adjust Minutes </strong> checkbox for the object is unchecked, then the <code>DateTime</code> fields will be shifted by the nearest number of whole days. </span>
+					</li>
+					<li>
+						All <code>Date</code> fields in all records for each of the objects in the list will be shifted <strong> {forBack} </strong>
+						<span>
+							by <strong> <lightning-formatted-number value={daysToShift} class="slds-text-color_destructive"></lightning-formatted-number> </strong> days.
+						</span>
+					</li>
+					<li>
+						If the <strong> Weekdays Only </strong> checkbox for the object is checked, then the adjusted dates will be further adjusted so that they do not fall on weekends.
+					</li>
+				</ul>
+			</section>
+		</div>
+	</template>
 </template>

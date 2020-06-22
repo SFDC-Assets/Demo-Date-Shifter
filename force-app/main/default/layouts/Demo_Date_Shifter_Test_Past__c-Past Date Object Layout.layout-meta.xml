@@ -12,11 +12,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Date__c</field>
+                <field>Date_Field__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Date_and_Time__c</field>
+                <field>DateTime_Field__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

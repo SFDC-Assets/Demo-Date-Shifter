@@ -54,32 +54,32 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Demo_Date_Shifter_Test_Current__c.Date__c</field>
+        <field>Demo_Date_Shifter_Test_Current__c.DateTime_Field__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Demo_Date_Shifter_Test_Current__c.Date_and_Time__c</field>
+        <field>Demo_Date_Shifter_Test_Current__c.Date_Field__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Demo_Date_Shifter_Test_Future__c.Date__c</field>
+        <field>Demo_Date_Shifter_Test_Future__c.DateTime_Field__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Demo_Date_Shifter_Test_Future__c.Date_and_Time__c</field>
+        <field>Demo_Date_Shifter_Test_Future__c.Date_Field__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Demo_Date_Shifter_Test_Past__c.Date__c</field>
+        <field>Demo_Date_Shifter_Test_Past__c.DateTime_Field__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Demo_Date_Shifter_Test_Past__c.Date_and_Time__c</field>
+        <field>Demo_Date_Shifter_Test_Past__c.Date_Field__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <layoutAssignments>

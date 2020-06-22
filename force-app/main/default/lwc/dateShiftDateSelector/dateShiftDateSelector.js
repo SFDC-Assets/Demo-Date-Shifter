@@ -19,7 +19,7 @@ export default class DateSelector extends LightningElement {
 	returnedMinutes = 0;
 	minutesToShift = 0;
 	daysToShift = 0;
-	forBack = '';
+	forBack = "";
 	shiftAmountVisible = false;
 
 	error;
@@ -76,26 +76,49 @@ export default class DateSelector extends LightningElement {
 		this.fieldApiName = "";
 		this.fieldSelectorDisabled = this.objectApiName === "";
 		this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
+		this.notifyParent(this.shiftAmountVisible);
 	}
 
 	handleFieldChange(event) {
 		this.fieldApiName = event.target.value;
-		this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
+		this.calculateShift();
 	}
 
 	handleDateChange(event) {
 		this.dateOfDemo = event.target.value;
 		this.dateOfDemoSelected = true;
-		getMinutesToShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
-			.then((result) => {
-				this.returnedMinutes = result;
-				this.minutesToShift = Math.abs(this.returnedMinutes);
-				this.datesToShift = Math.abs(this.returnedMinutes) / 60 / 24;
-				this.forBack = this.returnedMinutes < 0 ? "backward" : "forward";
-			})
-			.catch((error) => {
-				this.error = error;
-			});
-		this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
+		this.calculateShift();
 	}
+
+	calculateShift() {
+		if (this.fieldApiName != "" && this.dateOfDemoSelected) {
+			getMinutesToShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
+				.then((result) => {
+					this.returnedMinutes = result;
+					this.minutesToShift = Math.abs(this.returnedMinutes);
+					this.daysToShift = Math.round(Math.abs(this.returnedMinutes) / 60 / 24);
+					this.forBack = this.returnedMinutes < 0 ? "backward" : "forward";
+				})
+				.catch((error) => {
+					this.error = error;
+				});
+		}
+		this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
+		this.notifyParent(this.shiftAmountVisible);
+	}
+
+	notifyParent(isSet) {
+        this.dispatchEvent(new CustomEvent('datefilterchange', {
+            detail : {
+				isSet : isSet,
+                minutesToShift : this.minutesToShift,
+				daysToShift : this.daysToShift,
+				forBack : this.forBack,
+				objectApiName : this.objectApiName,
+				fieldApiName : this.fieldApiName,
+				dateOfDemo : this.dateOfDemo
+            }
+        }));
+    }
+
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Adjust_Minutes__c</fullName>
-    <defaultValue>false</defaultValue>
+    <defaultValue>true</defaultValue>
     <description>Checked to shift dates and times in the record by minutes, unchecked to adjust by whole days instead (e.g., tasks due and calendar events should shift by whole days).</description>
     <externalId>false</externalId>
     <inlineHelpText>Checked to shift dates and times in the record by minutes, unchecked to adjust by whole days instead (e.g., tasks due and calendar events should shift by whole days).</inlineHelpText>
