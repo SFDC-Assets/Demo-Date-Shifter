@@ -3,7 +3,7 @@
 //  This code is provided AS IS, with no warranty or guarantee of suitability for use.
 //  Contact: john.meyer@salesforce.com
 
-public with sharing class DemoDateShifter {
+public without sharing class DemoDateShifter {
  
     public class Toast {
         @AuraEnabled public String toastMessage;
@@ -89,7 +89,7 @@ public with sharing class DemoDateShifter {
     
     //  Calculate the number of minutes to shift for displaying on the Lightning component.
     
-    @AuraEnabled
+    @AuraEnabled(cacheable=false)
     public static Integer getMinutesToShift (String dateOfDemo, String objectApiName, String fieldApiName) {
         if (dateOfDemo != '' && objectApiName != '' && fieldApiName != '') {
             dateOfDemo = dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19);
