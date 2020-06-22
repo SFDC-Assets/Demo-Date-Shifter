@@ -24,6 +24,12 @@ public with sharing class DemoDateShifter {
         @AuraEnabled public Integer itemNumberOfErrors;
         @AuraEnabled public Boolean itemShiftFinished;
     }
+
+    public class Selector {
+        @AuraEnabled public String label;
+        @AuraEnabled public String apiName;
+    }
+
     
     //  Indexes into the conditionQueries map below.
     private static final Integer CONDITION_OBJECT_API = 0;
@@ -33,7 +39,46 @@ public with sharing class DemoDateShifter {
     private static final Map<String,List<String>> conditionQueries = new Map<String,List<String>> {
         'Last Office Visit Exit' => new List<String> { 'Office_Visit__c', 'Exit__c', 'SELECT Exit__c FROM Office_Visit__c WHERE Exit__c != null ORDER BY Exit__c DESC LIMIT 1' }
     };
-        
+
+    
+    //  Get the list of objects in the org.
+
+    @AuraEnabled(cacheable=true)
+    public static List<Selector> getOrgObjectList () {
+        List<Selector> osList = new List<Selector>();
+        for (Schema.SObjectType sot : Schema.getGlobalDescribe().values()) {
+            Schema.DescribeSObjectResult dsor = sot.getDescribe();
+            Selector s = new Selector();
+            String apiName = dsor.getName();
+            if (dsor.isUpdateable()) {
+                s.apiName = apiName;
+                s.label = dsor.getLabel();
+                osList.add(s);
+            }
+        }
+        return osList;
+    }
+
+    //  Get the list of DateTime fields in the given object
+
+    @AuraEnabled(cacheable=true)
+    public static List<Selector> getDateTimeFields (String objectApiName) {
+        List<Selector> fieldList = new List<Selector>();
+        if (objectApiName != '') {
+            Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objectAPIName).getDescribe().fields.getMap();         
+            for (String fieldName : fieldMap.keySet()) {
+                Schema.DescribeFieldResult dfr = fieldMap.get(fieldName).getDescribe();
+                Selector s = new Selector();
+                if (dfr.isUpdateable() && (dfr.getType().name() == 'Date' || dfr.getType().name() == 'DateTime')) {
+                    s.apiName = dfr.getName();
+                    s.label = dfr.getLabel();
+                    fieldList.add(s);
+                }
+            }
+        }
+        return fieldList;
+    }
+
         
     //  Get the list of the date shift objects to put into the list on the Lightning component.
         
