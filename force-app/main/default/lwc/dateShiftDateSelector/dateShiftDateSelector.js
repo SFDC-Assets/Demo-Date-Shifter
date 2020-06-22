@@ -11,6 +11,8 @@ export default class DateSelector extends LightningElement {
 	@api fieldApiName = "";
 	fieldSelectorDisabled = true;
 
+	dateOfDemo = (new Date(Date.now())).toISOString();
+
 	loading = true;
 	
 	error;
@@ -40,7 +42,6 @@ export default class DateSelector extends LightningElement {
 	@wire(getDateTimeFields, { objectApiName : "$objectApiName" })
 	wired_getFieldList({ error, data }) {
 		this.fieldList = [];
-		console.log(`data: ${JSON.stringify(data)}`);
 		if (data && data.length != 0) {
 			data.forEach((field) => {
 				this.fieldList.push({
@@ -66,6 +67,10 @@ export default class DateSelector extends LightningElement {
 
 	handleFieldChange(event) {
 		this.fieldApiName = event.target.value;
+	}
+
+	handleDateChange(event) {
+		this.dateOfDemo = event.target.value;
 	}
 
 }

@@ -31,16 +31,6 @@ public with sharing class DemoDateShifter {
     }
 
     
-    //  Indexes into the conditionQueries map below.
-    private static final Integer CONDITION_OBJECT_API = 0;
-    private static final Integer CONDITION_FIELD_API = 1;
-    private static final Integer CONDITION_QUERY = 2;
-    
-    private static final Map<String,List<String>> conditionQueries = new Map<String,List<String>> {
-        'Last Office Visit Exit' => new List<String> { 'Office_Visit__c', 'Exit__c', 'SELECT Exit__c FROM Office_Visit__c WHERE Exit__c != null ORDER BY Exit__c DESC LIMIT 1' }
-    };
-
-    
     //  Get the list of objects in the org.
 
     @AuraEnabled(cacheable=true)
@@ -98,16 +88,21 @@ public with sharing class DemoDateShifter {
     //  Calculate the number of minutes to shift for displaying on the Lightning component.
     
     @AuraEnabled
-    public static Integer getMinutesToShift (String dateOfDemo, String condition) {
-        sObject record = Database.query(conditionQueries.get(condition)[CONDITION_QUERY]);
-        return record == null ? 0 : (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(conditionQueries.get(condition)[CONDITION_FIELD_API])).getTime()) / 1000.0 / 60.0));
+    public static Integer getMinutesToShift (String dateOfDemo, String objectApiName, String fieldApiName) {
+        if (dateOfDemo != '' && objectApiName != '' && fieldApiName != '') {
+            dateOfDemo = dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19);
+            sObject record = Database.query('SELECT ' + fieldApiName + ' FROM ' + objectApiName + ' WHERE ' + fieldApiName + ' != null ORDER BY ' + fieldApiName + ' DESC LIMIT 1');
+            return record == null ? 0 : (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
+        } else {
+            return 0;
+        }
     }
     
     
     //  Shift the Date and DateTime fields of records based on the criteria specified.
     
     @AuraEnabled
-    public static List<Toast> dateShift (String dateOfDemo, String condition) {
+    public static List<Toast> dateShift (String dateOfDemo, String objectApiName, String fieldApiName) {
         
         List<Toast> toasts = new List<Toast>();        
         
@@ -115,20 +110,20 @@ public with sharing class DemoDateShifter {
         
         // Figure out what record we want to base the date and time off of.
         
-        sObject record = Database.query(conditionQueries.get(condition)[CONDITION_QUERY]);
+        sObject record = Database.query('SELECT ' + fieldApiName + ' FROM ' + objectApiName + ' WHERE ' + fieldApiName + ' != null ORDER BY ' + fieldApiName + ' DESC LIMIT 1');
         
         if (record == null) {
 	        Toast toast = new Toast();
-            toast.toastMessage = 'Could not find any ' + Schema.getGlobalDescribe().get(conditionQueries.get(condition)[CONDITION_OBJECT_API]).getDescribe().getLabel().toLowerCase() + ' records in the org from which to to base the last day.';
+            toast.toastMessage = 'Could not find any ' + Schema.getGlobalDescribe().get(objectApiName).getDescribe().getLabel().toLowerCase() + ' records in the org from which to to base the last day.';
             toast.toastVariant = 'error';
             toast.toastMode = 'sticky';
             toasts.add(toast);
         } else {
-            Integer minutesToShift = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(conditionQueries.get(condition)[CONDITION_FIELD_API])).getTime()) / 1000.0 / 60.0));
+            Integer minutesToShift = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
             Integer daysToShift = (Integer) Math.round(((Decimal) minutesToShift) / 60.0 / 24.0);
             if (minutesToShift == 0) {
                 Toast toast = new Toast();
-                toast.toastMessage = 'The given conditional date and time is already the same as the specified date and time.';
+                toast.toastMessage = 'The given date and time is already the same as the specified date and time.';
                 toast.toastVariant = 'info';
                 toast.toastMode = 'dismissable';
                 toasts.add(toast);

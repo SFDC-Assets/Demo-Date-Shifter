@@ -1,6 +1,9 @@
 <template>
 	<lightning-card title="Demo Date Shifter" icon-name="standard:event">
 		<lightning-button-icon-stateful slot="actions" icon-name="utility:question" label="Help" variant="neutral" selected={helpSectionVisible}></lightning-button-icon-stateful>
-		<c-date-shift-date-selector></c-date-shift-date-selector>
+        <c-date-shift-date-selector></c-date-shift-date-selector>
+        <p>
+            <lightning-formatted-url label="Date Shift Objects" value="#" onclick={handleDateShiftObjectClick}></lightning-formatted-url>
+        </p>
 	</lightning-card>
 </template>
