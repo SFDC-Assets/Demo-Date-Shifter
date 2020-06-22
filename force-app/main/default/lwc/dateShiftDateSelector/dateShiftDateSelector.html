@@ -2,14 +2,32 @@
 	<template if:true={loading}>
 		<lightning-spinner alternative-text="Retrieving org object list ..."></lightning-spinner>
 	</template>
+	<section class="slds-p-around_medium">
+		<p>
+			The date shifter shifts all <code>Date</code> and <code>DateTime</code> fields in the objects you choose by exactly the same amount. To determine the amount of the
+			shift, it examines the most recent value in the <code>DateTime</code> field of the object you specify below and calculates how much time separates it with the date
+			and time you choose in the picker.
+		</p>
+		<p class="slds-p-top_medium">
+			Please choose the object, the <code>DateTime</code> field within the object, and the date and time of your demo. An inactive picklist for the field indicates that no
+			modifiable <code>DateTime</code> field exists for the object you have selected.
+		</p>
+	</section>
 	<lightning-layout>
 		<lightning-layout-item size="6" padding="around-medium">
-			<lightning-combobox name="object" label="Select an Object" options={orgObjectList} value={objectApiName} placeholder="Select an object" onchange={handleObjectChange}>
+			<lightning-combobox
+				name="object"
+				label="Select an Object on Which to Base the Date Shift"
+				options={orgObjectList}
+				value={objectApiName}
+				placeholder="Select an object"
+				onchange={handleObjectChange}
+			>
 			</lightning-combobox>
 			<br />
 			<lightning-combobox
 				name="field"
-				label="Select a Field"
+				label="Select a DateTime field within the Object"
 				options={fieldList}
 				value={fieldApiName}
 				placeholder="Select a field"

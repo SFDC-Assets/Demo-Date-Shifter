@@ -59,7 +59,7 @@ public with sharing class DemoDateShifter {
             for (String fieldName : fieldMap.keySet()) {
                 Schema.DescribeFieldResult dfr = fieldMap.get(fieldName).getDescribe();
                 Selector s = new Selector();
-                if (dfr.isUpdateable() && (dfr.getType().name() == 'Date' || dfr.getType().name() == 'DateTime')) {
+                if (dfr.isUpdateable() && dfr.getType().name() == 'DateTime') {
                     s.apiName = dfr.getName();
                     s.label = dfr.getLabel();
                     fieldList.add(s);

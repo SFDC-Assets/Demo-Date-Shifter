@@ -3,18 +3,17 @@ import getOrgObjectList from "@salesforce/apex/DemoDateShifter.getOrgObjectList"
 import getDateTimeFields from "@salesforce/apex/DemoDateShifter.getDateTimeFields";
 
 export default class DateSelector extends LightningElement {
-
 	@track orgObjectList = [];
-	@api objectApiName = "";
+	objectApiName = "";
 
 	@track fieldList = [];
-	@api fieldApiName = "";
+	fieldApiName = "";
 	fieldSelectorDisabled = true;
 
-	dateOfDemo = (new Date(Date.now())).toISOString();
+	dateOfDemo = new Date(Date.now()).toISOString();
 
 	loading = true;
-	
+
 	error;
 
 	@wire(getOrgObjectList)
@@ -39,7 +38,7 @@ export default class DateSelector extends LightningElement {
 		}
 	}
 
-	@wire(getDateTimeFields, { objectApiName : "$objectApiName" })
+	@wire(getDateTimeFields, { objectApiName: "$objectApiName" })
 	wired_getFieldList({ error, data }) {
 		this.fieldList = [];
 		if (data && data.length != 0) {
@@ -62,6 +61,7 @@ export default class DateSelector extends LightningElement {
 
 	handleObjectChange(event) {
 		this.objectApiName = event.target.value;
+		this.fieldApiName = "";
 		this.fieldSelectorDisabled = this.objectApiName === "";
 	}
 
@@ -72,5 +72,4 @@ export default class DateSelector extends LightningElement {
 	handleDateChange(event) {
 		this.dateOfDemo = event.target.value;
 	}
-
 }
