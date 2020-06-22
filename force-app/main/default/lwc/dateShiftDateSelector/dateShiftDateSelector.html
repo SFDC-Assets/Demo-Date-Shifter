@@ -2,17 +2,11 @@
 	<template if:true={loading}>
 		<lightning-spinner alternative-text="Retrieving org object list ..."></lightning-spinner>
 	</template>
-	<section class="slds-p-around_medium">
-		<p>
-			The date shifter shifts all <code>Date</code> and <code>DateTime</code> fields in the objects you choose by exactly the same amount. To determine the amount of the
-			shift, it examines the most recent value in the <code>DateTime</code> field of the object you specify below and calculates how much time separates it with the date
-			and time you choose in the picker.
-		</p>
-		<p class="slds-p-top_medium">
-			Please choose the object, the <code>DateTime</code> field within the object, and the date and time of your demo. An inactive picklist for the field indicates that no
-			modifiable <code>DateTime</code> field exists for the object you have selected.
-		</p>
-	</section>
+	<p class="slds-p-horizontal_medium">
+		This tool shifts all <code>Date</code> and <code>DateTime</code> fields in the objects you specify by exactly the same amount. To determine the amount of the shift, it
+		examines the most recent value in a <code>DateTime</code> field of the object you choose below and calculates how much time separates it from the date and time you choose
+		in the picker. Dates can be shifted backwards as well as forwards.
+	</p>
 	<lightning-layout>
 		<lightning-layout-item size="6" padding="around-medium">
 			<lightning-combobox
@@ -27,6 +21,7 @@
 			<br />
 			<lightning-combobox
 				name="field"
+				data-id="field"
 				label="Select a DateTime field within the Object"
 				options={fieldList}
 				value={fieldApiName}
@@ -38,6 +33,19 @@
 		</lightning-layout-item>
 		<lightning-layout-item size="6" padding="around-medium">
 			<lightning-input type="datetime" date-style="long" value={dateOfDemo} onchange={handleDateChange}></lightning-input>
+			<br />
+			<template if:true={shiftAmountVisible}>
+				<section>
+					<p>
+						All <code>DateTime</code> fields in all records for each of the objects in the list will be shifted
+						&nbsp;<strong><lightning-formatted-text value={forBack}></lightning-formatted-text></strong> by
+						&nbsp;<span class="slds-text-color_destructive"><strong><lightning-formatted-number value={minutesToShift}></lightning-formatted-number></strong></span> minutes.
+						All <code>Date</code> fields in all records for each of the objects in the list will be shifted
+						&nbsp;<strong><lightning-formatted-text value={forBack}></lightning-formatted-text></strong> by
+						&nbsp;<span class="slds-text-color_destructive"><strong><lightning-formatted-number value={daysToShift}></lightning-formatted-number></strong></span> days.
+					</p>
+				</section>
+			</template>
 		</lightning-layout-item>
 	</lightning-layout>
 </template>
