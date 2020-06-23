@@ -1,5 +1,8 @@
 <template>
 	<lightning-card title="Demo Date Shifter" icon-name="standard:event">
+		<template if:true={startingDateShift}>
+			<lightning-spinner alternative-text="Starting date shift ..."></lightning-spinner>
+		</template>
 		<lightning-button-icon-stateful
 			slot="actions"
 			icon-name="utility:question"
@@ -8,8 +11,8 @@
 			selected={helpSectionVisible}
 			onclick={handleHelpButton}
 		></lightning-button-icon-stateful>
-		<c-date-shift-date-selector ondatefilterchange={handleDateFilterChange}></c-date-shift-date-selector>
 		<template if:false={shiftInProgress}>
+			<c-date-shift-date-selector ondatefilterchange={handleDateFilterChange}></c-date-shift-date-selector>
 			<template if:true={objectListIsEmpty}>
 				<div class="slds-p-around_large">
 					<p>
@@ -29,6 +32,10 @@
 					<div class="slds-p-around_medium slds-align_absolute-center">
 						<lightning-button variant="destructive" label="Shift the Dates" disabled={dateFilterNotSet} onclick={handleShiftDatesButton}></lightning-button>
 					</div>
+					<p>
+						minutesToShift: {minutesToShift} <br />
+						daysToShift: {daysToShift}
+					</p>
 				</section>
 			</template>
 		</template>

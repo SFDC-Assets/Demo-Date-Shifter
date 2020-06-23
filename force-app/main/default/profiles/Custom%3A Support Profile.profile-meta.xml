@@ -6,6 +6,14 @@
         <visible>false</visible>
     </applicationVisibilities>
     <classAccesses>
+        <apexClass>DemoDateShifter</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>DemoDateShifterBatch</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>DemoShiftDates</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -46,32 +54,32 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Demo_Date_Shifter_Test_Current__c.Date__c</field>
+        <field>Demo_Date_Shifter_Test_Current__c.DateTime_Field__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Demo_Date_Shifter_Test_Current__c.Date_and_Time__c</field>
+        <field>Demo_Date_Shifter_Test_Current__c.Date_Field__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Demo_Date_Shifter_Test_Future__c.Date__c</field>
+        <field>Demo_Date_Shifter_Test_Future__c.DateTime_Field__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Demo_Date_Shifter_Test_Future__c.Date_and_Time__c</field>
+        <field>Demo_Date_Shifter_Test_Future__c.Date_Field__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Demo_Date_Shifter_Test_Past__c.Date__c</field>
+        <field>Demo_Date_Shifter_Test_Past__c.DateTime_Field__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Demo_Date_Shifter_Test_Past__c.Date_and_Time__c</field>
+        <field>Demo_Date_Shifter_Test_Past__c.Date_Field__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <layoutAssignments>
@@ -89,6 +97,18 @@
     <tabVisibilities>
         <tab>Date_Shift_Object__c</tab>
         <visibility>Hidden</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Demo_Date_Shifter_Test_Current__c</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Demo_Date_Shifter_Test_Future__c</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>Demo_Date_Shifter_Test_Past__c</tab>
+        <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
         <tab>Demo_Reset_Tools</tab>

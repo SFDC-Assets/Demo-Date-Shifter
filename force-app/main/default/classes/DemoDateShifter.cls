@@ -107,8 +107,8 @@ public without sharing class DemoDateShifter {
     public static List<Toast> dateShift (String dateOfDemo, String objectApiName, String fieldApiName) {
         
         List<Toast> toasts = new List<Toast>();        
-        
-        DateTime demoDate = DateTime.valueOfGMT(dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19));
+        String dateOfDemoISO = dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19);       
+        DateTime demoDate = DateTime.valueOfGMT(dateOfDemoISO);
         
         // Figure out what record we want to base the date and time off of.
         
@@ -121,7 +121,7 @@ public without sharing class DemoDateShifter {
             toast.toastMode = 'sticky';
             toasts.add(toast);
         } else {
-            Integer minutesToShift = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
+            Integer minutesToShift = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemoISO).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
             Integer daysToShift = (Integer) Math.round(((Decimal) minutesToShift) / 60.0 / 24.0);
             if (minutesToShift == 0) {
                 Toast toast = new Toast();

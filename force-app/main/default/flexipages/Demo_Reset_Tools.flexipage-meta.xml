@@ -8,9 +8,6 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <componentInstances>
-            <componentName>DemoShiftDates</componentName>
-        </componentInstances>
         <name>column2</name>
         <type>Region</type>
     </flexiPageRegions>

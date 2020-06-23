@@ -75,8 +75,8 @@ export default class DateSelector extends LightningElement {
 		this.objectApiName = event.target.value;
 		this.fieldApiName = "";
 		this.fieldSelectorDisabled = this.objectApiName === "";
-		this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
-		this.notifyParent(this.shiftAmountVisible);
+		this.shiftAmountVisible = false;
+		this.notifyParent(false);
 	}
 
 	handleFieldChange(event) {
@@ -91,20 +91,24 @@ export default class DateSelector extends LightningElement {
 	}
 
 	calculateShift() {
+		console.log('Inside calculateShift');
 		if (this.fieldApiName != "" && this.dateOfDemoSelected) {
+			console.log('Calling getMinutesToShift');
 			getMinutesToShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
 				.then((result) => {
+					console.log(`In calculateShift: getmMinutesToShift returned ${JSON.stringify(result)}`);
 					this.returnedMinutes = result;
 					this.minutesToShift = Math.abs(this.returnedMinutes);
 					this.daysToShift = Math.round(Math.abs(this.returnedMinutes) / 60 / 24);
 					this.forBack = this.returnedMinutes < 0 ? "backward" : "forward";
+					this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
+					this.notifyParent(this.shiftAmountVisible);			
 				})
 				.catch((error) => {
+					console.log(`error from getMinutesToShift: ${JSON.stringify(error)}`);
 					this.error = error;
 				});
 		}
-		this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
-		this.notifyParent(this.shiftAmountVisible);
 	}
 
 	notifyParent(isSet) {
