@@ -75,8 +75,8 @@ public without sharing class DemoDateShifter {
             Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objectAPIName).getDescribe().fields.getMap();         
             for (String fieldName : fieldMap.keySet()) {
                 Schema.DescribeFieldResult dfr = fieldMap.get(fieldName).getDescribe();
-                Selector s = new Selector();
                 if (dfr.isUpdateable() && dfr.getType().name() == 'DateTime') {
+                    Selector s = new Selector();
                     s.apiName = dfr.getName();
                     s.label = dfr.getLabel();
                     fieldList.add(s);
