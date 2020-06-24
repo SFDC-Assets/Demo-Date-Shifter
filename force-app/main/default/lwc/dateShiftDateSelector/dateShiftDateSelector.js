@@ -13,6 +13,7 @@ export default class DateSelector extends LightningElement {
 
 	dateOfDemo = new Date(Date.now()).toISOString();
 	dateOfDemoSelected = false;
+	mostRecent = "";
 
 	loading = true;
 
@@ -91,38 +92,37 @@ export default class DateSelector extends LightningElement {
 	}
 
 	calculateShift() {
-		console.log('Inside calculateShift');
+		console.log("Inside calculateShift");
 		if (this.fieldApiName != "" && this.dateOfDemoSelected) {
-			console.log('Calling getMinutesToShift');
 			getMinutesToShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
 				.then((result) => {
-					console.log(`In calculateShift: getmMinutesToShift returned ${JSON.stringify(result)}`);
-					this.returnedMinutes = result;
+					this.mostRecent = result.mostRecent;
+					this.returnedMinutes = result.minutes;
 					this.minutesToShift = Math.abs(this.returnedMinutes);
 					this.daysToShift = Math.round(Math.abs(this.returnedMinutes) / 60 / 24);
 					this.forBack = this.returnedMinutes < 0 ? "backward" : "forward";
 					this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
-					this.notifyParent(this.shiftAmountVisible);			
+					this.notifyParent(this.shiftAmountVisible);
 				})
 				.catch((error) => {
-					console.log(`error from getMinutesToShift: ${JSON.stringify(error)}`);
 					this.error = error;
 				});
 		}
 	}
 
 	notifyParent(isSet) {
-        this.dispatchEvent(new CustomEvent('datefilterchange', {
-            detail : {
-				isSet : isSet,
-                minutesToShift : this.minutesToShift,
-				daysToShift : this.daysToShift,
-				forBack : this.forBack,
-				objectApiName : this.objectApiName,
-				fieldApiName : this.fieldApiName,
-				dateOfDemo : this.dateOfDemo
-            }
-        }));
-    }
-
+		this.dispatchEvent(
+			new CustomEvent("datefilterchange", {
+				detail: {
+					isSet: isSet,
+					minutesToShift: this.minutesToShift,
+					daysToShift: this.daysToShift,
+					forBack: this.forBack,
+					objectApiName: this.objectApiName,
+					fieldApiName: this.fieldApiName,
+					dateOfDemo: this.dateOfDemo
+				}
+			})
+		);
+	}
 }

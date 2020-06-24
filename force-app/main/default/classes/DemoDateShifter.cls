@@ -32,20 +32,35 @@ public without sharing class DemoDateShifter {
         @AuraEnabled public String apiName;
     }
 
+    public class DateDifference {
+        @AuraEnabled public DateTime mostRecent;
+        @AuraEnabled public Integer minutes;
+    }
+
     
-    //  Get the list of objects in the org.
+    //  Get the list of objects in the org that have at least one updateable DateTime field.
 
     @AuraEnabled(cacheable=true)
     public static List<Selector> getOrgObjectList () {
         List<Selector> osList = new List<Selector>();
         for (Schema.SObjectType sot : Schema.getGlobalDescribe().values()) {
             Schema.DescribeSObjectResult dsor = sot.getDescribe();
-            Selector s = new Selector();
-            String apiName = dsor.getName();
             if (dsor.isUpdateable()) {
-                s.apiName = apiName;
-                s.label = dsor.getLabel();
-                osList.add(s);
+                Map<String,Schema.SObjectField> fieldMap = dsor.fields.getMap();
+                Boolean foundOne = false;
+                for (String fieldName : fieldMap.keySet()) {
+                    Schema.DescribeFieldResult dfr = fieldMap.get(fieldName).getDescribe();
+                    if (dfr.isUpdateable() && dfr.getType().name() == 'DateTime') {
+                        foundOne = true;
+                        break;
+                    }
+                }
+                if (foundOne) {
+                    Selector s = new Selector();
+                    s.apiName = dsor.getName();
+                    s.label = dsor.getLabel();
+                    osList.add(s);
+                }
             }
         }
         return osList;
@@ -90,14 +105,19 @@ public without sharing class DemoDateShifter {
     //  Calculate the number of minutes to shift for displaying on the Lightning component.
     
     @AuraEnabled(cacheable=false)
-    public static Integer getMinutesToShift (String dateOfDemo, String objectApiName, String fieldApiName) {
+    public static DateDifference getMinutesToShift (String dateOfDemo, String objectApiName, String fieldApiName) {
+        DateDifference diff = new DateDifference();
+        diff.minutes = 0;
+        diff.mostRecent = null;
         if (dateOfDemo != '' && objectApiName != '' && fieldApiName != '') {
             dateOfDemo = dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19);
             sObject record = Database.query('SELECT ' + fieldApiName + ' FROM ' + objectApiName + ' WHERE ' + fieldApiName + ' != null ORDER BY ' + fieldApiName + ' DESC LIMIT 1');
-            return record == null ? 0 : (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
-        } else {
-            return 0;
+            if (record != null) {
+                diff.mostRecent = (DateTime) record.get(fieldApiName);
+                diff.minutes = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
+            }
         }
+        return diff;
     }
     
     

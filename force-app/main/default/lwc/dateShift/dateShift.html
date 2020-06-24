@@ -1,5 +1,8 @@
 <template>
-	<lightning-card title="Demo Date Shifter" icon-name="standard:event">
+	<lightning-card icon-name="standard:event">
+		<div slot="title">
+			<strong><h2>Demo Date Shifter</h2></strong>
+		</div>
 		<template if:true={startingDateShift}>
 			<lightning-spinner alternative-text="Starting date shift ..."></lightning-spinner>
 		</template>
@@ -27,15 +30,11 @@
 				</div>
 			</template>
 			<template if:false={objectListIsEmpty}>
-				<section class="slds-p-horizontal_medium">
+				<section class="slds-p-around_medium">
 					<lightning-datatable columns={columns} data={objectList} key-field="itemId" hide-checkbox-column="true"></lightning-datatable>
 					<div class="slds-p-around_medium slds-align_absolute-center">
 						<lightning-button variant="destructive" label="Shift the Dates" disabled={dateFilterNotSet} onclick={handleShiftDatesButton}></lightning-button>
 					</div>
-					<p>
-						minutesToShift: {minutesToShift} <br />
-						daysToShift: {daysToShift}
-					</p>
 				</section>
 			</template>
 		</template>
