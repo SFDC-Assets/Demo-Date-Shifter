@@ -42,6 +42,8 @@ export default class DateSelector extends LightningElement {
 				label: "Select an object"
 			});
 			this.loading = false;
+			this.fieldSelectorDisabled = true;
+			this.fieldApiName = "";
 		} else if (error) {
 			this.error = error;
 		}
@@ -51,22 +53,17 @@ export default class DateSelector extends LightningElement {
 	wired_getFieldList({ error, data }) {
 		this.fieldList = [];
 		if (data) {
-			if (data.length === 0 && this.objectApiName != "") {
-				this.template.querySelector("[data-id='field']").placeholder = "No modifiable DateTime fields";
-			} else {
-				data.forEach((field) => {
-					this.fieldList.push({
-						value: field.apiName,
-						label: field.label
-					});
+			data.forEach((field) => {
+				this.fieldList.push({
+					value: field.apiName,
+					label: field.label
 				});
-				this.fieldList.sort((a, b) => (a.label > b.label ? 1 : -1));
-				this.fieldList.unshift({
-					value: "",
-					label: "Select a field"
-				});
-				this.fieldSelectorDisabled = false;
-			}
+			});
+			this.fieldList.sort((a, b) => (a.label > b.label ? 1 : -1));
+			this.fieldList.unshift({
+				value: "",
+				label: "Select a field"
+			});
 		} else if (error) {
 			this.error = error;
 		}
@@ -75,6 +72,7 @@ export default class DateSelector extends LightningElement {
 	handleObjectChange(event) {
 		this.objectApiName = event.target.value;
 		this.fieldApiName = "";
+		console.log(`objectApiName: '${this.objectApiName}'`);
 		this.fieldSelectorDisabled = this.objectApiName === "";
 		this.shiftAmountVisible = false;
 		this.notifyParent(false);
