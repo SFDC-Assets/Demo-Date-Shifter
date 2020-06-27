@@ -78,9 +78,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 						})
 					);
 				});
-				subscribe("/event/Date_Shift_Event__e", -1, (response) => {
-					this.handleBatchEvent(this, response);
-				}).then((result) => {
+				subscribe("/event/Date_Shift_Event__e", -1, this.handleBatchEvent.bind(this)).then((result) => {
 					console.log(`subscribed, result: ${JSON.stringify(result)}`);
 					this.subscription = result;
 				});
@@ -108,12 +106,12 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		this.dateOfDemo = event.detail.dateOfDemo;
 	}
 
-	handleBatchEvent(component, event) {
-		console.log(`in receiveBatchEvent, event = ${JSON.stringify(event)}`);
-		console.log(`component.objectList = ${JSON.stringify(component.objectList)}`);
+	handleBatchEvent(event) {
+		console.log(`event = ${JSON.stringify(event)}`);
+		console.log(`this.objectList = ${JSON.stringify(this.objectList)}`);
 		let dateShiftFinished = true;
 		let dateShiftHadErrors = false;
-		for (let dso of component.objectList) {
+		this.objectList.forEach((dso) => {
 			try {
 				if (dso.itemAPIName === event.data.payload.SObject_API_Name__c) {
 					dso.itemRunningTotal = event.data.payload.runningTotal;
@@ -127,23 +125,23 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			} catch (err) {
 				console.log(`in forEach: error: ${err.message}`);
 			}
-		};
-		component.dateShiftFinished = dateShiftFinished;
-		component.dateShiftHadErrors = dateShiftHadErrors;
+		});
+		this.dateShiftFinished = dateShiftFinished;
+		this.dateShiftHadErrors = dateShiftHadErrors;
 		if (dateShiftFinished) {
-			unsubscribe(component.subscription, (result) => {
+			unsubscribe(this.subscription, (result) => {
 				console.log("Batch event unsubscribed.");
-				component.subscription = null;
+				this.subscription = null;
 			});
 			if (dateShiftHadErrors)
-				component.dispatchEvent(
+				this.dispatchEvent(
 					new showToastEvent({
 						mode: "sticky",
 						variant: "error",
 						message: "Errors occurred during the date shift. Please check the system debug log for details.\n" + "All records without errors were date shifted correctly."
 					})
 				);
-			component.dispatchEvent(
+			this.dispatchEvent(
 				new showToastEvent({
 					mode: "sticky",
 					variant: "success",
@@ -155,5 +153,4 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			);
 		}
 	}
-
 }

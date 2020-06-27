@@ -9,7 +9,6 @@
 		<lightning-button-icon-stateful
 			slot="actions"
 			icon-name="utility:question"
-			label="Help"
 			variant="neutral"
 			selected={helpSectionVisible}
 			onclick={handleHelpButton}
@@ -51,7 +50,7 @@
 				<table class="slds-table">
 					<tbody>
 						<template for:each={objectList} for:item="dso">
-							<tr class="slds-p-vertical_medium" key={dso.itemApiName}>
+							<tr class="slds-p-vertical_medium" key={dso.itemAPIName}>
 								<td class="runningObject">
 									<lightning-formatted-text value={dso.itemLabelPlural} class="slds-truncate"></lightning-formatted-text>
 								</td>
