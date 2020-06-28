@@ -12,11 +12,15 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Date_Field__c</field>
+                <field>Sample_Date_Field__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>DateTime_Field__c</field>
+                <field>Sample_DateTime_Field__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Random_Number__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

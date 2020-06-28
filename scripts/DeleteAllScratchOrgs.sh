@@ -1,6 +1,10 @@
-echo "Exporting scratch orgs..."
-sfdx force:data:soql:query -q "SELECT Id, Username FROM ScratchOrgInfo" -r csv -u MyComponents  > ./ScratchOrgs.csv
-cat ./ScratchOrgs.csv
-echo "Deleting found scratch Orgs..."
-sfdx force:data:bulk:delete -f ./ScratchOrgs.csv -s ScratchOrgInfo -w 10 -u MyComponents
-rm -f ./ScratchOrgs.csv
+#!/bin/bash
+
+readonly devHubOrgAlias="MyComponents"
+readonly tmpFile="data/tmp/ScratchOrgs.csv"
+
+echo "*** Finding scratch orgs ..."
+sfdx force:data:soql:query --query "SELECT Id FROM ScratchOrgInfo" --resultformat csv --targetusername "$devHubOrgAlias"  > "$tmpFile"
+echo "*** Deleting found scratch orgs ..."
+sfdx force:data:bulk:delete --csvfile "$tmpFile" --sobjecttype ScratchOrgInfo --wait 10 --targetusername "$devHubOrgAlias"
+rm -f "$tmpFile"

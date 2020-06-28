@@ -1,7 +1,7 @@
 import { LightningElement, wire, track } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { subscribe, unsubscribe } from "lightning/empApi";
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getObjectItems from "@salesforce/apex/DemoDateShifter.getObjectItems";
 import dateShift from "@salesforce/apex/DemoDateShifter.dateShift";
 
@@ -60,6 +60,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					itemNumberOfErrors: dso.itemNumberOfErrors,
 					itemRemaining: dso.itemRemaining,
 					itemPercentage: dso.itemPercentage,
+					itemToolTip: dso.itemToolTip,
 					itemShiftFinished: dso.itemShiftFinished
 				});
 			});
@@ -86,7 +87,6 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		this.startingDateShift = true;
 		dateShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
 			.then((result) => {
-				//console.log(`dateShift returned good result: ${JSON.stringify(result)}`);
 				result.forEach((toast) => {
 					this.dispatchEvent(
 						new ShowToastEvent({
@@ -112,7 +112,6 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	}
 
 	handleDateFilterChange(event) {
-		console.log(`event received: ${JSON.stringify(event.detail)}`);
 		this.dateFilterNotSet = !event.detail.isSet;
 		this.minutesToShift = event.detail.minutesToShift;
 		this.daysToShift = event.detail.daysToShift;
@@ -123,19 +122,17 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	}
 
 	handleBatchEvent(event) {
-		//console.log(`event = ${JSON.stringify(event)}`);
-		//console.log(`this.objectList = ${JSON.stringify(this.objectList)}`);
 		let dateShiftFinished = true;
 		let dateShiftHadErrors = false;
 		this.objectList.forEach((dso) => {
-				if (dso.itemAPIName === event.data.payload.SObject_API_Name__c) {
-					dso.itemRunningTotal = event.data.payload.Running_Total__c;
-					dso.itemNumberOfErrors = event.data.payload.Errors__c;
-					dso.itemShiftFinished = dso.itemRunningTotal >= dso.itemCount;
-					dso.itemRemaining = dso.itemCount - dso.itemRunningTotal;
-					dso.itemPercentage = (100 * dso.itemRunningTotal) / dso.itemCount;
-					console.log(`dso = ${JSON.stringify(dso)}`);
-				}
+			if (dso.itemAPIName === event.data.payload.SObject_API_Name__c) {
+				dso.itemRunningTotal = event.data.payload.Running_Total__c;
+				dso.itemNumberOfErrors = event.data.payload.Errors__c;
+				dso.itemShiftFinished = dso.itemRunningTotal >= dso.itemCount;
+				dso.itemRemaining = dso.itemCount - dso.itemRunningTotal;
+				dso.itemPercentage = Math.round((100 * dso.itemRunningTotal) / dso.itemCount);
+				dso.itemToolTip = `Completed ${dso.itemRunningTotal} / ${dso.itemCount} (${dso.itemPercentage}%)`;
+			}
 			dateShiftFinished = dateShiftFinished && dso.itemShiftFinished;
 			dateShiftHadErrors = dateShiftHadErrors || dso.itemNumberOfErrors > 0;
 		});
@@ -143,25 +140,22 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		this.dateShiftHadErrors = dateShiftHadErrors;
 		if (dateShiftFinished) {
 			unsubscribe(this.subscription, (result) => {
-				console.log("Batch event unsubscribed.");
-				this.subscription = null;
+				this.subscription = {};
 			});
 			if (dateShiftHadErrors)
 				this.dispatchEvent(
 					new ShowToastEvent({
 						mode: "sticky",
 						variant: "error",
-						message: "Errors occurred during the date shift. Please check the system debug log for details.\n" + "All records without errors were date shifted correctly."
+						message: "Errors occurred during the date shift. Please check the system debug log for details. " + "All records without errors were date shifted correctly."
 					})
 				);
 			this.dispatchEvent(
 				new ShowToastEvent({
 					mode: "sticky",
 					variant: "success",
-					title: "Date shifting has completed.",
-					message:
-						"Make sure that you run the Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates.\n" +
-						"If you have any questions about how to do that, please consult one of your team's Einstein Analytics Blackbelts."
+					title: `Dates were shifted ${this.forBack} by ${this.minutesToShift} minutes (${this.daysToShift} days).`,
+					message: "Make sure that you run the Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates."
 				})
 			);
 		}

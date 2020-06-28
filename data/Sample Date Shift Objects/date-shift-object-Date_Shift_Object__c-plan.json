@@ -1,0 +1,10 @@
+[
+    {
+        "sobject": "Date_Shift_Object__c",
+        "saveRefs": true,
+        "resolveRefs": false,
+        "files": [
+            "date-shift-object-Date_Shift_Object__cs.json"
+        ]
+    }
+]

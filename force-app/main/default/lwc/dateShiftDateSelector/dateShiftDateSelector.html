@@ -49,10 +49,27 @@
 					Here is what will happen:
 				</p>
 				<p class="slds-p-bottom_small">
-					The difference between the most recent <code>{fieldApiName}</code> field of the <code>{objectApiName}</code> object in your org
-					(<lightning-formatted-date-time value={mostRecent} year="numeric" day="2-digit" month="2-digit" hour="numeric" minute="2-digit"></lightning-formatted-date-time>) and the date and time you have
-					selected (<lightning-formatted-date-time value={dateOfDemo} year="numeric" day="2-digit" month="2-digit" hour="numeric" minute="2-digit"></lightning-formatted-date-time
-					>) is {minutesToShift} minutes. So ...
+					The difference between the most recent <code>{fieldApiName}</code> field of the <code>{objectApiName}</code> object in your org (<lightning-formatted-date-time
+						value={mostRecent}
+						year="numeric"
+						day="2-digit"
+						month="2-digit"
+						hour="numeric"
+						minute="2-digit"
+					></lightning-formatted-date-time
+					>) and the date and time you have selected (<lightning-formatted-date-time
+						value={dateOfDemo}
+						year="numeric"
+						day="2-digit"
+						month="2-digit"
+						hour="numeric"
+						minute="2-digit"
+					></lightning-formatted-date-time
+					>)
+					<span>
+						is <strong> <lightning-formatted-number value={minutesToShift} class="slds-text-color_destructive"></lightning-formatted-number> </strong> minutes.
+					</span>
+					So ...
 				</p>
 				<ul class="slds-list_dotted">
 					<li>
@@ -72,9 +89,9 @@
 						</span>
 					</li>
 					<li>
-						If the <strong> Weekdays Only </strong> checkbox for the object is checked, then the shifted dates will be further adjusted so that they do not fall on weekends. If
-						the shifted date falls on a Saturday, it will be further adjusted one whole day to fall on the previous Friday; if the shifted date falls on a Sunday, it
-						will be further adjusted one whole day to fall on the following Monday.
+						If the <strong> Weekdays Only </strong> checkbox for the object is checked, then the shifted dates will be further adjusted so that they do not fall on weekends.
+						If the shifted date falls on a Saturday, it will be further adjusted one whole day to fall on the previous Friday; if the shifted date falls on a Sunday, it will
+						be further adjusted one whole day to fall on the following Monday.
 					</li>
 				</ul>
 			</section>

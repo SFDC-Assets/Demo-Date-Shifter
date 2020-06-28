@@ -12,6 +12,10 @@
     <label>Demo Reset Tools</label>
     <navType>Standard</navType>
     <tabs>Demo_Reset_Tools</tabs>
+    <tabs>Demo_Date_Shifter_Test_Current__c</tabs>
+    <tabs>Demo_Date_Shifter_Test_Future__c</tabs>
+    <tabs>Demo_Date_Shifter_Test_Past__c</tabs>
+    <tabs>Date_Shift_Object__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Demo_Reset_Tools_UtilityBar</utilityBar>
 </CustomApplication>

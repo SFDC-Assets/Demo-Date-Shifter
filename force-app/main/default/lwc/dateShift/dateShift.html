@@ -41,13 +41,15 @@
 			<div class="slds-p-horizontal_medium">
 				<template if:false={dateShiftFinished}>
 					<p class="slds-p-vertical_medium">
-						All the <code>Date</code> and <code>DateTime</code> fields in the following objects are being shifted
-						<lightning-formatted-text value={forBack}></lightning-formatted-text> by <lightning-formatted-number value={minutesToShift}></lightning-formatted-number> minutes
-						(<lightning-formatted-number value={daysToShift} maximum-fraction-digits="0"></lightning-formatted-number> days). If you navigate away from this page or tab, the
-						date shifting will continue, but you will not be able to monitor the progress.
+						All the <code>Date</code> and <code>DateTime</code> fields in the following objects are being shifted {forBack} by
+						<span>
+							 <lightning-formatted-number value={minutesToShift}></lightning-formatted-number> minutes
+						</span>
+						<span> (<lightning-formatted-number value={daysToShift} maximum-fraction-digits="0"></lightning-formatted-number> days). </span> If you navigate away from this
+						page or tab, the date shifting will continue, but you will not be able to monitor the progress.
 					</p>
 				</template>
-				<table class="slds-table">
+				<table class="slds-table slds-table_cell-buffer slds-no-row-hover">
 					<tbody>
 						<template for:each={objectList} for:item="dso">
 							<tr class="slds-p-vertical_medium" key={dso.itemAPIName}>
@@ -55,7 +57,7 @@
 									<lightning-formatted-text value={dso.itemLabelPlural} class="slds-truncate"></lightning-formatted-text>
 								</td>
 								<td class="runningProgressBar">
-									<lightning-progress-bar size="large" value={dso.itemPercentage} variant="circular"></lightning-progress-bar>
+									<lightning-progress-bar size="large" value={dso.itemPercentage} variant="circular" title={dso.itemToolTip}></lightning-progress-bar>
 								</td>
 								<td class="runningRemaining">
 									<template if:true={dso.itemShiftFinished}>

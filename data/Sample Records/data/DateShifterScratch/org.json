@@ -1,6 +1,6 @@
 {
-	"now": "2020-06-22T01:50:21.555Z",
-	"alias": "MyComponentsScratch",
+	"now": "2020-06-28T17:07:00.946Z",
+	"alias": "DateShifterScratch",
 	"importOrder": [
 		"Demo_Date_Shifter_Test_Current__c",
 		"Demo_Date_Shifter_Test_Future__c",
@@ -12,9 +12,10 @@
 			"children": [],
 			"describeUrl": "/services/data/v48.0/sobjects/Demo_Date_Shifter_Test_Current__c/describe",
 			"fields": [
-				"Date__c",
-				"Date_and_Time__c",
-				"Id"
+				"Id",
+				"Random_Number__c",
+				"Sample_DateTime_Field__c",
+				"Sample_Date_Field__c"
 			],
 			"keyPrefix": "a01",
 			"label": "Demo Date Shifter Test Current",
@@ -28,9 +29,10 @@
 			"children": [],
 			"describeUrl": "/services/data/v48.0/sobjects/Demo_Date_Shifter_Test_Future__c/describe",
 			"fields": [
-				"Date__c",
-				"Date_and_Time__c",
-				"Id"
+				"Id",
+				"Random_Number__c",
+				"Sample_DateTime_Field__c",
+				"Sample_Date_Field__c"
 			],
 			"keyPrefix": "a02",
 			"label": "Demo Date Shifter Test Future",
@@ -44,9 +46,10 @@
 			"children": [],
 			"describeUrl": "/services/data/v48.0/sobjects/Demo_Date_Shifter_Test_Past__c/describe",
 			"fields": [
-				"Date__c",
-				"Date_and_Time__c",
-				"Id"
+				"Id",
+				"Random_Number__c",
+				"Sample_DateTime_Field__c",
+				"Sample_Date_Field__c"
 			],
 			"keyPrefix": "a03",
 			"label": "Demo Date Shifter Test Past",
@@ -311,14 +314,17 @@
 		"Demo_Date_Shifter_Test_Current__c": [
 			"CreatedById",
 			"CreatedDate",
-			"Date__c",
-			"Date_and_Time__c",
 			"Id",
 			"IsDeleted",
 			"LastModifiedById",
 			"LastModifiedDate",
+			"LastReferencedDate",
+			"LastViewedDate",
 			"Name",
 			"OwnerId",
+			"Random_Number__c",
+			"Sample_DateTime_Field__c",
+			"Sample_Date_Field__c",
 			"SystemModstamp"
 		],
 		"Demo_Date_Shifter_Test_Future__ChangeEvent": [],
@@ -326,14 +332,17 @@
 		"Demo_Date_Shifter_Test_Future__c": [
 			"CreatedById",
 			"CreatedDate",
-			"Date__c",
-			"Date_and_Time__c",
 			"Id",
 			"IsDeleted",
 			"LastModifiedById",
 			"LastModifiedDate",
+			"LastReferencedDate",
+			"LastViewedDate",
 			"Name",
 			"OwnerId",
+			"Random_Number__c",
+			"Sample_DateTime_Field__c",
+			"Sample_Date_Field__c",
 			"SystemModstamp"
 		],
 		"Demo_Date_Shifter_Test_Past__ChangeEvent": [],
@@ -341,14 +350,17 @@
 		"Demo_Date_Shifter_Test_Past__c": [
 			"CreatedById",
 			"CreatedDate",
-			"Date__c",
-			"Date_and_Time__c",
 			"Id",
 			"IsDeleted",
 			"LastModifiedById",
 			"LastModifiedDate",
+			"LastReferencedDate",
+			"LastViewedDate",
 			"Name",
 			"OwnerId",
+			"Random_Number__c",
+			"Sample_DateTime_Field__c",
+			"Sample_Date_Field__c",
 			"SystemModstamp"
 		],
 		"DigitalSignature": [],
@@ -849,6 +861,44 @@
 	},
 	"rejected": {
 		"ADD_FIELD": {
+			"Demo_Date_Shifter_Test_Past__c.OwnerId": [
+				"User asked for this field to be excluded",
+				"Reference, but it points to 0 or more than 1 sObject: | Group | User | "
+			],
+			"Demo_Date_Shifter_Test_Past__c.IsDeleted": [
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Past__c.Name": [
+				"Can't be autoNumber",
+				"User asked for this field to be excluded",
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Past__c.CreatedDate": [
+				"User asked for this field to be excluded",
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Past__c.CreatedById": [
+				"User asked for this field to be excluded",
+				"Must be createable",
+				"Parent sObject [User] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.LastModifiedDate": [
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Past__c.LastModifiedById": [
+				"User asked for this field to be excluded",
+				"Must be createable",
+				"Parent sObject [User] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.SystemModstamp": [
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Past__c.LastViewedDate": [
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Past__c.LastReferencedDate": [
+				"Must be createable"
+			],
 			"Demo_Date_Shifter_Test_Current__c.OwnerId": [
 				"User asked for this field to be excluded",
 				"Reference, but it points to 0 or more than 1 sObject: | Group | User | "
@@ -879,6 +929,12 @@
 				"Parent sObject [User] is not processed"
 			],
 			"Demo_Date_Shifter_Test_Current__c.SystemModstamp": [
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Current__c.LastViewedDate": [
+				"Must be createable"
+			],
+			"Demo_Date_Shifter_Test_Current__c.LastReferencedDate": [
 				"Must be createable"
 			],
 			"Demo_Date_Shifter_Test_Future__c.OwnerId": [
@@ -913,40 +969,92 @@
 			"Demo_Date_Shifter_Test_Future__c.SystemModstamp": [
 				"Must be createable"
 			],
-			"Demo_Date_Shifter_Test_Past__c.OwnerId": [
-				"User asked for this field to be excluded",
-				"Reference, but it points to 0 or more than 1 sObject: | Group | User | "
-			],
-			"Demo_Date_Shifter_Test_Past__c.IsDeleted": [
+			"Demo_Date_Shifter_Test_Future__c.LastViewedDate": [
 				"Must be createable"
 			],
-			"Demo_Date_Shifter_Test_Past__c.Name": [
-				"Can't be autoNumber",
-				"User asked for this field to be excluded",
-				"Must be createable"
-			],
-			"Demo_Date_Shifter_Test_Past__c.CreatedDate": [
-				"User asked for this field to be excluded",
-				"Must be createable"
-			],
-			"Demo_Date_Shifter_Test_Past__c.CreatedById": [
-				"User asked for this field to be excluded",
-				"Must be createable",
-				"Parent sObject [User] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.LastModifiedDate": [
-				"Must be createable"
-			],
-			"Demo_Date_Shifter_Test_Past__c.LastModifiedById": [
-				"User asked for this field to be excluded",
-				"Must be createable",
-				"Parent sObject [User] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.SystemModstamp": [
+			"Demo_Date_Shifter_Test_Future__c.LastReferencedDate": [
 				"Must be createable"
 			]
 		},
 		"ADD_CHILD": {
+			"Demo_Date_Shifter_Test_Past__c.AttachedContentDocuments => AttachedContentDocument": [
+				"Child sObject [AttachedContentDocument] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.Attachments => Attachment": [
+				"Child sObject [Attachment] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.RecordAssociatedGroups => CollaborationGroupRecord": [
+				"Child sObject [CollaborationGroupRecord] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.CombinedAttachments => CombinedAttachment": [
+				"Child sObject [CombinedAttachment] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.ContactRequests => ContactRequest": [
+				"Child sObject [ContactRequest] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => ContentDistribution": [
+				"Child sObject [ContentDistribution] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.ContentDocumentLinks => ContentDocumentLink": [
+				"Child sObject [ContentDocumentLink] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => ContentVersion": [
+				"Child sObject [ContentVersion] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.Shares => Demo_Date_Shifter_Test_Past__Share": [
+				"Child sObject [Demo_Date_Shifter_Test_Past__Share] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.DuplicateRecordItems => DuplicateRecordItem": [
+				"Child sObject [DuplicateRecordItem] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => EmailMessageChangeEvent": [
+				"Child sObject [EmailMessageChangeEvent] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.FeedSubscriptionsForEntity => EntitySubscription": [
+				"Child sObject [EntitySubscription] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => EventChangeEvent": [
+				"Child sObject [EventChangeEvent] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => EventRelationChangeEvent": [
+				"Child sObject [EventRelationChangeEvent] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => FeedComment": [
+				"Child sObject [FeedComment] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => FeedItem": [
+				"Child sObject [FeedItem] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => FlowExecutionErrorEvent": [
+				"Child sObject [FlowExecutionErrorEvent] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => FlowRecordRelation": [
+				"Child sObject [FlowRecordRelation] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.Notes => Note": [
+				"Child sObject [Note] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.NotesAndAttachments => NoteAndAttachment": [
+				"Child sObject [NoteAndAttachment] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.ProcessInstances => ProcessInstance": [
+				"Child sObject [ProcessInstance] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.ProcessSteps => ProcessInstanceHistory": [
+				"Child sObject [ProcessInstanceHistory] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.RecordActions => RecordAction": [
+				"Child sObject [RecordAction] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.RecordActionHistories => RecordActionHistory": [
+				"Child sObject [RecordActionHistory] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.null => TaskChangeEvent": [
+				"Child sObject [TaskChangeEvent] is not processed"
+			],
+			"Demo_Date_Shifter_Test_Past__c.TopicAssignments => TopicAssignment": [
+				"Child sObject [TopicAssignment] is not processed"
+			],
 			"Demo_Date_Shifter_Test_Current__c.AttachedContentDocuments => AttachedContentDocument": [
 				"Child sObject [AttachedContentDocument] is not processed"
 			],
@@ -1101,84 +1209,6 @@
 				"Child sObject [TaskChangeEvent] is not processed"
 			],
 			"Demo_Date_Shifter_Test_Future__c.TopicAssignments => TopicAssignment": [
-				"Child sObject [TopicAssignment] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.AttachedContentDocuments => AttachedContentDocument": [
-				"Child sObject [AttachedContentDocument] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.Attachments => Attachment": [
-				"Child sObject [Attachment] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.RecordAssociatedGroups => CollaborationGroupRecord": [
-				"Child sObject [CollaborationGroupRecord] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.CombinedAttachments => CombinedAttachment": [
-				"Child sObject [CombinedAttachment] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.ContactRequests => ContactRequest": [
-				"Child sObject [ContactRequest] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => ContentDistribution": [
-				"Child sObject [ContentDistribution] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.ContentDocumentLinks => ContentDocumentLink": [
-				"Child sObject [ContentDocumentLink] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => ContentVersion": [
-				"Child sObject [ContentVersion] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.Shares => Demo_Date_Shifter_Test_Past__Share": [
-				"Child sObject [Demo_Date_Shifter_Test_Past__Share] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.DuplicateRecordItems => DuplicateRecordItem": [
-				"Child sObject [DuplicateRecordItem] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => EmailMessageChangeEvent": [
-				"Child sObject [EmailMessageChangeEvent] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.FeedSubscriptionsForEntity => EntitySubscription": [
-				"Child sObject [EntitySubscription] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => EventChangeEvent": [
-				"Child sObject [EventChangeEvent] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => EventRelationChangeEvent": [
-				"Child sObject [EventRelationChangeEvent] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => FeedComment": [
-				"Child sObject [FeedComment] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => FeedItem": [
-				"Child sObject [FeedItem] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => FlowExecutionErrorEvent": [
-				"Child sObject [FlowExecutionErrorEvent] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => FlowRecordRelation": [
-				"Child sObject [FlowRecordRelation] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.Notes => Note": [
-				"Child sObject [Note] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.NotesAndAttachments => NoteAndAttachment": [
-				"Child sObject [NoteAndAttachment] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.ProcessInstances => ProcessInstance": [
-				"Child sObject [ProcessInstance] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.ProcessSteps => ProcessInstanceHistory": [
-				"Child sObject [ProcessInstanceHistory] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.RecordActions => RecordAction": [
-				"Child sObject [RecordAction] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.RecordActionHistories => RecordActionHistory": [
-				"Child sObject [RecordActionHistory] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.null => TaskChangeEvent": [
-				"Child sObject [TaskChangeEvent] is not processed"
-			],
-			"Demo_Date_Shifter_Test_Past__c.TopicAssignments => TopicAssignment": [
 				"Child sObject [TopicAssignment] is not processed"
 			]
 		},

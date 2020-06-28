@@ -1,7 +1,7 @@
 {
-    "now": "2020-06-22T01:50:19.398Z",
-    "orgSource": "MyComponentsScratch",
-    "orgDestination": "MyComponentsScratch",
+    "now": "2020-06-28T17:06:51.420Z",
+    "orgSource": "DateShifterScratch",
+    "orgDestination": "DateShifterScratch",
     "sObjectsData": [
         {
             "name": "Demo_Date_Shifter_Test_Current__c",
@@ -29,7 +29,7 @@
         }
     ],
     "sObjectsMetadata": [],
-    "rootFolder": ".",
+    "rootFolder": "data",
     "includeAllCustom": false,
     "stopOnErrors": true,
     "ignoreFields": "OwnerId, CreatedBy, CreatedDate, CurrencyIsoCode",

@@ -24,6 +24,7 @@ public without sharing class DemoDateShifter {
         @AuraEnabled public Integer itemNumberOfErrors;
         @AuraEnabled public Integer itemRemaining;
         @AuraEnabled public Integer itemPercentage;
+        @AuraEnabled public String itemToolTip;
         @AuraEnabled public Boolean itemShiftFinished;
     }
 
@@ -219,6 +220,7 @@ public without sharing class DemoDateShifter {
             item.itemRunningTotal = 0;
             item.itemRemaining = item.itemCount;
             item.itemPercentage = 0;
+            item.itemToolTip = '';
             item.itemNumberOfErrors = 0;
             item.itemShiftFinished = false;
             return item;

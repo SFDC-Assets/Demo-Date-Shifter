@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sample_DateTime_Field__c</fullName>
+    <description>Sample DateTime field used to test the Date Shifter.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Sample DateTime field used to test the Date Shifter.</inlineHelpText>
+    <label>Sample DateTime Field</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

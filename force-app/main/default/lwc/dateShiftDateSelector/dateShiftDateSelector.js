@@ -72,7 +72,6 @@ export default class DateSelector extends LightningElement {
 	handleObjectChange(event) {
 		this.objectApiName = event.target.value;
 		this.fieldApiName = "";
-		console.log(`objectApiName: '${this.objectApiName}'`);
 		this.fieldSelectorDisabled = this.objectApiName === "";
 		this.shiftAmountVisible = false;
 		this.notifyParent(false);
@@ -90,7 +89,6 @@ export default class DateSelector extends LightningElement {
 	}
 
 	calculateShift() {
-		console.log("Inside calculateShift");
 		if (this.fieldApiName != "" && this.dateOfDemoSelected) {
 			getMinutesToShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
 				.then((result) => {
