@@ -59,7 +59,7 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>Date Shift Object</label>
     <nameField>
-        <displayFormat>DSO-{000}</displayFormat>
+        <displayFormat>DSO-{00}</displayFormat>
         <label>Date Shift Object ID</label>
         <type>AutoNumber</type>
     </nameField>
