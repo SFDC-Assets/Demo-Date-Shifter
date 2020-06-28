@@ -147,7 +147,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					new ShowToastEvent({
 						mode: "sticky",
 						variant: "error",
-						message: "Errors occurred during the date shift. Please check the system debug log for details. " + "All records without errors were date shifted correctly."
+						title: "Errors occurred during the date shift. Please check the system debug log for details.",
+						message: "All records without errors were shifted correctly."
 					})
 				);
 			this.dispatchEvent(

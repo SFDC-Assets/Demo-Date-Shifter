@@ -12,8 +12,3 @@
     width: 15%;
     text-align: right;
 }
-
-/* Enable multi-line toasts. */
-.toastMessage.forceActionsText {
-	white-space : pre-line !important;
-}

@@ -12,7 +12,7 @@
         <apexClass>DemoDateShifterBatch</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <description>Allows access to classes and events necessary to run the Demo Reset Dates Lightning component bundle.</description>
+    <description>Allows access to classes, objects, tabs, and events necessary to run the Demo Date Shifter Lightning component bundle.</description>
     <fieldPermissions>
         <editable>true</editable>
         <field>Date_Shift_Object__c.Active__c</field>
