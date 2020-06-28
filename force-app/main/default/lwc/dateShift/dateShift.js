@@ -1,6 +1,7 @@
 import { LightningElement, wire, track } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { subscribe, unsubscribe } from "lightning/empApi";
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getObjectItems from "@salesforce/apex/DemoDateShifter.getObjectItems";
 import dateShift from "@salesforce/apex/DemoDateShifter.dateShift";
 
@@ -147,14 +148,14 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			});
 			if (dateShiftHadErrors)
 				this.dispatchEvent(
-					new showToastEvent({
+					new ShowToastEvent({
 						mode: "sticky",
 						variant: "error",
 						message: "Errors occurred during the date shift. Please check the system debug log for details.\n" + "All records without errors were date shifted correctly."
 					})
 				);
 			this.dispatchEvent(
-				new showToastEvent({
+				new ShowToastEvent({
 					mode: "sticky",
 					variant: "success",
 					title: "Date shifting has completed.",
