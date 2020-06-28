@@ -41,7 +41,7 @@
 			<div class="slds-p-horizontal_medium">
 				<template if:false={dateShiftFinished}>
 					<p class="slds-p-vertical_medium">
-						All the <code>Date</code> and <code>DateTime</code> fields in the following objects are being shifted {forBack} by
+						All the <code>Date</code> and <code>DateTime</code> fields in the following objects are being shifted {forBack} by&nbsp;
 						<span>
 							 <lightning-formatted-number value={minutesToShift}></lightning-formatted-number> minutes
 						</span>
@@ -49,7 +49,7 @@
 						page or tab, the date shifting will continue, but you will not be able to monitor the progress.
 					</p>
 				</template>
-				<table class="slds-table slds-table_cell-buffer slds-no-row-hover">
+				<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-p-vertical_medium">
 					<tbody>
 						<template for:each={objectList} for:item="dso">
 							<tr class="slds-p-vertical_medium" key={dso.itemAPIName}>
@@ -90,7 +90,7 @@
 							not be shifted were affected. All others were shifted properly.
 						</p>
 					</template>
-					<p class="slds-p-vertical_medium">
+					<p class="slds-p-top_medium">
 						Date shifting is now completed. Make sure that you run the Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect
 						the shifted dates. If you have any questions about how to do that, please consult one of your team's Einstein Analytics Blackbelts.
 					</p>

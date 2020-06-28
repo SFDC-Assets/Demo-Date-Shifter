@@ -59,18 +59,14 @@ public without sharing class DemoDateShifter {
             dssettings.fieldApiNameIsValid = false;
         } else {
             dssettings.settingsFound = true;
-            Schema.SObjectType ot = Schema.getGlobalDescribe().get(s.Object_API_Name__c);
-            if (ot == null)
+            dssettings.objectApiName = s.Object_API_Name__c;
+            dssettings.fieldApiName = s.Field_API_Name__c;
+            Schema.SObjectType sot = Schema.getGlobalDescribe().get(s.Object_API_Name__c);
+            if (sot == null)
                 dssettings.objectApiNameIsValid = false;
             else {
                 dssettings.objectApiNameIsValid = true;
-                if (ot.getDescribe().fields.getMap().get(s.Field_API_Name__c) == null)
-                    dssettings.fieldApiNameIsValid = false;
-                else {
-                    dssettings.fieldApiNameIsValid = true;
-                    dssettings.objectApiName = s.Object_API_Name__c;
-                    dssettings.fieldApiName = s.Field_API_Name__c;
-                }
+                dssettings.fieldApiNameIsValid = sot.getDescribe().fields.getMap().get(s.Field_API_Name__c) != null;
             }
         }
         return dssettings;

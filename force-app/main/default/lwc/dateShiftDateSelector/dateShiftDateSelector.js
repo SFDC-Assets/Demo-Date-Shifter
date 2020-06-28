@@ -6,28 +6,28 @@ import getDateTimeFields from "@salesforce/apex/DemoDateShifter.getDateTimeField
 import getMinutesToShift from "@salesforce/apex/DemoDateShifter.getMinutesToShift";
 
 export default class DateSelector extends LightningElement {
-	@track orgObjectList = [];
-	objectApiName = "";
-	objectSelectorDisabled = false;
+	@track orgObjectList = []; // List of date shift objects in the org
+	objectApiName = ""; // API name of the object from which to base the shift
+	objectSelectorDisabled = false; // True if the object selector is disabled
 
-	@track fieldList = [];
-	fieldApiName = "";
-	fieldSelectorDisabled = true;
+	@track fieldList = []; // List of fields from which to base the shift
+	fieldApiName = ""; // API name of the field from which to base the shift
+	fieldSelectorDisabled = true; // True if the field selector is disabled
 
-	dateOfDemo = new Date(Date.now()).toISOString();
-	dateOfDemoSelected = false;
-	mostRecent = "";
+	dateOfDemo = new Date(Date.now()).toISOString(); // Default value of the date picker
+	dateOfDemoSelected = false; // True if the date picker has been used to pick a date
+	mostRecent = ""; // Date and time of the most recent record based on the selectors
 
-	loading = true;
+	loading = true; // True if the selector is loading the objects from the org
 
-	returnedMinutes = 0;
-	minutesToShift = 0;
-	daysToShift = 0;
-	forBack = "";
-	shiftAmountVisible = false;
+	returnedMinutes = 0; // The number of minutes to shift (can be negative)
+	returnedDays = 0; // The number of days to shift (can be negative)
+	minutesToShift = 0; // The absolute value of minutes to shift
+	daysToShift = 0; // The aboslute value of days to shift
+	forBack = ""; // "forward" or "backward"
+	shiftAmountVisible = false; // Controls whether the explanation of what's going to happen appears
 
 	error;
-
 
 	@wire(getOrgObjectList)
 	wired_getOrgObjectList({ error, data }) {
@@ -47,18 +47,29 @@ export default class DateSelector extends LightningElement {
 			});
 			getCustomDateShifterSettings()
 				.then((result) => {
-					console.log(`getCustomDateShifterSettings returned ${JSON.stringify(result)}`);
 					if (result.settingsFound) {
-						if (result.objectApiNameIsValid && result.fieldApiNameIsValid) {
-							this.objectApiName = result.objectApiName;
-							this.fieldApiName = result.fieldApiName;
-							this.objectSelectorDisabled = true;
+						if (result.objectApiNameIsValid) {
+							if (result.fieldApiNameIsValid) {
+								this.objectApiName = result.objectApiName;
+								this.fieldApiName = result.fieldApiName;
+								this.objectSelectorDisabled = true;
+							} else
+								this.dispatchEvent(
+									new ShowToastEvent({
+										mode: "sticky",
+										variant: "error",
+										message:
+											`The custom setting "Date_Shifter_Saved_Settings__c" for your profile has an incorrect "Field_API_Name__c" value ("${result.fieldApiName}"). Please correct it or delete it to remove this message.`
+									})
+								);
 						} else {
-							this.dispatchEvent(new ShowToastEvent({
-								mode: "sticky",
-								variant: "error",
-								message: "The custom setting \"Date_Shifter_Saved_Settings__c\" has incorrect fields. Please correct it or delete it."		
-							}));
+							this.dispatchEvent(
+								new ShowToastEvent({
+									mode: "sticky",
+									variant: "error",
+									message: `The custom setting "Date_Shifter_Saved_Settings__c" for your profile has an incorrect "Object_API_Name__c" value ("${result.objectApiName}"). Please correct it or delete it to remove this message.`
+								})
+							);
 							this.objectSelectorDisabled = false;
 							this.fieldApiName = "";
 						}
@@ -122,6 +133,7 @@ export default class DateSelector extends LightningElement {
 				.then((result) => {
 					this.mostRecent = result.mostRecent;
 					this.returnedMinutes = result.minutes;
+					this.returnedDays = Math.round(this.returnedMinutes / 60 / 24);
 					this.minutesToShift = Math.abs(this.returnedMinutes);
 					this.daysToShift = Math.round(Math.abs(this.returnedMinutes) / 60 / 24);
 					this.forBack = this.returnedMinutes < 0 ? "backward" : "forward";
@@ -139,6 +151,8 @@ export default class DateSelector extends LightningElement {
 			new CustomEvent("datefilterchange", {
 				detail: {
 					isSet: isSet,
+					returnedMinutes: this.returnedMinutes,
+					returnedDays: this.returnedDays,
 					minutesToShift: this.minutesToShift,
 					daysToShift: this.daysToShift,
 					forBack: this.forBack,

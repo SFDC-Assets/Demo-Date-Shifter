@@ -22,6 +22,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	@track objectList = [];
 	objectListIsEmpty = true;
 
+	returnedMinutes = 0;
+	returnedMinutes = 0;
 	minutesToShift = 0;
 	daysToShift = 0;
 	forBack = "";
@@ -113,6 +115,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 
 	handleDateFilterChange(event) {
 		this.dateFilterNotSet = !event.detail.isSet;
+		this.returnedMinutes = event.detail.returnedMinutes;
+		this.returnedDays = event.detail.returnedDays;
 		this.minutesToShift = event.detail.minutesToShift;
 		this.daysToShift = event.detail.daysToShift;
 		this.forBack = event.detail.forBack;
