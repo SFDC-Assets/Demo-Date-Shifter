@@ -1,3 +1,6 @@
+declare module "@salesforce/apex/DemoDateShifter.getCustomDateShifterSettings" {
+  export default function getCustomDateShifterSettings(): Promise<any>;
+}
 declare module "@salesforce/apex/DemoDateShifter.getOrgObjectList" {
   export default function getOrgObjectList(): Promise<any>;
 }

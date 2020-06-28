@@ -38,6 +38,44 @@ public without sharing class DemoDateShifter {
         @AuraEnabled public Integer minutes;
     }
 
+    public class DateShifterSettings {
+        @AuraEnabled public Boolean settingsFound;
+        @AuraEnabled public String objectApiName;
+        @AuraEnabled public Boolean objectApiNameIsValid;
+        @AuraEnabled public String fieldApiName;
+        @AuraEnabled public Boolean fieldApiNameIsValid;
+    }
+
+
+    //  Get the custome settings for the object and field API names, if they exist in the org.
+
+    @AuraEnabled(cacheable=true)
+    public static DateShifterSettings getCustomDateShifterSettings () {
+        Date_Shifter_Saved_Settings__c s = Date_Shifter_Saved_Settings__c.getInstance();
+        DateShifterSettings dssettings = new DateShifterSettings();
+        if (s == null) {
+            dssettings.settingsFound = false;
+            dssettings.objectApiNameIsValid = false;
+            dssettings.fieldApiNameIsValid = false;
+        } else {
+            dssettings.settingsFound = true;
+            Schema.SObjectType ot = Schema.getGlobalDescribe().get(s.Object_API_Name__c);
+            if (ot == null)
+                dssettings.objectApiNameIsValid = false;
+            else {
+                dssettings.objectApiNameIsValid = true;
+                if (ot.getDescribe().fields.getMap().get(s.Field_API_Name__c) == null)
+                    dssettings.fieldApiNameIsValid = false;
+                else {
+                    dssettings.fieldApiNameIsValid = true;
+                    dssettings.objectApiName = s.Object_API_Name__c;
+                    dssettings.fieldApiName = s.Field_API_Name__c;
+                }
+            }
+        }
+        return dssettings;
+    }
+    
     
     //  Get the list of objects in the org that have at least one updateable DateTime field.
 

@@ -1,4 +1,6 @@
 import { LightningElement, wire, track } from "lwc";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import getCustomDateShifterSettings from "@salesforce/apex/DemoDateShifter.getCustomDateShifterSettings";
 import getOrgObjectList from "@salesforce/apex/DemoDateShifter.getOrgObjectList";
 import getDateTimeFields from "@salesforce/apex/DemoDateShifter.getDateTimeFields";
 import getMinutesToShift from "@salesforce/apex/DemoDateShifter.getMinutesToShift";
@@ -6,6 +8,7 @@ import getMinutesToShift from "@salesforce/apex/DemoDateShifter.getMinutesToShif
 export default class DateSelector extends LightningElement {
 	@track orgObjectList = [];
 	objectApiName = "";
+	objectSelectorDisabled = false;
 
 	@track fieldList = [];
 	fieldApiName = "";
@@ -25,6 +28,7 @@ export default class DateSelector extends LightningElement {
 
 	error;
 
+
 	@wire(getOrgObjectList)
 	wired_getOrgObjectList({ error, data }) {
 		this.orgObjectList = [];
@@ -41,9 +45,33 @@ export default class DateSelector extends LightningElement {
 				value: "",
 				label: "Select an object"
 			});
-			this.loading = false;
+			getCustomDateShifterSettings()
+				.then((result) => {
+					console.log(`getCustomDateShifterSettings returned ${JSON.stringify(result)}`);
+					if (result.settingsFound) {
+						if (result.objectApiNameIsValid && result.fieldApiNameIsValid) {
+							this.objectApiName = result.objectApiName;
+							this.fieldApiName = result.fieldApiName;
+							this.objectSelectorDisabled = true;
+						} else {
+							this.dispatchEvent(new ShowToastEvent({
+								mode: "sticky",
+								variant: "error",
+								message: "The custom setting \"Date_Shifter_Saved_Settings__c\" has incorrect fields. Please correct it or delete it."		
+							}));
+							this.objectSelectorDisabled = false;
+							this.fieldApiName = "";
+						}
+					} else {
+						this.objectSelectorDisabled = true;
+						this.fieldApiName = "";
+					}
+				})
+				.catch((error) => {
+					this.error = error;
+				});
 			this.fieldSelectorDisabled = true;
-			this.fieldApiName = "";
+			this.loading = false;
 		} else if (error) {
 			this.error = error;
 		}

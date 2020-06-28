@@ -16,6 +16,7 @@
 				options={orgObjectList}
 				value={objectApiName}
 				placeholder="Select an object"
+				disabled={objectSelectorDisabled}
 				onchange={handleObjectChange}
 			>
 			</lightning-combobox>
@@ -38,7 +39,7 @@
 				date-style="long"
 				value={dateOfDemo}
 				onchange={handleDateChange}
-				label="Choose a date and time for your demo or dry run."
+				label="Choose a date and time for your demo or dry run"
 			></lightning-input>
 		</lightning-layout-item>
 	</lightning-layout>
