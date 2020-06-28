@@ -37,14 +37,31 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 
 	helpSectionVisible = false;
 
-	subscription;
+	subscription = {};
 
 	error;
 
 	@wire(getObjectItems)
 	wired_getObjectItems({ error, data }) {
 		if (data) {
-			this.objectList = data;
+			this.objectList = [];
+			data.forEach((dso) => {
+				this.objectList.push({
+					itemId: dso.itemId,
+					itemAPIName: dso.itemAPIName,
+					itemLabel: dso.itemLabel,
+					itemLabelPlural: dso.itemLabelPlural,
+					itemWeekdaysOnly: dso.itemWeekdaysOnly,
+					itemAdjustMinutes: dso.itemAdjustMinutes,
+					itemLink: dso.itemLink,
+					itemCount: dso.itemCount,
+					itemRunningTotal: dso.itemRunningTotal,
+					itemNumberOfErrors: dso.itemNumberOfErrors,
+					itemRemaining: dso.itemRemaining,
+					itemPercentage: dso.itemPercentage,
+					itemShiftFinished: dso.itemShiftFinished
+				});
+			});
 			this.objectListIsEmpty = this.objectList.length === 0;
 		} else if (error) {
 			this.error = error;
@@ -68,7 +85,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		this.startingDateShift = true;
 		dateShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
 			.then((result) => {
-				console.log(`dateShift returned good result: ${JSON.stringify(result)}`);
+				//console.log(`dateShift returned good result: ${JSON.stringify(result)}`);
 				result.forEach((toast) => {
 					this.dispatchEvent(
 						new ShowToastEvent({
@@ -79,13 +96,11 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					);
 				});
 				subscribe("/event/Date_Shift_Event__e", -1, this.handleBatchEvent.bind(this)).then((result) => {
-					console.log(`subscribed, result: ${JSON.stringify(result)}`);
 					this.subscription = result;
 				});
 				this.shiftInProgress = true;
 			})
 			.catch((error) => {
-				console.log(`dateShift returned error: ${JSON.stringify(error)}`);
 				this.error = error;
 			});
 		this.startingDateShift = false;
@@ -107,24 +122,21 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	}
 
 	handleBatchEvent(event) {
-		console.log(`event = ${JSON.stringify(event)}`);
-		console.log(`this.objectList = ${JSON.stringify(this.objectList)}`);
+		//console.log(`event = ${JSON.stringify(event)}`);
+		//console.log(`this.objectList = ${JSON.stringify(this.objectList)}`);
 		let dateShiftFinished = true;
 		let dateShiftHadErrors = false;
 		this.objectList.forEach((dso) => {
-			try {
 				if (dso.itemAPIName === event.data.payload.SObject_API_Name__c) {
-					dso.itemRunningTotal = event.data.payload.runningTotal;
-					dso.itemNumberOfErrors = event.data.payload.numberOfErrors;
-					dso.itemShiftFinished = event.data.payload.runningTotal >= dso.itemCount;
+					dso.itemRunningTotal = event.data.payload.Running_Total__c;
+					dso.itemNumberOfErrors = event.data.payload.Errors__c;
+					dso.itemShiftFinished = dso.itemRunningTotal >= dso.itemCount;
 					dso.itemRemaining = dso.itemCount - dso.itemRunningTotal;
 					dso.itemPercentage = (100 * dso.itemRunningTotal) / dso.itemCount;
+					console.log(`dso = ${JSON.stringify(dso)}`);
 				}
-				dateShiftFinished = dateShiftFinished && dso.itemShiftFinished;
-				dateShiftHadErrors = dateShiftHadErrors || dso.itemNumberOfErrors > 0;
-			} catch (err) {
-				console.log(`in forEach: error: ${err.message}`);
-			}
+			dateShiftFinished = dateShiftFinished && dso.itemShiftFinished;
+			dateShiftHadErrors = dateShiftHadErrors || dso.itemNumberOfErrors > 0;
 		});
 		this.dateShiftFinished = dateShiftFinished;
 		this.dateShiftHadErrors = dateShiftHadErrors;
