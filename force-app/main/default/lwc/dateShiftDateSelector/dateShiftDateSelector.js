@@ -30,7 +30,7 @@ export default class DateSelector extends LightningElement {
 	error;
 
 	@wire(getOrgObjectList)
-	wired_getOrgObjectList({ error, data }) {
+	wired_getOrgObjectList({ data, error }) {
 		this.orgObjectList = [];
 		if (data) {
 			this.orgObjectList = [];
@@ -74,7 +74,7 @@ export default class DateSelector extends LightningElement {
 							this.fieldApiName = "";
 						}
 					} else {
-						this.objectSelectorDisabled = true;
+						this.objectSelectorDisabled = false;
 						this.fieldApiName = "";
 					}
 				})
@@ -89,7 +89,7 @@ export default class DateSelector extends LightningElement {
 	}
 
 	@wire(getDateTimeFields, { objectApiName: "$objectApiName" })
-	wired_getFieldList({ error, data }) {
+	wired_getFieldList({ data, error }) {
 		this.fieldList = [];
 		if (data) {
 			data.forEach((field) => {

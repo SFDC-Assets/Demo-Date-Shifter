@@ -53,7 +53,7 @@ public without sharing class DemoDateShifter {
     public static DateShifterSettings getCustomDateShifterSettings () {
         Date_Shifter_Saved_Settings__c s = Date_Shifter_Saved_Settings__c.getInstance();
         DateShifterSettings dssettings = new DateShifterSettings();
-        if (s == null) {
+        if (s.Object_API_Name__c == null) {
             dssettings.settingsFound = false;
             dssettings.objectApiNameIsValid = false;
             dssettings.fieldApiNameIsValid = false;
