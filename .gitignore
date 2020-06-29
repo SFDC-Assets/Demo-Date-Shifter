@@ -2,7 +2,6 @@
 /.prettierrc
 **/.prettierignore
 **/.DS_Store
-**/jsconfig.json
 /.vscode/settings.json
 /uncrustify.cfg
 /.uncrustify.cfg.swp

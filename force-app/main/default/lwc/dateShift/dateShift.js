@@ -45,7 +45,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	error;
 
 	@wire(getObjectItems)
-	wired_getObjectItems({ error, data }) {
+	wired_getObjectItems({ data, error }) {
 		if (data) {
 			this.objectList = [];
 			data.forEach((dso) => {

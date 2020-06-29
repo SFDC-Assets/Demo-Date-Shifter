@@ -40,7 +40,7 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
     //  Start the query.
     
     global Database.QueryLocator start (Database.BatchableContext bc) {
-        return Database.getQueryLocator('SELECT ' + String.join(fieldList, ',') + ' FROM ' + sObjectAPIName);
+        return Database.getQueryLocator('SELECT Name, ' + String.join(fieldList, ',') + ' FROM ' + sObjectAPIName);
     }
     
     
@@ -71,20 +71,26 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
             }
         }
 
-        for (Database.SaveResult result : Database.update(scope, false))
+        Integer index = 0;
+        String errorJSON = '[';
+        for (Database.SaveResult result : Database.update(scope, false)) {
             if (!result.isSuccess())
                 for (Database.Error error : result.getErrors()) {
-                    System.debug('Date shift error occurred:  ' + error.getMessage());
-                    System.debug('Date shift fields affected: ' + error.getFields());
+                    errorJSON += '{"name":"' + scope.get(index).get('Name') + '","link":"/lightning/r/' + scope.get(index).Id + '/view","fields":"' +
+                        String.join(error.getFields(),',') + '","message":"' + error.getMessage().escapeEcmaScript() + '"}';
                     totalErrors++;
                 }
+            index++;
+        }
+        errorJSON += ']';
         
         totalRecordsProcessed += scope.size();
         
         Database.Saveresult eventResult = EventBus.publish (new Date_Shift_Event__e (
             SObject_API_Name__c = sObjectAPIName,
             Running_Total__c = totalRecordsProcessed,
-            Errors__c = totalErrors
+            Errors__c = totalErrors,
+            Error_List__c = errorJSON
         ));
         if (!eventResult.isSuccess())
             for (Database.Error error : eventResult.getErrors())
