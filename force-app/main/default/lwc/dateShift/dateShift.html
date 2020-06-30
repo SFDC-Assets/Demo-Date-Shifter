@@ -53,7 +53,7 @@
 						the shifted dates. If you have any questions about how to do that, please consult one of your team's Einstein Analytics Blackbelts.
 					</p>
 				</template>
-				<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-p-vertical_large">
+				<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-p-vertical_x-large">
 					<tbody>
 						<template for:each={objectList} for:item="dso">
 							<tr class="slds-p-vertical_medium" key={dso.itemAPIName}>
@@ -61,7 +61,7 @@
 									<lightning-formatted-text value={dso.itemLabelPlural} class="slds-truncate"></lightning-formatted-text>
 								</td>
 								<td class="runningProgressBar">
-									<lightning-progress-bar size="large" value={dso.itemPercentage} variant="circular" title={dso.itemToolTip}></lightning-progress-bar>
+									<lightning-progress-bar size="large" value={dso.itemPercentage} title={dso.itemToolTip}></lightning-progress-bar>
 								</td>
 								<td class="runningRemaining">
 									<template if:true={dso.itemShiftFinished}>
