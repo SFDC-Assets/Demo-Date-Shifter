@@ -28,7 +28,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			cellAttributes: { alignment: "left" },
 			typeAttributes: { label: { fieldName: "name" }, target: "_parent" }
 		},
-		{ label: "Error Fields", fieldName: "fields", type: "text", iconName: "standard:first_non_empty", initialWidth: 200, cellAttributes: { alignment: "left" } },
+		{ label: "Problem Fields", fieldName: "fields", type: "text", iconName: "standard:first_non_empty", initialWidth: 200, cellAttributes: { alignment: "left" } },
 		{ label: "Error Message", fieldName: "message", type: "text", iconName: "standard:live_chat", wrapText: true, cellAttributes: { alignment: "left" } }
 	];
 
@@ -156,8 +156,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		});
 		this.dateShiftFinished = dateShiftFinished;
 		this.dateShiftHadErrors = dateShiftHadErrors;
-		let errors = JSON.parse(event.data.payload.Error_List__c);
-		errors.forEach((error) => {
+		JSON.parse(event.data.payload.Error_List__c).forEach((error) => {
 			this.errorList.push(error);
 		});
 		if (dateShiftFinished) {
@@ -169,7 +168,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					mode: "sticky",
 					variant: "info",
 					title: `Dates were shifted ${this.forBack} by ${this.minutesToShift} minutes (${this.daysToShift} days).`,
-					message: "Make sure that you run the Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates."
+					message: "Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates."
 				})
 			);
 		}

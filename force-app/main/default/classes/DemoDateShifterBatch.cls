@@ -79,7 +79,7 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
                     errorJSON += '{"id":"' + scope.get(index).get('Id') + '","name":"' + scope.get(index).get('Name') +
                         '","link":"/lightning/r/' + scope.get(index).get('Id') + '/view","fields":"' +
                         String.join(error.getFields(),',') + '","message":"' + error.getMessage().escapeEcmaScript() + '"},';
-                     totalErrors++;
+                    totalErrors++;
                 }
             index++;
         }
