@@ -6,7 +6,7 @@ import getObjectItems from "@salesforce/apex/DemoDateShifter.getObjectItems";
 import dateShift from "@salesforce/apex/DemoDateShifter.dateShift";
 
 export default class DateShift extends NavigationMixin(LightningElement) {
-	columns = [
+	objectListColumns = [
 		{ label: "Records", fieldName: "itemCount", type: "number", initialWidth: 100, cellAttributes: { alignment: "right" } },
 		{ label: "Weekdays Only", fieldName: "itemWeekdaysOnly", type: "boolean", initialWidth: 120, cellAttributes: { alignment: "center" } },
 		{ label: "Adjust Minutes", fieldName: "itemAdjustMinutes", type: "boolean", initialWidth: 120, cellAttributes: { alignment: "center" } },
@@ -18,8 +18,22 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			typeAttributes: { label: { fieldName: "itemLabel" }, tooltip: { fieldName: "itemLabelPlural" }, target: "_parent" }
 		}
 	];
+	errorListColumns = [
+		{
+			label: "Record",
+			fieldName: "link",
+			type: "url",
+			initialWidth: 200,
+			iconName: "standard:record",
+			cellAttributes: { alignment: "left" },
+			typeAttributes: { label: { fieldName: "name" }, target: "_parent" }
+		},
+		{ label: "Error Fields", fieldName: "fields", type: "text", iconName: "standard:first_non_empty", initialWidth: 200, cellAttributes: { alignment: "left" } },
+		{ label: "Error Message", fieldName: "message", type: "text", iconName: "standard:live_chat", wrapText: true, cellAttributes: { alignment: "left" } }
+	];
 
 	@track objectList = [];
+	@track errorList = [];
 	objectListIsEmpty = true;
 
 	returnedMinutes = 0;
@@ -142,23 +156,18 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		});
 		this.dateShiftFinished = dateShiftFinished;
 		this.dateShiftHadErrors = dateShiftHadErrors;
+		let errors = JSON.parse(event.data.payload.Error_List__c);
+		errors.forEach((error) => {
+			this.errorList.push(error);
+		});
 		if (dateShiftFinished) {
 			unsubscribe(this.subscription, (result) => {
 				this.subscription = {};
 			});
-			if (dateShiftHadErrors)
-				this.dispatchEvent(
-					new ShowToastEvent({
-						mode: "sticky",
-						variant: "error",
-						title: "Errors occurred during the date shift. Please check the system debug log for details.",
-						message: "All records without errors were shifted correctly."
-					})
-				);
 			this.dispatchEvent(
 				new ShowToastEvent({
 					mode: "sticky",
-					variant: "success",
+					variant: "info",
 					title: `Dates were shifted ${this.forBack} by ${this.minutesToShift} minutes (${this.daysToShift} days).`,
 					message: "Make sure that you run the Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates."
 				})

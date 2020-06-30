@@ -76,14 +76,15 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
         for (Database.SaveResult result : Database.update(scope, false)) {
             if (!result.isSuccess())
                 for (Database.Error error : result.getErrors()) {
-                    errorJSON += '{"name":"' + scope.get(index).get('Name') + '","link":"/lightning/r/' + scope.get(index).Id + '/view","fields":"' +
-                        String.join(error.getFields(),',') + '","message":"' + error.getMessage().escapeEcmaScript() + '"}';
-                    totalErrors++;
+                    errorJSON += '{"id":"' + scope.get(index).get('Id') + '","name":"' + scope.get(index).get('Name') +
+                        '","link":"/lightning/r/' + scope.get(index).get('Id') + '/view","fields":"' +
+                        String.join(error.getFields(),',') + '","message":"' + error.getMessage().escapeEcmaScript() + '"},';
+                     totalErrors++;
                 }
             index++;
         }
-        errorJSON += ']';
-        
+        errorJSON = errorJSON.substringBeforeLast(',') + ']';   // Remove final ',' from object list
+       
         totalRecordsProcessed += scope.size();
         
         Database.Saveresult eventResult = EventBus.publish (new Date_Shift_Event__e (

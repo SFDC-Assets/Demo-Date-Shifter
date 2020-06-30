@@ -30,7 +30,7 @@
 			</template>
 			<template if:false={objectListIsEmpty}>
 				<section class="slds-p-around_medium">
-					<lightning-datatable columns={columns} data={objectList} key-field="itemId" hide-checkbox-column="true"></lightning-datatable>
+					<lightning-datatable columns={objectListColumns} data={objectList} key-field="itemId" hide-checkbox-column="true"></lightning-datatable>
 					<div class="slds-p-around_medium slds-align_absolute-center">
 						<lightning-button variant="destructive" label="Shift the Dates" disabled={dateFilterNotSet} onclick={handleShiftDatesButton}></lightning-button>
 					</div>
@@ -42,14 +42,18 @@
 				<template if:false={dateShiftFinished}>
 					<p class="slds-p-vertical_medium">
 						All the <code>Date</code> and <code>DateTime</code> fields in the following objects are being shifted {forBack} by&nbsp;
-						<span>
-							 <lightning-formatted-number value={minutesToShift}></lightning-formatted-number> minutes
-						</span>
+						<span> <lightning-formatted-number value={minutesToShift}></lightning-formatted-number> minutes </span>
 						<span> (<lightning-formatted-number value={daysToShift} maximum-fraction-digits="0"></lightning-formatted-number> days). </span> If you navigate away from this
 						page or tab, the date shifting will continue, but you will not be able to monitor the progress.
 					</p>
 				</template>
-				<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-p-vertical_medium">
+				<template if:true={dateShiftFinished}>
+					<p class="slds-p-vertical_medium">
+						Date shifting is now complete. Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect
+						the shifted dates. If you have any questions about how to do that, please consult one of your team's Einstein Analytics Blackbelts.
+					</p>
+				</template>
+				<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-p-vertical_large">
 					<tbody>
 						<template for:each={objectList} for:item="dso">
 							<tr class="slds-p-vertical_medium" key={dso.itemAPIName}>
@@ -85,15 +89,18 @@
 				</table>
 				<template if:true={dateShiftFinished}>
 					<template if:true={dateShiftHadErrors}>
-						<p class="slds-p-top_medium slds-text-color_error">
-							Some errors occurred during the date shift. Please check the system debug log for details (filter it on the string "Date shift"). Only those records which could
-							not be shifted were affected. All others were shifted properly.
+						<p class="slds-p-vertical_medium slds-text-color_error">
+							The following errors occurred during the date shift. Only these records were affected and all others were shifted properly.
 						</p>
+						<div class="slds-scrollable scrollerSize">
+							<lightning-datatable
+								columns={errorListColumns}
+								data={errorList}
+								key-field="id"
+								hide-checkbox-column="true"
+							></lightning-datatable>
+						</div>
 					</template>
-					<p class="slds-p-top_medium">
-						Date shifting is now completed. Make sure that you run the Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect
-						the shifted dates. If you have any questions about how to do that, please consult one of your team's Einstein Analytics Blackbelts.
-					</p>
 				</template>
 			</div>
 		</template>
