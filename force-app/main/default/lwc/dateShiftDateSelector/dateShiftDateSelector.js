@@ -124,6 +124,7 @@ export default class DateSelector extends LightningElement {
 	handleDateChange(event) {
 		this.dateOfDemo = event.target.value;
 		this.dateOfDemoSelected = true;
+		console.log(`New date: ${this.dateOfDemo}`);
 		this.calculateShift();
 	}
 

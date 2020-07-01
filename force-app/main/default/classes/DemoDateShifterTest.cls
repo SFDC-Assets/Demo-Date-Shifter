@@ -9,7 +9,7 @@ private without sharing class DemoDateShifterTest {
     private static DateTime nextWeekTime = now.addMinutes(MINUTES);
 
 
-    @TestSetup
+    @testSetup
     static void setup() {
 
         List<Demo_Date_Shifter_Test_Current__c> current = new List<Demo_Date_Shifter_Test_Current__c>();
@@ -55,10 +55,34 @@ private without sharing class DemoDateShifterTest {
     }
 
     @isTest
+    static void testGetDateTimeFields() {
+
+        Test.startTest();
+        List<DemoDateShifter.Selector> selectors = DemoDateShifter.getDateTimeFields('Demo_Date_Shifter_Test_Current__c');
+        Test.stopTest();
+
+        Boolean found = false;
+        for (DemoDateShifter.Selector selector : selectors)
+            if (selector.apiName == 'Sample_DateTime_Field__c') {
+                found = true;
+                break;
+            }
+        System.assert(found);
+    }
+
+    @isTest
+    static void testGetMinutesToShift() {
+
+        Test.startTest();
+        Test.stopTest();
+        System.assert(true);
+    }
+
+    @isTest
     static void testDateShift() {
 
         Test.startTest();
-        List<DemoDateShifter.Toast> toasts = DemoDateShifter.dateShift(MINUTES, DAYS);
+        DemoDateShifter.dateShift(MINUTES, DAYS);
         Test.stopTest();
 
         Demo_Date_Shifter_Test_Current__c current = [SELECT Sample_Date_Field__c, Sample_DateTime_Field__c FROM Demo_Date_Shifter_Test_Current__c LIMIT 1];

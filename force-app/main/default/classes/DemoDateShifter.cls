@@ -181,12 +181,7 @@ public without sharing class DemoDateShifter {
             item.itemWeekdaysOnly = dso.Weekdays_Only__c;
             item.itemAdjustMinutes = dso.Adjust_Minutes__c;
             item.itemLink = '/lightning/r/' + dso.Id + '/view';
-            try {
-                item.itemCount = Database.countQuery('SELECT count() FROM ' + dso.Object_API_Name__c);
-            } catch (QueryException e) {
-                System.debug('Date shift problem getting object item count: ' + e.getMessage());
-                item.itemCount = 0;
-            }
+            item.itemCount = Database.countQuery('SELECT count() FROM ' + dso.Object_API_Name__c);
             item.itemRunningTotal = 0;
             item.itemRemaining = item.itemCount;
             item.itemPercentage = 0;
