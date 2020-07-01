@@ -56,7 +56,25 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 
 	subscription = {};
 
+	dateShiftObjectListViewURL = "";
+	dateShiftObjectListViewSpec = {
+		type: "standard__objectPage",
+		attributes: {
+			objectApiName: "Date_Shift_Object__c",
+			actionName: "list"
+		},
+		state: {
+			filterName: "All"
+		}
+	};
+
 	error;
+
+	connectedCallback() {
+		this[NavigationMixin.GenerateUrl](this.dateShiftObjectListViewSpec).then((url) => {
+			this.dateShiftObjectListViewURL = url;
+		});
+	}
 
 	@wire(getObjectItems)
 	wired_getObjectItems({ data, error }) {
@@ -86,17 +104,10 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		}
 	}
 
-	handleDateShiftObjectClick() {
-		this[NavigationMixin.Navigate]({
-			type: "standard__objectPage",
-			attributes: {
-				objectApiName: "Date_Shift_Object__c",
-				actionName: "list"
-			},
-			state: {
-				filterName: "All"
-			}
-		});
+	handleDateShiftObjectClick(event) {
+		event.preventDefault();
+        event.stopPropagation();
+		this[NavigationMixin.Navigate](this.dateShiftObjectListViewSpec);
 	}
 
 	handleShiftDatesButton() {

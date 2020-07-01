@@ -93,12 +93,7 @@
 							The following errors occurred during the date shift. Only these records were affected and all others were shifted properly.
 						</p>
 						<div class="slds-scrollable scrollerSize">
-							<lightning-datatable
-								columns={errorListColumns}
-								data={errorList}
-								key-field="id"
-								hide-checkbox-column="true"
-							></lightning-datatable>
+							<lightning-datatable columns={errorListColumns} data={errorList} key-field="id" hide-checkbox-column="true"></lightning-datatable>
 						</div>
 					</template>
 				</template>
@@ -116,15 +111,15 @@
 					</p>
 					<h2 class="slds-p-vertical_medium"><strong>How It Works</strong></h2>
 					<p>
-						Setting up the objects whose <code>Date</code> and <code>DateTime</code> fields are to be shifted is easy: just navigate to the
-						<strong>Date Shift Object</strong> tab and create as many records for objects as you need. Each one will require the API name of the object whose
-						<code>Date</code> and <code>DateTime</code>fields you want to shift. Additionally, you can can check a box specifying whether to ensure that a date falls on a
-						weekday when it's shifted (if the shifted date/time falls on a Saturday, it will be further adjusted to fall on the previous Friday; if it falls on a Sunday, it
-						will be further adjusted to fall on the following Monday). This can be useful in demo scenarios in which, say, cases can come in any time during the week but
-						calendar events are only scheduled with people on weekdays. To adjust the minutes as well as the date (useful for objects like Cases), check the the
-						<strong>Adjust Minutes</strong> box; leave it unchecked so that <code>DateTime</code> fields in objects like calendar events that typically begin and end on hour
-						or half-hour boundaries won't wind up with odd-looking times. Finally, you can use a checkbox to specify whether or not the object is active, in case you wanted to
-						deactivate it temporarily without deleting the definition entirely.
+						Setting up the objects whose <code>Date</code> and <code>DateTime</code> fields are to be shifted is easy: just navigate to
+						<span> the <lightning-formatted-url label="Date Shift Object tab" value={dateShiftObjectListViewURL}></lightning-formatted-url> and </span> create as many records
+						for objects as you need. Each one will require the API name of the object whose <code>Date</code> and <code>DateTime</code>fields you want to shift. Additionally,
+						you can can check a box specifying whether to ensure that a date falls on a weekday when it's shifted (if the shifted date/time falls on a Saturday, it will be
+						further adjusted to fall on the previous Friday; if it falls on a Sunday, it will be further adjusted to fall on the following Monday). This can be useful in demo
+						scenarios in which, say, cases can come in any time during the week but calendar events are only scheduled with people on weekdays. To adjust the minutes as well
+						as the date (useful for objects like Cases), check the the <strong>Adjust Minutes</strong> box; leave it unchecked so that <code>DateTime</code> fields in objects
+						like calendar events that typically begin and end on hour or half-hour boundaries won't wind up with odd-looking times. Finally, you can use a checkbox to specify
+						whether or not the object is active, in case you wanted to deactivate it temporarily without deleting the definition entirely.
 					</p>
 					<p class="slds-p-top_medium">
 						For each object in the list, the component inspects the object's schema and gathers a list of all <code>Date</code> and <code>DateTime</code> fields that are
