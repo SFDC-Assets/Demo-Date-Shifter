@@ -81,10 +81,9 @@ public without sharing class DemoDateShifter {
         for (Schema.SObjectType sot : Schema.getGlobalDescribe().values()) {
             Schema.DescribeSObjectResult dsor = sot.getDescribe();
             if (dsor.isUpdateable()) {
-                Map<String,Schema.SObjectField> fieldMap = dsor.fields.getMap();
                 Boolean foundOne = false;
-                for (String fieldName : fieldMap.keySet()) {
-                    Schema.DescribeFieldResult dfr = fieldMap.get(fieldName).getDescribe();
+                for (Schema.SObjectField field : dsor.fields.getMap().values()) {
+                    Schema.DescribeFieldResult dfr = field.getDescribe();
                     if (dfr.isUpdateable() && dfr.getType().name() == 'DateTime') {
                         foundOne = true;
                         break;
@@ -107,9 +106,8 @@ public without sharing class DemoDateShifter {
     public static List<Selector> getDateTimeFields (String objectApiName) {
         List<Selector> fieldList = new List<Selector>();
         if (objectApiName != '') {
-            Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objectAPIName).getDescribe().fields.getMap();         
-            for (String fieldName : fieldMap.keySet()) {
-                Schema.DescribeFieldResult dfr = fieldMap.get(fieldName).getDescribe();
+            for (Schema.SObjectField field : Schema.getGlobalDescribe().get(objectAPIName).getDescribe().fields.getMap().values()) {
+                Schema.DescribeFieldResult dfr = field.getDescribe();
                 if (dfr.isUpdateable() && dfr.getType().name() == 'DateTime') {
                     Selector s = new Selector();
                     s.apiName = dfr.getName();
@@ -265,20 +263,13 @@ public without sharing class DemoDateShifter {
     //  Utility to get all of the updateable Date and DateTime field API names from the given object.
     
     private static List<String> getDateFieldNames (String sObjectAPIName) {
-        
-        try {
-            Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(sObjectAPIName).getDescribe().fields.getMap();         
-            Set<String> dateFieldNames = new Set<String>();
-            for (String fieldName : fieldMap.keySet()) {
-                Schema.DescribeFieldResult dfr = fieldMap.get(fieldName).getDescribe();
-                if (dfr.isUpdateable() && (dfr.getType().name() == 'Date' || dfr.getType().name() == 'DateTime'))
-                    dateFieldNames.add(dfr.getName());
-            }
-            dateFieldNames.removeAll(new List<String> {'SlaStartDate', 'SlaExitDate'});			//  Special case: never return these
-            return new List<String>(dateFieldNames);
-        } catch (Exception e) {
-            System.debug('getDateFieldName: ' + e.getMessage());
-            return null;
-        }        
-    }    
+        Set<String> dateFieldNames = new Set<String>();
+        for (Schema.SObjectField field : Schema.getGlobalDescribe().get(sObjectAPIName).getDescribe().fields.getMap().values()) {
+            Schema.DescribeFieldResult dfr = field.getDescribe();
+            if (dfr.isUpdateable() && (dfr.getType().name() == 'Date' || dfr.getType().name() == 'DateTime'))
+                dateFieldNames.add(dfr.getName());
+        }
+        dateFieldNames.removeAll(new List<String> {'SlaStartDate', 'SlaExitDate'});			//  Special case: never return these
+        return new List<String>(dateFieldNames);
+   }    
 }
