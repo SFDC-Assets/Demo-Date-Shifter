@@ -114,15 +114,6 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		this.startingDateShift = true;
 		dateShift({ minutesToShift: this.returnedMinutes, daysToShift: this.returnedDays })
 			.then((result) => {
-				result.forEach((toast) => {
-					this.dispatchEvent(
-						new ShowToastEvent({
-							mode: toast.toastMode,
-							variant: toast.toastVariant,
-							message: toast.toastMessage
-						})
-					);
-				});
 				subscribe("/event/Date_Shift_Event__e", -1, this.handleBatchEvent.bind(this)).then((result) => {
 					this.subscription = result;
 				});

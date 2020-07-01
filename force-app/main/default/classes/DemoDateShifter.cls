@@ -157,44 +157,9 @@ public without sharing class DemoDateShifter {
     //  Shift the Date and DateTime fields of records based on the criteria specified.
     
     @AuraEnabled
-    public static List<Toast> dateShift (Integer minutesToShift, Integer daysToShift) {        
-        List<Toast> toasts = new List<Toast>();        
-        for (ObjectItem item : getObjectItems ()) {
-            Toast toast = shiftDatesAsynchronously(minutesToShift, daysToShift, item.itemAPIName, getDateFieldNames(item.itemAPIName), item.itemWeekdaysOnly, item.itemAdjustMinutes);
-            if (toast != null) toasts.add(toast);
-        }      
-        return toasts;
-    }
-    
-    
-    //  Shift the dates (forward or backward) in the Date or DateTime fields of the given object by the specified amount.  This operation is
-    //  done asynchronously, so a larger number of records can be updated.  It executes in the background, and an email is sent to the user
-    //  when it is finished.
-    //  
-    //  The parameters represent:
-    //      minutesToAdd: the number of minutes to add to the DateTimes (can be negative to shift dates backward).)
-    //      daysToAdd: the number of days to add (can be negative to shift dates backward).
-    //      sObjectAPIName: the API name of the object whose records are to be deleted.
-    //      fieldList: a list of the API names of the Date or DateTime fields to be shifted.
-    //      weekdaysOnly: if true, an additional shift will ensure that the date falls on a weekday.
-    //      adjustMinutes: if true, adjust the minutes; otherwise just adjust to the nearest day.
-    
-    private static Toast shiftDatesAsynchronously (Integer minutesToAdd, Integer daysToAdd, String sObjectAPIName, List<String> fieldList, Boolean weekdaysOnly, Boolean adjustMinutes) {
-        
-        Toast toast = null;
-        
-        String forback = minutesToAdd > 0 ? 'forward' : 'backward';        
-        String sObjectLabel = Schema.getGlobalDescribe().get(sObjectAPIName).getDescribe().getLabel().toLowerCase();
-        
-        if (fieldList.IsEmpty()) {
-            toast = new Toast();
-            toast.toastMessage = sObjectLabel.capitalize() + 's do not have any Date or DateTime fields.';
-            toast.toastVariant = 'error';
-            toast.toastMode = 'sticky';
-        } else
-            Database.executeBatch(new DemoDateShifterBatch(minutesToAdd, daystoAdd, sObjectAPIName, fieldList, weekdaysOnly, adjustMinutes));
-        
-        return toast;
+    public static void dateShift (Integer minutesToShift, Integer daysToShift) {        
+        for (ObjectItem item : getObjectItems ())
+            Database.executeBatch(new DemoDateShifterBatch(minutesToShift, daysToShift, item.itemAPIName, getDateFieldNames(item.itemAPIName), item.itemWeekdaysOnly, item.itemAdjustMinutes));      
     }
     
     
