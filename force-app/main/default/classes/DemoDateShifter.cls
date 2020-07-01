@@ -157,39 +157,12 @@ public without sharing class DemoDateShifter {
     //  Shift the Date and DateTime fields of records based on the criteria specified.
     
     @AuraEnabled
-    public static List<Toast> dateShift (String dateOfDemo, String objectApiName, String fieldApiName) {
-        
+    public static List<Toast> dateShift (Integer minutesToShift, Integer daysToShift) {        
         List<Toast> toasts = new List<Toast>();        
-        String dateOfDemoISO = dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19);       
-        DateTime demoDate = DateTime.valueOfGMT(dateOfDemoISO);
-        
-        // Figure out what record we want to base the date and time off of.
-        
-        sObject record = Database.query('SELECT ' + fieldApiName + ' FROM ' + objectApiName + ' WHERE ' + fieldApiName + ' != null ORDER BY ' + fieldApiName + ' DESC LIMIT 1');
-        
-        if (record == null) {
-	        Toast toast = new Toast();
-            toast.toastMessage = 'Could not find any ' + Schema.getGlobalDescribe().get(objectApiName).getDescribe().getLabel().toLowerCase() + ' records in the org from which to to base the last day.';
-            toast.toastVariant = 'error';
-            toast.toastMode = 'sticky';
-            toasts.add(toast);
-        } else {
-            Integer minutesToShift = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemoISO).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
-            Integer daysToShift = (Integer) Math.round(((Decimal) minutesToShift) / 60.0 / 24.0);
-            if (minutesToShift == 0) {
-                Toast toast = new Toast();
-                toast.toastMessage = 'The given date and time is already the same as the specified date and time.';
-                toast.toastVariant = 'info';
-                toast.toastMode = 'dismissable';
-                toasts.add(toast);
-            } else
-                for (ObjectItem item : getObjectItems ()) {
-                    Toast toast = shiftDatesAsynchronously(minutesToShift, daysToShift, item.itemAPIName, getDateFieldNames(item.itemAPIName), item.itemWeekdaysOnly, item.itemAdjustMinutes);
-                    if (toast != null)
-                        toasts.add(toast);
-                }
-        }
-        
+        for (ObjectItem item : getObjectItems ()) {
+            Toast toast = shiftDatesAsynchronously(minutesToShift, daysToShift, item.itemAPIName, getDateFieldNames(item.itemAPIName), item.itemWeekdaysOnly, item.itemAdjustMinutes);
+            if (toast != null) toasts.add(toast);
+        }      
         return toasts;
     }
     

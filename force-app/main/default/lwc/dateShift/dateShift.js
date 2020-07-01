@@ -37,7 +37,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	objectListIsEmpty = true;
 
 	returnedMinutes = 0;
-	returnedMinutes = 0;
+	returnedDays = 0;
 	minutesToShift = 0;
 	daysToShift = 0;
 	forBack = "";
@@ -101,7 +101,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 
 	handleShiftDatesButton() {
 		this.startingDateShift = true;
-		dateShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
+		dateShift({ minutesToShift: this.returnedMinutes, daysToShift: this.returnedDays })
 			.then((result) => {
 				result.forEach((toast) => {
 					this.dispatchEvent(

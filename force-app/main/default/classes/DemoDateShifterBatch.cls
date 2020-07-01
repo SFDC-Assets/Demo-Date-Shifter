@@ -72,7 +72,7 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
         }
 
         Integer index = 0;
-        String errorJSON = '[';
+        String errorJSON = '';
         for (Database.SaveResult result : Database.update(scope, false)) {
             if (!result.isSuccess())
                 for (Database.Error error : result.getErrors()) {
@@ -83,7 +83,7 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
                 }
             index++;
         }
-        errorJSON = errorJSON.substringBeforeLast(',') + ']';   // Remove final ',' from object list
+        errorJSON = '[' + errorJSON.substringBeforeLast(',') + ']';   // Remove final ',' from object list
        
         totalRecordsProcessed += scope.size();
         

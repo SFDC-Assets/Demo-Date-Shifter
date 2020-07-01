@@ -14,5 +14,5 @@ declare module "@salesforce/apex/DemoDateShifter.getMinutesToShift" {
   export default function getMinutesToShift(param: {dateOfDemo: any, objectApiName: any, fieldApiName: any}): Promise<any>;
 }
 declare module "@salesforce/apex/DemoDateShifter.dateShift" {
-  export default function dateShift(param: {dateOfDemo: any, objectApiName: any, fieldApiName: any}): Promise<any>;
+  export default function dateShift(param: {minutesToShift: any, daysToShift: any}): Promise<any>;
 }
