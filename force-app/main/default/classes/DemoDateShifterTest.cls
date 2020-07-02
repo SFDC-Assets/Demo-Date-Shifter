@@ -1,3 +1,8 @@
+//  Test class and metbods for the DemoDateShifter Lightning component.
+//
+//  This code is provided AS IS, with no warranty or guarantee of suitability for use.
+//  Contact: john.meyer@salesforce.com
+
 @isTest
 private without sharing class DemoDateShifterTest {
 
@@ -10,7 +15,7 @@ private without sharing class DemoDateShifterTest {
 
 
     @testSetup
-    static void setup() {
+    static void setup () {
 
         List<Demo_Date_Shifter_Test_Current__c> current = new List<Demo_Date_Shifter_Test_Current__c>();
         for (Integer i = 0; i < 5; i++)
@@ -37,7 +42,7 @@ private without sharing class DemoDateShifterTest {
     }
 
     @isTest
-    static void testGetOrgObjectList() {
+    static void testGetOrgObjectList () {
 
         DemoDateShifter.Selector current = new DemoDateShifter.Selector();
 
@@ -55,7 +60,20 @@ private without sharing class DemoDateShifterTest {
     }
 
     @isTest
-    static void testGetDateTimeFields() {
+    static void testGetCustomDateShifterSettings () {
+
+        Test.startTest();
+        DemoDateShifter.DateShifterSettings setting = DemoDateShifter.getCustomDateShifterSettings();
+        System.assert(!setting.settingsFound);
+
+        insert new Date_Shifter_Saved_Settings__c(Object_API_Name__c = 'Demo_Date_Shifter_Test_Current__c', Field_API_Name__c = 'Sample_DateTime_Field__c');
+        setting = DemoDateShifter.getCustomDateShifterSettings();
+        Test.stopTest();
+        System.assert(setting.settingsFound);
+    }
+
+    @isTest
+    static void testGetDateTimeFields () {
 
         Test.startTest();
         List<DemoDateShifter.Selector> selectors = DemoDateShifter.getDateTimeFields('Demo_Date_Shifter_Test_Current__c');
@@ -71,15 +89,16 @@ private without sharing class DemoDateShifterTest {
     }
 
     @isTest
-    static void testGetMinutesToShift() {
-
+    static void testGetMinutesToShift () {
         Test.startTest();
+        DemoDateShifter.DateDifference diff = DemoDateShifter.getMinutesToShift(now.format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'','GMT'),
+            'Demo_Date_Shifter_Test_Current__c', 'Sample_DateTime_Field__c');
         Test.stopTest();
-        System.assert(true);
+        System.assert(diff.minutes < 2);
     }
 
     @isTest
-    static void testDateShift() {
+    static void testDateShift () {
 
         Test.startTest();
         DemoDateShifter.dateShift(MINUTES, DAYS);
