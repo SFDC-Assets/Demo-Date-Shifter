@@ -7,7 +7,7 @@
 private without sharing class DemoDateShifterTest {
 
     private static final Integer DAYS = 7;
-    private static final Integer MINUTES = 7 * 24 * 60;
+    private static final Integer MINUTES = DAYS * 24 * 60;
     private static Date today = Date.today();
     private static Date nextWeek = today.addDays(DAYS);
     private static DateTime now = DateTime.now();
@@ -60,16 +60,22 @@ private without sharing class DemoDateShifterTest {
     }
 
     @isTest
-    static void testGetCustomDateShifterSettings () {
+    static void testCustomDateShifterSettings () {
 
         Test.startTest();
+
         DemoDateShifter.DateShifterSettings setting = DemoDateShifter.getCustomDateShifterSettings();
         System.assert(!setting.settingsFound);
 
-        insert new Date_Shifter_Saved_Settings__c(Object_API_Name__c = 'Demo_Date_Shifter_Test_Current__c', Field_API_Name__c = 'Sample_DateTime_Field__c');
+        DemoDateShifter.setCustomDateShifterSettings ('Demo_Date_Shifter_Test_Current__c', 'Sample_DateTime_Field__c');
         setting = DemoDateShifter.getCustomDateShifterSettings();
-        Test.stopTest();
         System.assert(setting.settingsFound);
+
+        DemoDateShifter.deleteCustomDateShifterSettings ();
+        setting = DemoDateShifter.getCustomDateShifterSettings();
+        System.assert(!setting.settingsFound);
+
+        Test.stopTest();
     }
 
     @isTest
@@ -106,7 +112,7 @@ private without sharing class DemoDateShifterTest {
 
         Demo_Date_Shifter_Test_Current__c current = [SELECT Sample_Date_Field__c, Sample_DateTime_Field__c FROM Demo_Date_Shifter_Test_Current__c LIMIT 1];
         System.assert(current.Sample_Date_Field__c.isSameDay(nextWeek));
-        System.assert(Math.abs(current.Sample_DateTime_Field__c.getTime() - nextWeekTime.getTime()) < 2000);
+        System.assert(Math.abs(current.Sample_DateTime_Field__c.getTime() - nextWeekTime.getTime()) < 10000);
     }
 
 }

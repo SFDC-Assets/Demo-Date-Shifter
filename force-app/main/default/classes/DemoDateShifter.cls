@@ -71,6 +71,29 @@ public without sharing class DemoDateShifter {
         }
         return dssettings;
     }
+
+
+    //  Set the user's custom setting.
+    
+    @AuraEnabled
+    public static void setCustomDateShifterSettings(String objectApiName, String fieldApiName){
+        insert new Date_Shifter_Saved_Settings__c (
+            Name = UserInfo.getUserName(),
+            SetupOwnerId = UserInfo.getUserId(),
+            Object_API_Name__c = objectApiName,       
+            Field_API_Name__c = fieldApiName
+        );
+    }
+
+
+    //  Remove user's custom setting.
+
+    @AuraEnabled
+    public static void deleteCustomDateShifterSettings () {
+        Date_Shifter_Saved_Settings__c setting = [SELECT Id FROM Date_Shifter_Saved_Settings__c WHERE SetupOwnerId = :UserInfo.getUserId() LIMIT 1];
+        if (setting != null)
+            delete setting;
+    }
     
     
     //  Get the list of objects in the org that have at least one updateable DateTime field.
@@ -99,6 +122,7 @@ public without sharing class DemoDateShifter {
         }
         return osList;
     }
+
 
     //  Get the list of DateTime fields in the given object
 
