@@ -35,6 +35,10 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	@track objectList = [];
 	@track errorList = [];
 	objectListIsEmpty = true;
+	maxDateShiftObjects = 45;
+	get tooManyObjects() {
+		return this.objectList.length > this.maxDateShiftObjects;
+	}
 
 	returnedMinutes = 0;
 	returnedDays = 0;

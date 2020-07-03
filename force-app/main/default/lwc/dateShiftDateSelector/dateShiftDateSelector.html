@@ -2,7 +2,7 @@
 	<template if:true={loading}>
 		<lightning-spinner alternative-text="Retrieving org object list ..."></lightning-spinner>
 	</template>
-	<p class="slds-p-horizontal_medium">
+	<p class="slds-p-horizontal_medium slds-hyphenate">
 		This tool shifts all <code>Date</code> and <code>DateTime</code> fields in the objects you specify by the same amount of time so that dates that lined up logically when
 		you first showed the demo can stay lined up when you do your demo again weeks or months later. To determine the amount of the shift, the tool examines the most recent
 		value in a <code>DateTime</code> field of the object that you choose below and calculates how much time separates it from the date and time you choose in the picker. Dates
@@ -38,6 +38,7 @@
 						label="Save object and field settings"
 						variant="base"
 						icon-name="utility:save"
+						icon-position="left"
 						disabled={saveSettingsButtonDisabled}
 						onclick={handleSaveSettingsButton}
 					></lightning-button>
@@ -47,7 +48,13 @@
 					></lightning-helptext>
 				</template>
 				<template if:false={showSaveSettingsButton}>
-					<lightning-button label="Clear saved object and field settings" variant="base" icon-name="utility:clear" onclick={handleClearSettingsButton}></lightning-button>
+					<lightning-button
+						label="Clear saved object and field settings"
+						variant="base"
+						icon-name="utility:clear"
+						icon-position="left"
+						onclick={handleClearSettingsButton}
+					></lightning-button>
 					<lightning-helptext
 						content="Clear the object and field entries you previously saved and re-activate the object and field selectors above."
 						icon-name="utility:info_alt"
@@ -104,7 +111,7 @@
 				<p class="slds-text-title_caps slds-p-bottom_medium">
 					Here is what will happen:
 				</p>
-				<p class="slds-p-bottom_small">
+				<p class="slds-p-bottom_small slds-hyphenate">
 					<span>
 						The difference between the most recent <code>{fieldApiName}</code> field of the <code>{objectApiName}</code> object in your org (<lightning-formatted-date-time
 							value={mostRecent}
@@ -128,7 +135,7 @@
 						is <strong> <lightning-formatted-number value={minutesToShift} class="slds-text-color_destructive"></lightning-formatted-number> </strong> minutes. So ...
 					</span>
 				</p>
-				<ul class="slds-list_dotted">
+				<ul class="slds-list_dotted slds-hyphenate">
 					<li>
 						All <code>DateTime</code> fields in all records for each of the objects in the list below will be shifted <strong> {forBack} </strong>
 						<span>

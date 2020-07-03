@@ -10,15 +10,23 @@ import getMinutesToShift from "@salesforce/apex/DemoDateShifter.getMinutesToShif
 export default class DateSelector extends LightningElement {
 	@track orgObjectList = [];
 	objectApiName = "";
-	objectSelectorDisabled = false;
+	get objectSelectorDisabled() {
+		return this.savedSettingsFound;
+	}
 
 	@track fieldList = [];
 	fieldApiName = "";
-	fieldSelectorDisabled = true;
+	get fieldSelectorDisabled() {
+		return this.savedSettingsFound || this.objectApiName === "";
+	}
 
 	savedSettingsFound = false;
-	saveSettingsButtonDisabled = true;
-	showSaveSettingsButton = true;
+	get showSaveSettingsButton() {
+		return !this.savedSettingsFound;
+	}
+	get saveSettingsButtonDisabled() {
+		return this.objectApiName === "" || this.fieldApiName === "";
+	}
 
 	dateOfDemo = new Date(Date.now()).toISOString();
 	dateOfDemoSelected = false;
@@ -31,7 +39,10 @@ export default class DateSelector extends LightningElement {
 	minutesToShift = 0;
 	daysToShift = 0;
 	forBack = "";
-	shiftAmountVisible = false;
+
+	get shiftAmountVisible() {
+		return this.objectApiName !== "" && this.fieldApiName !== "" && this.dateOfDemoSelected;
+	}
 
 	error;
 
@@ -58,9 +69,7 @@ export default class DateSelector extends LightningElement {
 							if (result.fieldApiNameIsValid) {
 								this.objectApiName = result.objectApiName;
 								this.fieldApiName = result.fieldApiName;
-								this.objectSelectorDisabled = true;
 								this.savedSettingsFound = true;
-								this.showSaveSettingsButton = false;
 							} else {
 								this.dispatchEvent(
 									new ShowToastEvent({
@@ -69,7 +78,7 @@ export default class DateSelector extends LightningElement {
 										message: `The custom setting "Date_Shifter_Saved_Settings__c" for your profile has an incorrect "Field_API_Name__c" value ("${result.fieldApiName}"). Please correct it or delete it to remove this message.`
 									})
 								);
-								this.saveSettingsButtonDisabled = true;
+								this.fieldApiName = "";
 							}
 						} else {
 							this.dispatchEvent(
@@ -79,20 +88,16 @@ export default class DateSelector extends LightningElement {
 									message: `The custom setting "Date_Shifter_Saved_Settings__c" for your profile has an incorrect "Object_API_Name__c" value ("${result.objectApiName}"). Please correct it or delete it to remove this message.`
 								})
 							);
-							this.objectSelectorDisabled = false;
 							this.fieldApiName = "";
-							this.saveSettingsButtonDisabled = true;
+							this.objectApiName = "";
 						}
 					} else {
-						this.showSaveSettingsButton = true;
-						this.objectSelectorDisabled = false;
 						this.fieldApiName = "";
 					}
 				})
 				.catch((error) => {
 					this.error = error;
 				});
-			this.fieldSelectorDisabled = true;
 			this.loading = false;
 		} else if (error) {
 			this.error = error;
@@ -122,18 +127,12 @@ export default class DateSelector extends LightningElement {
 	handleObjectChange(event) {
 		this.objectApiName = event.target.value;
 		this.fieldApiName = "";
-		this.fieldSelectorDisabled = this.objectApiName === "";
-		this.shiftAmountVisible = false;
-		this.showSaveSettingsButton = true;
-		this.saveSettingsButtonDisabled = true;
 		this.notifyParent(false);
 	}
 
 	handleFieldChange(event) {
 		this.fieldApiName = event.target.value;
 		this.calculateShift();
-		this.showSaveSettingsButton = true;
-		this.saveSettingsButtonDisabled = this.fieldApiName === "";
 	}
 
 	handleDateChange(event) {
@@ -150,10 +149,7 @@ export default class DateSelector extends LightningElement {
 					message: "Your settings have been saved."
 				})
 			);
-			this.showSaveSettingsButton = false;
 			this.savedSettingsFound = true;
-			this.objectSelectorDisabled = true;
-			this.fieldSelectorDisabled = true;
 		});
 	}
 
@@ -165,15 +161,12 @@ export default class DateSelector extends LightningElement {
 					message: "Your saved settings have been removed."
 				})
 			);
-			this.showSaveSettingsButton = true;
-			this.savedSettingsFound = true;
-			this.objectSelectorDisabled = false;
-			this.fieldSelectorDisabled = false;
+			this.savedSettingsFound = false;
 		});
 	}
 
 	calculateShift() {
-		if (this.fieldApiName != "" && this.dateOfDemoSelected) {
+		if (this.fieldApiName !== "" && this.dateOfDemoSelected) {
 			getMinutesToShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
 				.then((result) => {
 					this.mostRecent = result.mostRecent;
@@ -182,7 +175,6 @@ export default class DateSelector extends LightningElement {
 					this.minutesToShift = Math.abs(this.returnedMinutes);
 					this.daysToShift = Math.round(Math.abs(this.returnedMinutes) / 60 / 24);
 					this.forBack = this.returnedMinutes < 0 ? "backward" : "forward";
-					this.shiftAmountVisible = this.fieldApiName != "" && this.dateOfDemoSelected;
 					this.notifyParent(this.shiftAmountVisible);
 				})
 				.catch((error) => {
