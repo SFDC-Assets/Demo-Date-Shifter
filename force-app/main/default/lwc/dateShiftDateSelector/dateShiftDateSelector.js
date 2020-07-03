@@ -1,31 +1,37 @@
 import { LightningElement, wire, track } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getCustomDateShifterSettings from "@salesforce/apex/DemoDateShifter.getCustomDateShifterSettings";
+import setCustomDateShifterSettings from "@salesforce/apex/DemoDateShifter.setCustomDateShifterSettings";
+import deleteCustomDateShifterSettings from "@salesforce/apex/DemoDateShifter.deleteCustomDateShifterSettings";
 import getOrgObjectList from "@salesforce/apex/DemoDateShifter.getOrgObjectList";
 import getDateTimeFields from "@salesforce/apex/DemoDateShifter.getDateTimeFields";
 import getMinutesToShift from "@salesforce/apex/DemoDateShifter.getMinutesToShift";
 
 export default class DateSelector extends LightningElement {
-	@track orgObjectList = []; // List of date shift objects in the org
-	objectApiName = ""; // API name of the object from which to base the shift
-	objectSelectorDisabled = false; // True if the object selector is disabled
+	@track orgObjectList = [];
+	objectApiName = "";
+	objectSelectorDisabled = false;
 
-	@track fieldList = []; // List of fields from which to base the shift
-	fieldApiName = ""; // API name of the field from which to base the shift
-	fieldSelectorDisabled = true; // True if the field selector is disabled
+	@track fieldList = [];
+	fieldApiName = "";
+	fieldSelectorDisabled = true;
 
-	dateOfDemo = new Date(Date.now()).toISOString(); // Default value of the date picker
-	dateOfDemoSelected = false; // True if the date picker has been used to pick a date
-	mostRecent = ""; // Date and time of the most recent record based on the selectors
+	savedSettingsFound = false;
+	saveSettingsButtonDisabled = true;
+	showSaveSettingsButton = true;
 
-	loading = true; // True if the selector is loading the objects from the org
+	dateOfDemo = new Date(Date.now()).toISOString();
+	dateOfDemoSelected = false;
+	mostRecent = "";
 
-	returnedMinutes = 0; // The number of minutes to shift (can be negative)
-	returnedDays = 0; // The number of days to shift (can be negative)
-	minutesToShift = 0; // The absolute value of minutes to shift
-	daysToShift = 0; // The aboslute value of days to shift
-	forBack = ""; // "forward" or "backward"
-	shiftAmountVisible = false; // Controls whether the explanation of what's going to happen appears
+	loading = true;
+
+	returnedMinutes = 0;
+	returnedDays = 0;
+	minutesToShift = 0;
+	daysToShift = 0;
+	forBack = "";
+	shiftAmountVisible = false;
 
 	error;
 
@@ -53,15 +59,18 @@ export default class DateSelector extends LightningElement {
 								this.objectApiName = result.objectApiName;
 								this.fieldApiName = result.fieldApiName;
 								this.objectSelectorDisabled = true;
-							} else
+								this.savedSettingsFound = true;
+								this.showSaveSettingsButton = false;
+							} else {
 								this.dispatchEvent(
 									new ShowToastEvent({
 										mode: "sticky",
 										variant: "error",
-										message:
-											`The custom setting "Date_Shifter_Saved_Settings__c" for your profile has an incorrect "Field_API_Name__c" value ("${result.fieldApiName}"). Please correct it or delete it to remove this message.`
+										message: `The custom setting "Date_Shifter_Saved_Settings__c" for your profile has an incorrect "Field_API_Name__c" value ("${result.fieldApiName}"). Please correct it or delete it to remove this message.`
 									})
 								);
+								this.saveSettingsButtonDisabled = true;
+							}
 						} else {
 							this.dispatchEvent(
 								new ShowToastEvent({
@@ -72,8 +81,10 @@ export default class DateSelector extends LightningElement {
 							);
 							this.objectSelectorDisabled = false;
 							this.fieldApiName = "";
+							this.saveSettingsButtonDisabled = true;
 						}
 					} else {
+						this.showSaveSettingsButton = true;
 						this.objectSelectorDisabled = false;
 						this.fieldApiName = "";
 					}
@@ -113,19 +124,52 @@ export default class DateSelector extends LightningElement {
 		this.fieldApiName = "";
 		this.fieldSelectorDisabled = this.objectApiName === "";
 		this.shiftAmountVisible = false;
+		this.showSaveSettingsButton = true;
+		this.saveSettingsButtonDisabled = true;
 		this.notifyParent(false);
 	}
 
 	handleFieldChange(event) {
 		this.fieldApiName = event.target.value;
 		this.calculateShift();
+		this.showSaveSettingsButton = true;
+		this.saveSettingsButtonDisabled = this.fieldApiName === "";
 	}
 
 	handleDateChange(event) {
 		this.dateOfDemo = event.target.value;
 		this.dateOfDemoSelected = true;
-		console.log(`New date: ${this.dateOfDemo}`);
 		this.calculateShift();
+	}
+
+	handleSaveSettingsButton(event) {
+		setCustomDateShifterSettings({ objectApiName: this.objectApiName, fieldApiName: this.fieldApiName }).then((result) => {
+			this.dispatchEvent(
+				new ShowToastEvent({
+					variant: "success",
+					message: "Your settings have been saved."
+				})
+			);
+			this.showSaveSettingsButton = false;
+			this.savedSettingsFound = true;
+			this.objectSelectorDisabled = true;
+			this.fieldSelectorDisabled = true;
+		});
+	}
+
+	handleClearSettingsButton(event) {
+		deleteCustomDateShifterSettings().then((result) => {
+			this.dispatchEvent(
+				new ShowToastEvent({
+					variant: "success",
+					message: "Your saved settings have been removed."
+				})
+			);
+			this.showSaveSettingsButton = true;
+			this.savedSettingsFound = true;
+			this.objectSelectorDisabled = false;
+			this.fieldSelectorDisabled = false;
+		});
 	}
 
 	calculateShift() {

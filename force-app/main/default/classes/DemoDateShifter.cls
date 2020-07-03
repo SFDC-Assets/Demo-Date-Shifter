@@ -76,7 +76,7 @@ public without sharing class DemoDateShifter {
     //  Set the user's custom setting.
     
     @AuraEnabled
-    public static void setCustomDateShifterSettings(String objectApiName, String fieldApiName){
+    public static void setCustomDateShifterSettings (String objectApiName, String fieldApiName){
         insert new Date_Shifter_Saved_Settings__c (
             Name = UserInfo.getUserName(),
             SetupOwnerId = UserInfo.getUserId(),
