@@ -1,7 +1,7 @@
 <template>
 	<lightning-card icon-name="standard:event">
 		<div slot="title">
-			<strong><h2>Demo Date Shifter</h2></strong>
+			<strong><h2>{cardTitle}</h2></strong>
 		</div>
 		<template if:true={startingDateShift}>
 			<lightning-spinner alternative-text="Starting date shift ..."></lightning-spinner>
@@ -16,7 +16,7 @@
 		<template if:false={shiftInProgress}>
 			<c-date-shift-date-selector ondatefilterchange={handleDateFilterChange}></c-date-shift-date-selector>
 			<template if:true={objectListIsEmpty}>
-				<div class="slds-p-around_large">
+				<section class="slds-p-around_large">
 					<p class="slds-hyphenate">
 						<em>
 							You do not have any active date shift objects. You can create new ones from the <strong>Date Shift Objects</strong> tab or you can activate existing ones so that
@@ -32,11 +32,11 @@
 							onclick={handleDateShiftObjectClick}
 						></lightning-button>
 					</div>
-				</div>
+				</section>
 			</template>
 			<template if:false={objectListIsEmpty}>
 				<template if:true={tooManyObjects}>
-					<div class="slds-p-around_large">
+					<section class="slds-p-around_large">
 						<p class="slds-hyphenate">
 							<em> The maximum number of active date shift objects is {maxDateShiftObjects}. You can disable some from the <strong>Date Shift Objects</strong> tab. </em>
 						</p>
@@ -49,7 +49,7 @@
 								onclick={handleDateShiftObjectClick}
 							></lightning-button>
 						</div>
-					</div>
+					</section>
 				</template>
 				<template if:false={tooManyObjects}>
 					<section class="slds-p-around_medium">
@@ -69,9 +69,9 @@
 			</template>
 		</template>
 		<template if:true={shiftInProgress}>
-			<div class="slds-p-horizontal_medium">
+			<section class="slds-p-horizontal_medium">
 				<template if:false={dateShiftFinished}>
-					<p class="slds-p-vertical_medium slds-hyphenate">
+					<p class="slds-p-bottom_medium slds-hyphenate">
 						All the <code>Date</code> and <code>DateTime</code> fields in the following objects are being shifted {forBack} by&nbsp;
 						<span> <lightning-formatted-number value={minutesToShift}></lightning-formatted-number> minutes </span>
 						<span> (<lightning-formatted-number value={daysToShift} maximum-fraction-digits="0"></lightning-formatted-number> days). </span> If you navigate away from this
@@ -79,56 +79,68 @@
 					</p>
 				</template>
 				<template if:true={dateShiftFinished}>
-					<p class="slds-p-vertical_medium slds-hyphenate">
+					<p class="slds-p-bottom_medium slds-hyphenate">
 						Date shifting is now complete. Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect
-						the shifted dates. If you have any questions about how to do that, please consult one of your team's Einstein Analytics Blackbelts.
+						the shifted dates.
 					</p>
 				</template>
-				<table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-p-vertical_x-large">
-					<tbody>
-						<template for:each={objectList} for:item="dso">
-							<tr class="slds-p-vertical_medium" key={dso.itemAPIName}>
-								<td class="runningObject">
-									<lightning-formatted-text value={dso.itemLabelPlural} class="slds-truncate"></lightning-formatted-text>
-								</td>
-								<td class="runningProgressBar">
-									<lightning-progress-bar
-										size="large"
-										value={dso.itemPercentage}
-										title={dso.itemToolTip}
-										aria-valuemin="0"
-										aria-valuemax={dso.itemCount}
-										aria-valuenow={dso.itemRunningTotal}
-										role="progressbar"
-									></lightning-progress-bar>
-								</td>
-								<td class="runningRemaining">
-									<template if:true={dso.itemShiftFinished}>
+				<div class="slds-p-vertical_medium slds-p-horizontal_x-large">
+					<table class="slds-text-body_small">
+						<tbody>
+							<template for:each={objectList} for:item="dso">
+								<tr class="slds-p-around_none" key={dso.itemAPIName}>
+									<td class="runningObject">
+										<strong><lightning-formatted-text value={dso.itemLabelPlural} class="slds-truncate"></lightning-formatted-text></strong>
+									</td>
+									<td class="runningCounts">
+										<lightning-formatted-number value={dso.itemRunningTotal}></lightning-formatted-number>&nbsp;/&nbsp;<lightning-formatted-number
+											value={dso.itemCount}
+										></lightning-formatted-number
+										>&nbsp;&nbsp;(<lightning-formatted-number value={dso.itemPercentage}></lightning-formatted-number>%)
+									</td>
+									<td class="runningRemaining">
+										<template if:true={dso.itemShiftFinished}>
+											<template if:true={dso.itemNumberOfErrors}>
+												<strong><span class="slds-text-color_error">Done</span></strong>
+											</template>
+											<template if:false={dso.itemNumberOfErrors}>
+												<strong><span class="slds-text-color_success">Done</span></strong>
+											</template>
+										</template>
+										<template if:false={dso.itemShiftFinished}>
+											<lightning-formatted-number value={dso.itemRemaining} class="slds-text-align_right"></lightning-formatted-number>
+										</template>
+									</td>
+									<td class="runningErrors">
 										<template if:true={dso.itemNumberOfErrors}>
-											<strong><span class="slds-text-color_error">Done</span></strong>
+											<span class="slds-text-color_error">
+												<lightning-formatted-number value={dso.itemNumberOfErrors} class="slds-text-color_error"></lightning-formatted-number>&nbsp;error(s)
+											</span>
 										</template>
-										<template if:false={dso.itemNumberOfErrors}>
-											<strong><span class="slds-text-color_success">Done</span></strong>
-										</template>
-									</template>
-									<template if:false={dso.itemShiftFinished}>
-										<lightning-formatted-number value={dso.itemRemaining} class="slds-text-align--right"></lightning-formatted-number>
-									</template>
-								</td>
-								<td class="runningErrors">
-									<template if:true={dso.itemNumberOfErrors}>
-										<span class="slds-text-color_error">
-											<lightning-formatted-number value={dso.itemNumberOfErrors} class="slds-text-color_error"></lightning-formatted-number>&nbsp;error(s)
-										</span>
-									</template>
-								</td>
-							</tr>
-						</template>
-					</tbody>
-				</table>
+									</td>
+								</tr>
+								<tr key={dso.itemAPIName}>
+									<td class="runningProgressBar" colspan="4">
+										<div class="slds-p-bottom_medium">
+											<lightning-progress-bar
+												size="large"
+												value={dso.itemPercentage}
+												title={dso.itemToolTip}
+												aria-valuemin="0"
+												aria-valuemax={dso.itemCount}
+												aria-valuenow={dso.itemRunningTotal}
+												role="progressbar"
+											></lightning-progress-bar>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
 				<template if:true={dateShiftFinished}>
 					<template if:true={dateShiftHadErrors}>
-						<p class="slds-p-vertical_medium slds-text-color_error">
+						<p class="slds-p-bottom_medium slds-text-color_error">
 							The following errors occurred during the date shift. Only these records were affected and all others were shifted properly.
 						</p>
 						<div class="slds-scrollable scrollerSize">
@@ -136,14 +148,14 @@
 						</div>
 					</template>
 				</template>
-			</div>
+			</section>
 		</template>
 		<template if:true={helpSectionVisible}>
 			<section class="slds-p-horizontal_large">
 				<lightning-tile class="slds-tile_board slds-box slds-theme_shade">
 					<lightning-icon icon-name="utility:info" slot="media"></lightning-icon>
 					<h2 class="slds-p-bottom_medium"><strong>Motivation</strong></h2>
-					<p class=slds-hyphenate>
+					<p class="slds-hyphenate">
 						This component was inspired by the Salesforce SDO/CDO Perfect Date Wizard, and includes some interesting enhancements. The Date Shifter can fine-tune the date and
 						time shifting beyond the date boundary and also shift dates backwards and forwards by arbitrary amounts. This allows an SE to shift dates forward to the date and
 						time of the actual demo instead of just the current date, and be able to shift them backwards if any anomalies resulted.

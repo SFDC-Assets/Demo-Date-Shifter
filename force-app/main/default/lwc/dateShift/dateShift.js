@@ -1,4 +1,4 @@
-import { LightningElement, wire, track } from "lwc";
+import { LightningElement, wire, track, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { subscribe, unsubscribe } from "lightning/empApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
@@ -32,6 +32,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		{ label: "Error Message", fieldName: "message", type: "text", iconName: "standard:live_chat", wrapText: true, cellAttributes: { alignment: "left" } }
 	];
 
+	@api cardTitle = "Demo Date Shifter";
+	
 	@track objectList = [];
 	@track errorList = [];
 	objectListIsEmpty = true;

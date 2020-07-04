@@ -2,5 +2,6 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>48.0</apiVersion>
     <masterLabel>Demo Date Shifter Date Selector</masterLabel>
+    <description>A Lightning Web Component that gathers object, field, and date information for the Demo Date Shifter LWC.</description>
     <isExposed>false</isExposed>
 </LightningComponentBundle>

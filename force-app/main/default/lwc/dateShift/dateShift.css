@@ -1,8 +1,10 @@
 .runningObject {
-    width: 20%;
+    width: 40%;
+    text-align: left;
 }
-.runningProgressBar {
-    width: 50%;
+.runningCounts {
+    width: 30%;
+    text-align: right;
 }
 .runningRemaining {
     width: 15%;
@@ -11,6 +13,9 @@
 .runningErrors {
     width: 15%;
     text-align: right;
+}
+.runningProgressBar {
+    width: 100%;
 }
 .scrollerSize {
     height: 200px;
