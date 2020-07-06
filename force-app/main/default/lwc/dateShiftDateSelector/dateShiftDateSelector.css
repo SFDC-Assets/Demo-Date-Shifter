@@ -1,0 +1,9 @@
+p {
+    text-align: justify;
+}
+code {
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	-webkit-hyphens: none;
+	hyphens: none;
+}

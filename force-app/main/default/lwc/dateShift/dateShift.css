@@ -1,22 +1,31 @@
+p {
+    text-align: justify;
+}
+code {
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	-webkit-hyphens: none;
+	hyphens: none;
+}
 .runningObject {
-    width: 40%;
-    text-align: left;
+	width: 40%;
+	text-align: left;
 }
 .runningCounts {
-    width: 30%;
-    text-align: right;
+	width: 30%;
+	text-align: right;
 }
 .runningRemaining {
-    width: 15%;
-    text-align: right;
+	width: 15%;
+	text-align: right;
 }
 .runningErrors {
-    width: 15%;
-    text-align: right;
+	width: 15%;
+	text-align: right;
 }
 .runningProgressBar {
-    width: 100%;
+	width: 100%;
 }
 .scrollerSize {
-    height: 200px;
+	height: 200px;
 }

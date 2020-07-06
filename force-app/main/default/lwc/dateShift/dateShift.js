@@ -8,8 +8,20 @@ import dateShift from "@salesforce/apex/DemoDateShifter.dateShift";
 export default class DateShift extends NavigationMixin(LightningElement) {
 	objectListColumns = [
 		{ label: "Records", fieldName: "itemCount", type: "number", initialWidth: 100, cellAttributes: { alignment: "right" } },
-		{ label: "Weekdays Only", fieldName: "itemWeekdaysOnly", type: "boolean", initialWidth: 120, cellAttributes: { alignment: "center" } },
-		{ label: "Adjust Minutes", fieldName: "itemAdjustMinutes", type: "boolean", initialWidth: 120, cellAttributes: { alignment: "center" } },
+		{
+			label: "Weekdays Only",
+			fieldName: "itemWeekdaysOnly",
+			type: "boolean",
+			initialWidth: 120,
+			cellAttributes: { alignment: "center" }
+		},
+		{
+			label: "Adjust Minutes",
+			fieldName: "itemAdjustMinutes",
+			type: "boolean",
+			initialWidth: 120,
+			cellAttributes: { alignment: "center" }
+		},
 		{
 			label: "Object",
 			fieldName: "itemLink",
@@ -28,12 +40,26 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			cellAttributes: { alignment: "left" },
 			typeAttributes: { label: { fieldName: "name" }, target: "_parent" }
 		},
-		{ label: "Problem Fields", fieldName: "fields", type: "text", iconName: "standard:first_non_empty", initialWidth: 200, cellAttributes: { alignment: "left" } },
-		{ label: "Error Message", fieldName: "message", type: "text", iconName: "standard:live_chat", wrapText: true, cellAttributes: { alignment: "left" } }
+		{
+			label: "Problem Fields",
+			fieldName: "fields",
+			type: "text",
+			iconName: "standard:first_non_empty",
+			initialWidth: 200,
+			cellAttributes: { alignment: "left" }
+		},
+		{
+			label: "Error Message",
+			fieldName: "message",
+			type: "text",
+			iconName: "standard:live_chat",
+			wrapText: true,
+			cellAttributes: { alignment: "left" }
+		}
 	];
 
 	@api cardTitle = "Demo Date Shifter";
-	
+
 	@track objectList = [];
 	@track errorList = [];
 	objectListIsEmpty = true;
@@ -112,14 +138,14 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 
 	handleDateShiftObjectClick(event) {
 		event.preventDefault();
-        event.stopPropagation();
+		event.stopPropagation();
 		this[NavigationMixin.Navigate](this.dateShiftObjectListViewSpec);
 	}
 
 	handleShiftDatesButton() {
 		this.startingDateShift = true;
 		dateShift({ minutesToShift: this.returnedMinutes, daysToShift: this.returnedDays })
-			.then((result) => {
+			.then(() => {
 				subscribe("/event/Date_Shift_Event__e", -1, this.handleBatchEvent.bind(this)).then((result) => {
 					this.subscription = result;
 				});
@@ -176,7 +202,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					mode: "sticky",
 					variant: "info",
 					title: `Dates were shifted ${this.forBack} by ${this.minutesToShift} minutes (${this.daysToShift} days).`,
-					message: "Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates."
+					message:
+						"Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates."
 				})
 			);
 		}

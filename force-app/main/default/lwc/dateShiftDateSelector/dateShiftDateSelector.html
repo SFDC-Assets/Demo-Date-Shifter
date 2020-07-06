@@ -3,10 +3,11 @@
 		<lightning-spinner alternative-text="Retrieving org object list ..."></lightning-spinner>
 	</template>
 	<p class="slds-p-horizontal_medium slds-hyphenate">
-		This tool shifts all <code>Date</code> and <code>DateTime</code> fields in the objects you specify by the same amount of time so that dates that lined up logically when
-		you first showed the demo can stay lined up when you do your demo again weeks or months later. To determine the amount of the shift, the tool examines the most recent
-		value in a <code>DateTime</code> field of the object that you choose below and calculates how much time separates it from the date and time you choose in the picker. Dates
-		can be shifted backwards as well as forwards.
+		This tool shifts all <code> Date </code> and <code> DateTime </code> fields in the objects you specify by the same amount of
+		time so that dates that lined up logically when you first showed the demo can stay lined up when you do your demo again weeks or
+		months later. To determine the amount of the shift, the tool examines the most recent value in a <code> DateTime </code> field
+		of the object that you choose below and calculates how much time separates it from the date and time you choose in the picker.
+		Dates can be shifted backwards as well as forwards.
 	</p>
 	<lightning-layout>
 		<lightning-layout-item size="6" padding="around-medium">
@@ -76,7 +77,10 @@
 						<div class="slds-box slds-text-align_center slds-p-around_none">
 							<div class="slds-p-vertical_xx-small">
 								<strong>
-									<lightning-formatted-number value={returnedMinutes} class="slds-text-heading_large slds-text-color_destructive"></lightning-formatted-number>
+									<lightning-formatted-number
+										value={returnedMinutes}
+										class="slds-text-heading_large slds-text-color_destructive"
+									></lightning-formatted-number>
 								</strong>
 							</div>
 							<div class="slds-theme_shade slds-p-vertical_xxx-small">
@@ -93,7 +97,10 @@
 						<div class="slds-box slds-text-align_center slds-p-around_none">
 							<div class="slds-p-vertical_xx-small">
 								<strong>
-									<lightning-formatted-number value={returnedDays} class="slds-text-heading_large slds-text-color_destructive"></lightning-formatted-number>
+									<lightning-formatted-number
+										value={returnedDays}
+										class="slds-text-heading_large slds-text-color_destructive"
+									></lightning-formatted-number>
 								</strong>
 							</div>
 							<div class="slds-theme_shade slds-p-vertical_xxx-small">
@@ -112,7 +119,8 @@
 					Here is what will happen:
 				</p>
 				<p class="slds-p-bottom_small slds-hyphenate">
-					The difference between the most recent <code>{fieldApiName}</code> field of the <code>{objectApiName}</code> object in your org (<lightning-formatted-date-time
+					The difference between the most recent <code>{fieldApiName}</code> field of the <code>{objectApiName}</code> object in
+					your org (<lightning-formatted-date-time
 						value={mostRecent}
 						year="numeric"
 						day="2-digit"
@@ -128,24 +136,44 @@
 						hour="numeric"
 						minute="2-digit"
 					></lightning-formatted-date-time
-					>) is <strong><lightning-formatted-number value={minutesToShift} class="slds-text-color_destructive"></lightning-formatted-number></strong> minutes. So ...
+					>) is
+					<strong>
+						&nbsp;<lightning-formatted-number
+							value={minutesToShift}
+							class="slds-text-color_destructive"
+						></lightning-formatted-number
+						>&nbsp;
+					</strong>
+					minutes. So ...
 				</p>
 				<ul class="slds-list_dotted slds-hyphenate">
 					<li>
-						All <code>DateTime</code> fields in all records for each of the objects in the list below will be shifted <strong>{forBack}</strong> by&nbsp;<strong
-							><lightning-formatted-number value={minutesToShift} class="slds-text-color_destructive"></lightning-formatted-number></strong
-						>&nbsp;minutes. If the <strong>Adjust Minutes</strong> checkbox for the object is unchecked, then the <code>DateTime</code> fields will be shifted by the nearest
-						number of whole days.
+						All <code> DateTime </code> fields in all records for each of the objects in the list below will be shifted
+						<strong> {forBack} </strong> by
+						<strong>
+							&nbsp;<lightning-formatted-number
+								value={minutesToShift}
+								class="slds-text-color_destructive"
+							></lightning-formatted-number
+							>&nbsp;
+						</strong>
+						minutes. If the <strong>Adjust Minutes</strong> checkbox for the object is unchecked, then the
+						<code> DateTime </code> fields will be shifted by the nearest number of whole days.
 					</li>
 					<li>
-						All <code>Date</code> fields in all records for each of the objects in the list below will be shifted <strong>{forBack}</strong> by&nbsp;<strong
-							><lightning-formatted-number value={daysToShift} class="slds-text-color_destructive"></lightning-formatted-number></strong
-						>&nbsp;days.
+						All <code> Date </code> fields in all records for each of the objects in the list below will be shifted
+						<strong> {forBack} </strong> by
+						<strong>
+							&nbsp;<lightning-formatted-number value={daysToShift} class="slds-text-color_destructive"></lightning-formatted-number
+							>&nbsp;
+						</strong>
+						days.
 					</li>
 					<li>
-						If the <strong>Weekdays Only</strong> checkbox for the object is checked, then the shifted dates will be further adjusted so that they do not fall on weekends. If
-						the shifted date falls on a Saturday, it will be further adjusted one whole day to fall on the previous Friday; if the shifted date falls on a Sunday, it will be
-						further adjusted one whole day to fall on the following Monday.
+						If the <strong>Weekdays Only</strong> checkbox for the object is checked, then the shifted dates will be further
+						adjusted so that they do not fall on weekends. If the shifted date falls on a Saturday, it will be further adjusted one
+						whole day to fall on the previous Friday; if the shifted date falls on a Sunday, it will be further adjusted one whole
+						day to fall on the following Monday.
 					</li>
 				</ul>
 			</section>

@@ -7,7 +7,7 @@ import getOrgObjectList from "@salesforce/apex/DemoDateShifter.getOrgObjectList"
 import getDateTimeFields from "@salesforce/apex/DemoDateShifter.getDateTimeFields";
 import getMinutesToShift from "@salesforce/apex/DemoDateShifter.getMinutesToShift";
 
-export default class DateSelector extends LightningElement {
+export default class DateShiftDateSelector extends LightningElement {
 	@track orgObjectList = [];
 	objectApiName = "";
 	get objectSelectorDisabled() {
@@ -142,27 +142,35 @@ export default class DateSelector extends LightningElement {
 	}
 
 	handleSaveSettingsButton(event) {
-		setCustomDateShifterSettings({ objectApiName: this.objectApiName, fieldApiName: this.fieldApiName }).then((result) => {
-			this.dispatchEvent(
-				new ShowToastEvent({
-					variant: "success",
-					message: "Your settings have been saved."
-				})
-			);
-			this.savedSettingsFound = true;
-		});
+		setCustomDateShifterSettings({ objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
+			.then(() => {
+				this.dispatchEvent(
+					new ShowToastEvent({
+						variant: "success",
+						message: "Your settings have been saved."
+					})
+				);
+				this.savedSettingsFound = true;
+			})
+			.catch((error) => {
+				this.error = error;
+			});
 	}
 
 	handleClearSettingsButton(event) {
-		deleteCustomDateShifterSettings().then((result) => {
-			this.dispatchEvent(
-				new ShowToastEvent({
-					variant: "success",
-					message: "Your saved settings have been removed."
-				})
-			);
-			this.savedSettingsFound = false;
-		});
+		deleteCustomDateShifterSettings()
+			.then(() => {
+				this.dispatchEvent(
+					new ShowToastEvent({
+						variant: "success",
+						message: "Your saved settings have been removed."
+					})
+				);
+				this.savedSettingsFound = false;
+			})
+			.catch((error) => {
+				this.error = error;
+			});
 	}
 
 	calculateShift() {
