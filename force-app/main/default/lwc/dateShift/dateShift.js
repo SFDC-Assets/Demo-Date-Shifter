@@ -132,7 +132,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			});
 			this.objectListIsEmpty = this.objectList.length === 0;
 		} else if (error) {
-			this.error = error;
+			this.showErrorToast(error, "Could not get the list of object items");
 		}
 	}
 
@@ -152,7 +152,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 				this.shiftInProgress = true;
 			})
 			.catch((error) => {
-				this.error = error;
+				this.showErrorToast(error, "Could not shift the dates in the org");
 			});
 		this.startingDateShift = false;
 	}
@@ -207,5 +207,19 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 				})
 			);
 		}
+	}
+
+	showErrorToast(error, title) {
+		this.error = "Unknown error";
+		if (Array.isArray(error.body)) this.error = error.body.map((err) => err.message).join(", ");
+		else if (typeof error.body.message === "string") this.error = error.body.message;
+		this.dispatchEvent(
+			new ShowToastEvent({
+				mode: "sticky",
+				variant: "error",
+				title: title,
+				message: this.error
+			})
+		);
 	}
 }

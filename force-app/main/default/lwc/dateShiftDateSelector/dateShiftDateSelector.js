@@ -96,11 +96,11 @@ export default class DateShiftDateSelector extends LightningElement {
 					}
 				})
 				.catch((error) => {
-					this.error = error;
+					this.showErrorToast(error, "Could not get custom date shifter settings");
 				});
 			this.loading = false;
 		} else if (error) {
-			this.error = error;
+			this.showErrorToast(error, "Could not get the org's list of objects");
 		}
 	}
 
@@ -120,7 +120,7 @@ export default class DateShiftDateSelector extends LightningElement {
 				label: "Select a field"
 			});
 		} else if (error) {
-			this.error = error;
+			this.showErrorToast(error, `Could not get the Date and DateTime fields for the ${this.objectApiName} object`);
 		}
 	}
 
@@ -153,7 +153,7 @@ export default class DateShiftDateSelector extends LightningElement {
 				this.savedSettingsFound = true;
 			})
 			.catch((error) => {
-				this.error = error;
+				this.showErrorToast(error, "Could not save custom date shifter settings");
 			});
 	}
 
@@ -169,7 +169,7 @@ export default class DateShiftDateSelector extends LightningElement {
 				this.savedSettingsFound = false;
 			})
 			.catch((error) => {
-				this.error = error;
+				this.showErrorToast(error, "Could not delete custom settings");
 			});
 	}
 
@@ -186,7 +186,7 @@ export default class DateShiftDateSelector extends LightningElement {
 					this.notifyParent(this.shiftAmountVisible);
 				})
 				.catch((error) => {
-					this.error = error;
+					this.showErrorToast(error, "Could not calculate the time shift");
 				});
 		}
 	}
@@ -205,6 +205,20 @@ export default class DateShiftDateSelector extends LightningElement {
 					fieldApiName: this.fieldApiName,
 					dateOfDemo: this.dateOfDemo
 				}
+			})
+		);
+	}
+
+	showErrorToast(error, title) {
+		this.error = "Unknown error";
+		if (Array.isArray(error.body)) this.error = error.body.map((err) => err.message).join(", ");
+		else if (typeof error.body.message === "string") this.error = error.body.message;
+		this.dispatchEvent(
+			new ShowToastEvent({
+				mode: "sticky",
+				variant: "error",
+				title: title,
+				message: this.error
 			})
 		);
 	}
