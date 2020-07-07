@@ -1,15 +1,19 @@
 {
-  "packageDirectories": [
-    {
-      "path": "force-app",
-      "default": true,
-      "package": "Demo Date Shifter",
-      "versionName": "Version 1.0",
-      "versionNumber": "1.0.NEXT",
-      "versionDescription": "Initial package test"
+    "packageDirectories": [
+        {
+            "path": "force-app",
+            "default": true,
+            "package": "Demo Date Shifter",
+            "versionName": "Version 1.0",
+            "versionNumber": "1.0.0.NEXT",
+            "versionDescription": "Initial package test"
+        }
+    ],
+    "namespace": "",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "48.0",
+    "packageAliases": {
+        "Demo Date Shifter": "0Ho2E000000007CSAQ",
+        "Demo Date Shifter@1.0.0-1": "04t2E000003oboDQAQ"
     }
-  ],
-  "namespace": "",
-  "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "48.0"
 }
