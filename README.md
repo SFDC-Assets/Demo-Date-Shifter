@@ -1,10 +1,10 @@
 ![Creative Commons License](https://img.shields.io/badge/license-Creative%20Commons-success) ![In Development](https://img.shields.io/badge/status-In%20Development-yellow) ![Code Coverage](https://img.shields.io/badge/code%20coverage-93%25-green)
 
-# Demo Date Shifter
 
+<h1 align="center">DEMO DATE SHIFTER</h1>
+<p align="center">
 This package contains tabs, Lightning components, and other support to shift `Date` and `DateTime` fields in selected objects. The user specifies which objects whose date fields are to be adjusted, a reference field in an object that tells how the dates are to be relatively shifted, and a date and time to shift to.
-
-![Demo Shift Dates](/images/ShiftDates.gif)
+</p>
 
 ## Summary
 
@@ -47,4 +47,5 @@ Simply click the button below and log into your org:
 - 2.0 (2020-07-07): New and improved version with LWCs, error checking, arbitary object and field selection, progress race track.
 
 ## Maintainer
+
 [John Meyer / johnsfdemo](https://github.com/johnsfdemo)
