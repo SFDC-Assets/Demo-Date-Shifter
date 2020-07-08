@@ -37,8 +37,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			type: "url",
 			initialWidth: 200,
 			iconName: "standard:record",
-			cellAttributes: { alignment: "left" },
-			typeAttributes: { label: { fieldName: "name" }, target: "_parent" }
+			cellAttributes: { alignment: "left", iconName: "utility:new_window", iconAlternativeText: "Go To Record" },
+			typeAttributes: { label: { fieldName: "name" }, tooltip: { fieldName: "id" }, target: "_parent" }
 		},
 		{
 			label: "Problem Fields",
@@ -46,6 +46,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			type: "text",
 			iconName: "standard:first_non_empty",
 			initialWidth: 200,
+			wrapText: true,
 			cellAttributes: { alignment: "left" }
 		},
 		{

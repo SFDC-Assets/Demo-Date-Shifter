@@ -9,6 +9,7 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
     private Integer minutesToAdd = 0;
     private Integer daysToAdd = 0;
     private String sObjectAPIName;
+    private String sObjectLabel;
     private List<String> fieldList;
     private Boolean weekdaysOnly;
     private Boolean adjustMinutes;
@@ -31,6 +32,7 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
         minutesToAdd = additionalMinutes;
         daysToAdd = additionalDays;
         sObjectAPIName = objectAPIName;
+        sObjectLabel = Schema.getGlobalDescribe().get(objectAPIName).getDescribe().getLabel();
         fieldList = fields;
         weekdaysOnly = weekdays;
         adjustMinutes = minutes;
@@ -40,7 +42,7 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
     //  Start the query.
     
     global Database.QueryLocator start (Database.BatchableContext bc) {
-        return Database.getQueryLocator('SELECT Name, ' + String.join(fieldList, ',') + ' FROM ' + sObjectAPIName);
+        return Database.getQueryLocator('SELECT ' + String.join(fieldList, ',') + ' FROM ' + sObjectAPIName);
     }
     
     
@@ -76,8 +78,8 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
         for (Database.SaveResult result : Database.update(scope, false)) {
             if (!result.isSuccess())
                 for (Database.Error error : result.getErrors()) {
-                    errorJSON += '{"id":"' + scope.get(index).get('Id') + '","name":"' + scope.get(index).get('Name') +
-                        '","link":"/lightning/r/' + scope.get(index).get('Id') + '/view","fields":"' +
+                    String id = (String) scope.get(index).get('Id');
+                    errorJSON += '{"id":"' + id + '","name":"' + sObjectLabel + '","link":"/lightning/r/' + id + '/view","fields":"' +
                         String.join(error.getFields(),',') + '","message":"' + error.getMessage().escapeEcmaScript() + '"},';
                     totalErrors++;
                 }
