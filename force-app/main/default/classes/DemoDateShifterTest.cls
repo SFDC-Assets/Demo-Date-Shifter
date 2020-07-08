@@ -17,24 +17,33 @@ private without sharing class DemoDateShifterTest {
     @testSetup
     static void setup () {
 
-        List<Demo_Date_Shifter_Test_Current__c> current = new List<Demo_Date_Shifter_Test_Current__c>();
-        for (Integer i = 0; i < 5; i++)
-            current.add(new Demo_Date_Shifter_Test_Current__c (Sample_Date_Field__c = today, Sample_DateTime_Field__c = now));
-        insert current;
+        List<Shipment> shipments = new List<Shipment>();
+        for (Integer i = 0; i < 7; i++)
+            shipments.add(new Shipment (
+                ShipToName = 'Test Name',
+                ExpectedDeliveryDate = now.addDays(i)
+            ));
+        insert shipments;
 
-        List<Demo_Date_Shifter_Test_Past__c> past = new List<Demo_Date_Shifter_Test_Past__c>();
-        for (Integer i = 0; i < 5; i++)
-            past.add(new Demo_Date_Shifter_Test_Past__c (Sample_Date_Field__c = today, Sample_DateTime_Field__c = now));
-        insert past;        
+        List<Task> tasks = new List<Task>();
+        for (Integer i = 0; i < 7; i++)
+            tasks.add(new Task (
+                OwnerId = UserInfo.getUserId(),
+                Status = 'Not Started',
+                Subject = 'Test',
+                Priority = 'Normal',
+                ActivityDate = today.addDays(i)
+            ));
+        insert tasks;        
 
         insert new Date_Shift_Object__c(
-            Object_API_Name__c = 'Demo_Date_Shifter_Test_Current__c',
+            Object_API_Name__c = 'Shipment',
             Active__c = true,
             Adjust_Minutes__c = true,
-            Weekdays_Only__c = false
+            Weekdays_Only__c = true
         );
         insert new Date_Shift_Object__c(
-            Object_API_Name__c = 'Demo_Date_Shifter_Test_Past__c',
+            Object_API_Name__c = 'Task',
             Active__c = true,
             Adjust_Minutes__c = false,
             Weekdays_Only__c = true
@@ -44,15 +53,13 @@ private without sharing class DemoDateShifterTest {
     @isTest
     static void testGetOrgObjectList () {
 
-        DemoDateShifter.Selector current = new DemoDateShifter.Selector();
-
         Test.startTest();
         List<DemoDateShifter.Selector> selectors = DemoDateShifter.getOrgObjectList();
         Test.stopTest();
 
         Boolean found = false;
         for (DemoDateShifter.Selector selector : selectors)
-            if (selector.apiName == 'Demo_Date_Shifter_Test_Current__c') {
+            if (selector.apiName == 'Task') {
                 found = true;
                 break;
             }
@@ -67,7 +74,7 @@ private without sharing class DemoDateShifterTest {
         DemoDateShifter.DateShifterSettings setting = DemoDateShifter.getCustomDateShifterSettings();
         System.assert(!setting.settingsFound);
 
-        DemoDateShifter.setCustomDateShifterSettings ('Demo_Date_Shifter_Test_Current__c', 'Sample_DateTime_Field__c');
+        DemoDateShifter.setCustomDateShifterSettings ('Shipment', 'ExpectedDeliveryDate');
         setting = DemoDateShifter.getCustomDateShifterSettings();
         System.assert(setting.settingsFound);
 
@@ -82,12 +89,12 @@ private without sharing class DemoDateShifterTest {
     static void testGetDateTimeFields () {
 
         Test.startTest();
-        List<DemoDateShifter.Selector> selectors = DemoDateShifter.getDateTimeFields('Demo_Date_Shifter_Test_Current__c');
+        List<DemoDateShifter.Selector> selectors = DemoDateShifter.getDateTimeFields('Shipment');
         Test.stopTest();
 
         Boolean found = false;
         for (DemoDateShifter.Selector selector : selectors)
-            if (selector.apiName == 'Sample_DateTime_Field__c') {
+            if (selector.apiName == 'ExpectedDeliveryDate') {
                 found = true;
                 break;
             }
@@ -98,7 +105,7 @@ private without sharing class DemoDateShifterTest {
     static void testGetMinutesToShift () {
         Test.startTest();
         DemoDateShifter.DateDifference diff = DemoDateShifter.getMinutesToShift(now.format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'','GMT'),
-            'Demo_Date_Shifter_Test_Current__c', 'Sample_DateTime_Field__c');
+            'Shipment', 'ExpectedDeliveryDate');
         Test.stopTest();
         System.assert(diff.minutes < 2);
     }
@@ -110,9 +117,10 @@ private without sharing class DemoDateShifterTest {
         DemoDateShifter.dateShift(MINUTES, DAYS);
         Test.stopTest();
 
-        Demo_Date_Shifter_Test_Current__c current = [SELECT Sample_Date_Field__c, Sample_DateTime_Field__c FROM Demo_Date_Shifter_Test_Current__c LIMIT 1];
-        System.assert(current.Sample_Date_Field__c.isSameDay(nextWeek));
-        System.assert(Math.abs(current.Sample_DateTime_Field__c.getTime() - nextWeekTime.getTime()) < 10000);
+        Task tsk = [SELECT ActivityDate FROM Task ORDER BY ActivityDate ASC LIMIT 1];
+        Shipment ship = [SELECT ExpectedDeliveryDate FROM Shipment ORDER BY ExpectedDeliveryDate ASC LIMIT 1];
+        System.assert(tsk.ActivityDate.isSameDay(nextWeek));
+        System.assert(Math.abs(ship.ExpectedDeliveryDate.getTime() - nextWeekTime.getTime()) < 10000);
     }
 
 }
