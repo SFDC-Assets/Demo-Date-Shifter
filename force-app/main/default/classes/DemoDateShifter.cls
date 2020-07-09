@@ -206,7 +206,7 @@ public without sharing class DemoDateShifter {
             item.itemLabelPlural = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabelPlural();
             item.itemWeekdaysOnly = dso.Weekdays_Only__c;
             item.itemAdjustMinutes = dso.Adjust_Minutes__c;
-            item.itemLink = '/lightning/r/' + dso.Id + '/view';
+            item.itemLink = URL.getSalesforceBaseUrl().toExternalForm() + '/' + dso.Id;
             item.itemCount = Database.countQuery('SELECT count() FROM ' + dso.Object_API_Name__c);
             item.itemRunningTotal = 0;
             item.itemRemaining = item.itemCount;
