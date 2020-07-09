@@ -1,11 +1,12 @@
 #!/bin/bash
 readonly orgAlias="DateShifterScratch"
+readonly devHubUserName="MyComponents"
 
 echo "*** Creating scratch org ..."
 sfdx force:org:create --definitionfile config/project-scratch-def.json \
     --type scratch \
     --nonamespace \
-    --targetdevhubusername MyComponents \
+    --targetdevhubusername "$devHubUserName" \
     --setdefaultusername \
     --setalias "$orgAlias" \
     --durationdays 30 \
