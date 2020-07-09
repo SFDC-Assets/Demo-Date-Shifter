@@ -54,9 +54,8 @@ private without sharing class DemoDateShifterTest {
     static void testGetOrgObjectList () {
 
         Test.startTest();
-        List<DemoDateShifter.Selector> selectors = DemoDateShifter.getOrgObjectList();
-        Test.stopTest();
 
+        List<DemoDateShifter.Selector> selectors = DemoDateShifter.getOrgObjectList();
         Boolean found = false;
         for (DemoDateShifter.Selector selector : selectors)
             if (selector.apiName == 'Task') {
@@ -64,6 +63,8 @@ private without sharing class DemoDateShifterTest {
                 break;
             }
         System.assert(found);
+
+        Test.stopTest();
     }
 
     @isTest
@@ -89,9 +90,8 @@ private without sharing class DemoDateShifterTest {
     static void testGetDateTimeFields () {
 
         Test.startTest();
-        List<DemoDateShifter.Selector> selectors = DemoDateShifter.getDateTimeFields('Shipment');
-        Test.stopTest();
 
+        List<DemoDateShifter.Selector> selectors = DemoDateShifter.getDateTimeFields('Shipment');
         Boolean found = false;
         for (DemoDateShifter.Selector selector : selectors)
             if (selector.apiName == 'ExpectedDeliveryDate') {
@@ -99,28 +99,33 @@ private without sharing class DemoDateShifterTest {
                 break;
             }
         System.assert(found);
+
+        Test.stopTest();
     }
 
     @isTest
     static void testGetMinutesToShift () {
+
         Test.startTest();
         DemoDateShifter.DateDifference diff = DemoDateShifter.getMinutesToShift(now.format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'','GMT'),
             'Shipment', 'ExpectedDeliveryDate');
-        Test.stopTest();
         System.assert(diff.minutes < 2);
+        Test.stopTest();
     }
 
     @isTest
     static void testDateShift () {
 
         Test.startTest();
-        DemoDateShifter.dateShift(MINUTES, DAYS);
-        Test.stopTest();
 
+        DemoDateShifter.dateShift(MINUTES, DAYS);
         Task tsk = [SELECT ActivityDate FROM Task ORDER BY ActivityDate ASC LIMIT 1];
         Shipment ship = [SELECT ExpectedDeliveryDate FROM Shipment ORDER BY ExpectedDeliveryDate ASC LIMIT 1];
+
         System.assert(tsk.ActivityDate.isSameDay(nextWeek));
         System.assert(Math.abs(ship.ExpectedDeliveryDate.getTime() - nextWeekTime.getTime()) < 10000);
+
+        Test.stopTest();
     }
 
 }

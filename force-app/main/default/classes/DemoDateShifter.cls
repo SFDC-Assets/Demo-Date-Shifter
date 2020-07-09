@@ -228,7 +228,7 @@ public without sharing class DemoDateShifter {
             if (dfr.isUpdateable() && (dfr.getType().name() == 'Date' || dfr.getType().name() == 'DateTime'))
                 dateFieldNames.add(dfr.getName());
         }
-        dateFieldNames.removeAll(new List<String> {'SlaStartDate', 'SlaExitDate'});			//  Special case: never return these
+        dateFieldNames.removeAll(new List<String> {'SlaStartDate', 'SlaExitDate', 'ActivityDate', 'ActivityDateTime'});			//  Special case: never return these
         return new List<String>(dateFieldNames);
    }    
 }
