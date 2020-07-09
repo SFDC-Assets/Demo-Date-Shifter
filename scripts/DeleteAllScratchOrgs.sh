@@ -1,7 +1,7 @@
 #!/bin/bash
 
 readonly devHubOrgAlias="MyComponents"
-readonly tmpFile="data/tmp/ScratchOrgs.csv"
+readonly tmpFile="tmp/ScratchOrgs.csv"
 
 echo "*** Finding scratch orgs ..."
 sfdx force:data:soql:query --query "SELECT Id FROM ScratchOrgInfo" --resultformat csv --targetusername "$devHubOrgAlias"  > "$tmpFile"
