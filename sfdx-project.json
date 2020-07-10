@@ -4,8 +4,8 @@
             "path": "force-app",
             "default": true,
             "package": "Demo Date Shifter",
-            "versionName": "Demo Date Shifter Version 1.1.1",
-            "versionNumber": "1.1.1.0"
+            "versionName": "Demo Date Shifter Version 1.2",
+            "versionNumber": "1.2.0.0"
         }
     ],
     "namespace": "",
@@ -14,6 +14,7 @@
     "packageAliases": {
         "Demo Date Shifter": "0Ho2E000000007CSAQ",
         "Demo Date Shifter@1.0.0-1": "04t2E000003oboDQAQ",
-        "Demo Date Shifter@1.1.0-0": "04t2E000003obomQAA"
+        "Demo Date Shifter@1.1.0-0": "04t2E000003obomQAA",
+        "Demo Date Shifter@1.2.0-0": "04t2E000003obpGQAQ"
     }
 }
