@@ -16,6 +16,8 @@ This component was inspired by the Salesforce SDO/CDO Perfect Date Wizard writte
 - You can specify that certain dates, such as calendar events and task due dates, remain on weekdays after the date shifting.
 - You can watch the progress of the shift as it completes.
 
+![Demo Date Shifter](/images/DemoDateShifter.gif)
+
 ## Installation and Setup
 
 Installation is easy: just read the disclaimer below and click on the **Deploy to Salesforce** button. This will install the component, all custom objects, tabs, and page layouts needed to use the component and assign all appropriate visibilities to the System Administrator profile. Simply create an app page using Lightning App Builder and drag the component onto the page where you would like it.
