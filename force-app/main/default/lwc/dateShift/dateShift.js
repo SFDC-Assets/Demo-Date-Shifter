@@ -7,7 +7,13 @@ import dateShift from "@salesforce/apex/DemoDateShifter.dateShift";
 
 export default class DateShift extends NavigationMixin(LightningElement) {
 	objectListColumns = [
-		{ label: "Records", fieldName: "itemCount", type: "number", initialWidth: 100, cellAttributes: { alignment: "right" } },
+		{
+			label: "Records",
+			fieldName: "itemCount",
+			type: "number",
+			initialWidth: 100,
+			cellAttributes: { alignment: "right" }
+		},
 		{
 			label: "Weekdays Only",
 			fieldName: "itemWeekdaysOnly",
