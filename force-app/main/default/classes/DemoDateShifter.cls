@@ -4,12 +4,6 @@
 //  Contact: john.meyer@salesforce.com
 
 public without sharing class DemoDateShifter {
- 
-    public class Toast {
-        @AuraEnabled public String toastMessage;
-        @AuraEnabled public String toastVariant;
-        @AuraEnabled public String toastMode;
-    }
     
     public class ObjectItem {
         @AuraEnabled public Id itemId;
@@ -91,7 +85,9 @@ public without sharing class DemoDateShifter {
 
     @AuraEnabled(cacheable=true)
     public static List<Selector> getOrgObjectList () {
+
         List<Selector> osList = new List<Selector>();
+
         for (Schema.SObjectType sot : Schema.getGlobalDescribe().values()) {
             Schema.DescribeSObjectResult dsor = sot.getDescribe();
             if (dsor.isUpdateable()) {
@@ -111,6 +107,7 @@ public without sharing class DemoDateShifter {
                 }
             }
         }
+
         return osList;
     }
 
@@ -119,7 +116,9 @@ public without sharing class DemoDateShifter {
 
     @AuraEnabled(cacheable=true)
     public static List<Selector> getDateTimeFields (String objectApiName) {
+
         List<Selector> fieldList = new List<Selector>();
+
         if (objectApiName != '') {
             for (Schema.SObjectField field : Schema.getGlobalDescribe().get(objectAPIName).getDescribe().fields.getMap().values()) {
                 Schema.DescribeFieldResult dfr = field.getDescribe();
@@ -131,17 +130,20 @@ public without sharing class DemoDateShifter {
                 }
             }
         }
+
         return fieldList;
     }
 
         
-    //  Get the list of the date shift objects to put into the list on the Lightning component.
+    //  Get the list of the date shift objects.
         
     @AuraEnabled(cacheable=true)
-    public static List<ObjectItem> getObjectItems () {
+    public static List<ObjectItem> getDateShiftObjects () {
+
         List<ObjectItem> objectItems = new List<ObjectItem>();        
         for (Date_Shift_Object__c dso : [SELECT Object_API_Name__c FROM Date_Shift_Object__c WHERE Active__c = true ORDER BY Object_API_Name__c ASC])
             objectItems.add(getObjectItem(dso.Object_API_Name__c));       
+
         return objectItems;
     }
     
@@ -150,9 +152,11 @@ public without sharing class DemoDateShifter {
     
     @AuraEnabled(cacheable=false)
     public static DateDifference getMinutesToShift (String dateOfDemo, String objectApiName, String fieldApiName) {
+
         DateDifference diff = new DateDifference();
         diff.minutes = 0;
         diff.mostRecent = null;
+
         if (dateOfDemo != '' && objectApiName != '' && fieldApiName != '') {
             sObject record = Database.query('SELECT ' + fieldApiName + ' FROM ' + objectApiName + ' WHERE ' + fieldApiName + ' != null ORDER BY ' + fieldApiName + ' DESC LIMIT 1');
             if (record != null) {
@@ -163,6 +167,7 @@ public without sharing class DemoDateShifter {
                 }
             }
         }
+
         return diff;
     }
     
@@ -171,7 +176,7 @@ public without sharing class DemoDateShifter {
     
     @AuraEnabled
     public static void dateShift (Integer minutesToShift, Integer daysToShift) {        
-        for (ObjectItem item : getObjectItems ())
+        for (ObjectItem item : getDateShiftObjects())
             Database.executeBatch(new DemoDateShifterBatch(minutesToShift, daysToShift, item.itemAPIName, getDateFieldNames(item.itemAPIName), item.itemWeekdaysOnly, item.itemAdjustMinutes));      
     }
     
@@ -181,9 +186,9 @@ public without sharing class DemoDateShifter {
     
     private static ObjectItem getObjectItem (String sObjectAPIName) {
         
-        Date_Shift_Object__c dso = [SELECT Object_API_Name__c, Weekdays_Only__c, Adjust_Minutes__c FROM Date_Shift_Object__c WHERE Active__c = true AND Object_API_Name__c = :sObjectAPIName LIMIT 1];
-        
+        Date_Shift_Object__c dso = [SELECT Object_API_Name__c, Weekdays_Only__c, Adjust_Minutes__c FROM Date_Shift_Object__c WHERE Active__c = true AND Object_API_Name__c = :sObjectAPIName LIMIT 1];        
         ObjectItem item = new ObjectItem();
+ 
         item.itemId = dso.Id;
         item.itemAPIName = dso.Object_API_Name__c;
         item.itemLabel = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabel();
@@ -193,20 +198,22 @@ public without sharing class DemoDateShifter {
         item.itemCount = Database.countQuery('SELECT count() FROM ' + dso.Object_API_Name__c);
 
         return item;
-
     }
     
     
     //  Utility to get all of the updateable Date and DateTime field API names from the given object.
     
     private static List<String> getDateFieldNames (String sObjectAPIName) {
+
         Set<String> dateFieldNames = new Set<String>();
+
         for (Schema.SObjectField field : Schema.getGlobalDescribe().get(sObjectAPIName).getDescribe().fields.getMap().values()) {
             Schema.DescribeFieldResult dfr = field.getDescribe();
             if (dfr.isUpdateable() && (dfr.getType().name() == 'Date' || dfr.getType().name() == 'DateTime'))
                 dateFieldNames.add(dfr.getName());
         }
         dateFieldNames.removeAll(new List<String> {'SlaStartDate', 'SlaExitDate'});			//  Special case: never return these
+
         return new List<String>(dateFieldNames);
    }    
 }

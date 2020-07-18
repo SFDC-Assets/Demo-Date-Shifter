@@ -2,7 +2,7 @@ import { LightningElement, wire, track, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
 import { subscribe, unsubscribe } from "lightning/empApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import getObjectItems from "@salesforce/apex/DemoDateShifter.getObjectItems";
+import getDateShiftObjects from "@salesforce/apex/DemoDateShifter.getDateShiftObjects";
 import dateShift from "@salesforce/apex/DemoDateShifter.dateShift";
 
 export default class DateShift extends NavigationMixin(LightningElement) {
@@ -130,8 +130,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		});
 	}
 
-	@wire(getObjectItems)
-	wired_getObjectItems({ data, error }) {
+	@wire(getDateShiftObjects)
+	wired_getDateShiftObjects({ data, error }) {
 		if (data) {
 			this.objectList = [];
 			data.forEach((dso) => {
