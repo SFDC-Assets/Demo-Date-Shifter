@@ -32,8 +32,15 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			label: "Object",
 			fieldName: "itemLink",
 			type: "url",
-			cellAttributes: { iconName: "standard:shift", alignment: "left" },
-			typeAttributes: { label: { fieldName: "itemLabel" }, tooltip: { fieldName: "itemLabelPlural" }, target: "_parent" }
+			cellAttributes: {
+				iconName: "standard:shift",
+				alignment: "left"
+			},
+			typeAttributes: {
+				label: { fieldName: "itemLabel" },
+				tooltip: { fieldName: "itemLabelPlural" },
+				target: "_parent"
+			}
 		}
 	];
 	errorListColumns = [
@@ -43,8 +50,16 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			type: "url",
 			initialWidth: 200,
 			iconName: "standard:record",
-			cellAttributes: { alignment: "left", iconName: "utility:new_window", iconAlternativeText: "Go To Record" },
-			typeAttributes: { label: { fieldName: "name" }, tooltip: { fieldName: "id" }, target: "_parent" }
+			cellAttributes: {
+				alignment: "left",
+				iconName: "utility:new_window",
+				iconAlternativeText: "Go To Record"
+			},
+			typeAttributes: {
+				label: { fieldName: "name" },
+				tooltip: { fieldName: "id" },
+				target: "_parent"
+			}
 		},
 		{
 			label: "Problem Fields",
