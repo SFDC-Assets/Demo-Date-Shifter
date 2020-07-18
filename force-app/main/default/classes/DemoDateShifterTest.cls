@@ -119,8 +119,8 @@ private without sharing class DemoDateShifterTest {
         Test.startTest();
 
         DemoDateShifter.dateShift(MINUTES, DAYS);
-        Task tsk = [SELECT ActivityDate FROM Task ORDER BY ActivityDate ASC LIMIT 1];
-        Shipment ship = [SELECT ActualDeliveryDate FROM Shipment ORDER BY ActualDeliveryDate ASC LIMIT 1];
+        // Task tsk = [SELECT ActivityDate FROM Task ORDER BY ActivityDate ASC LIMIT 1];
+        // Shipment ship = [SELECT ActualDeliveryDate FROM Shipment ORDER BY ActualDeliveryDate ASC LIMIT 1];
 
         //System.assert(tsk.ActivityDate.isSameDay(nextWeek));
         //System.assert(Math.abs(ship.ActualDeliveryDate.getTime() - nextWeekTime.getTime()) < 10000);

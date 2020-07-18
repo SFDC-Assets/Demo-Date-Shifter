@@ -142,14 +142,14 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					itemLabelPlural: dso.itemLabelPlural,
 					itemWeekdaysOnly: dso.itemWeekdaysOnly,
 					itemAdjustMinutes: dso.itemAdjustMinutes,
-					itemLink: dso.itemLink,
 					itemCount: dso.itemCount,
-					itemRunningTotal: dso.itemRunningTotal,
-					itemNumberOfErrors: dso.itemNumberOfErrors,
-					itemRemaining: dso.itemRemaining,
-					itemPercentage: dso.itemPercentage,
-					itemToolTip: dso.itemToolTip,
-					itemShiftFinished: dso.itemShiftFinished
+					itemLink: `${this.dateShiftObjectListViewURL}/${dso.itemId}`,
+					itemRunningTotal: 0,
+					itemNumberOfErrors: 0,
+					itemRemaining: dso.itemCount,
+					itemPercentage: 0,
+					itemToolTip: "",
+					itemShiftFinished: false
 				});
 			});
 			this.objectListIsEmpty = this.objectList.length === 0;

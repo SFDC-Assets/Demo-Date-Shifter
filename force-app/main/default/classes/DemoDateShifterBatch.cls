@@ -89,15 +89,12 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
        
         totalRecordsProcessed += scope.size();
         
-        Database.SaveResult eventResult = EventBus.publish (new Date_Shift_Event__e (
+        EventBus.publish (new Date_Shift_Event__e (
             SObject_API_Name__c = sObjectAPIName,
             Running_Total__c = totalRecordsProcessed,
             Errors__c = totalErrors,
             Error_List__c = errorJSON
         ));
-        if (!eventResult.isSuccess())
-            for (Database.Error error : eventResult.getErrors())
-                System.debug('Date shift could not publish event: ' + error.getMessage());
     }
     
     

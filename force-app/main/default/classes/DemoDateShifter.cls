@@ -18,14 +18,7 @@ public without sharing class DemoDateShifter {
         @AuraEnabled public String itemLabelPlural;
         @AuraEnabled public Boolean itemWeekdaysOnly;
         @AuraEnabled public Boolean itemAdjustMinutes;
-        @AuraEnabled public String itemLink;
         @AuraEnabled public Integer itemCount;
-        @AuraEnabled public Integer itemRunningTotal;
-        @AuraEnabled public Integer itemNumberOfErrors;
-        @AuraEnabled public Integer itemRemaining;
-        @AuraEnabled public Integer itemPercentage;
-        @AuraEnabled public String itemToolTip;
-        @AuraEnabled public Boolean itemShiftFinished;
     }
 
     public class Selector {
@@ -51,24 +44,22 @@ public without sharing class DemoDateShifter {
 
     @AuraEnabled(cacheable=true)
     public static DateShifterSettings getCustomDateShifterSettings () {
+
         Date_Shifter_Saved_Settings__c s = Date_Shifter_Saved_Settings__c.getInstance();
         DateShifterSettings dssettings = new DateShifterSettings();
+
         if (s.Object_API_Name__c == null) {
             dssettings.settingsFound = false;
             dssettings.objectApiNameIsValid = false;
             dssettings.fieldApiNameIsValid = false;
         } else {
-            dssettings.settingsFound = true;
             dssettings.objectApiName = s.Object_API_Name__c;
             dssettings.fieldApiName = s.Field_API_Name__c;
-            Schema.SObjectType sot = Schema.getGlobalDescribe().get(s.Object_API_Name__c);
-            if (sot == null)
-                dssettings.objectApiNameIsValid = false;
-            else {
-                dssettings.objectApiNameIsValid = true;
-                dssettings.fieldApiNameIsValid = sot.getDescribe().fields.getMap().get(s.Field_API_Name__c) != null;
-            }
+            dssettings.settingsFound = true;
+            dssettings.objectApiNameIsValid = true;
+            dssettings.fieldApiNameIsValid = Schema.getGlobalDescribe().get(s.Object_API_Name__c).getDescribe().fields.getMap().get(s.Field_API_Name__c) != null;
         }
+
         return dssettings;
     }
 
@@ -149,17 +140,13 @@ public without sharing class DemoDateShifter {
     @AuraEnabled(cacheable=true)
     public static List<ObjectItem> getObjectItems () {
         List<ObjectItem> objectItems = new List<ObjectItem>();        
-        List<Date_Shift_Object__c> dateShiftObjects = [SELECT Object_API_Name__c FROM Date_Shift_Object__c WHERE Active__c = true ORDER BY Object_API_Name__c ASC];
-        for (Date_Shift_Object__c dso : dateShiftObjects) {
-            ObjectItem item = getObjectItem(dso.Object_API_Name__c);
-            if (item != null)
-                objectItems.add(item);
-        }        
+        for (Date_Shift_Object__c dso : [SELECT Object_API_Name__c FROM Date_Shift_Object__c WHERE Active__c = true ORDER BY Object_API_Name__c ASC])
+            objectItems.add(getObjectItem(dso.Object_API_Name__c));       
         return objectItems;
     }
     
     
-    //  Calculate the number of minutes to shift for displaying on the Lightning component.
+    //  Calculate the number of minutes to shift.
     
     @AuraEnabled(cacheable=false)
     public static DateDifference getMinutesToShift (String dateOfDemo, String objectApiName, String fieldApiName) {
@@ -189,33 +176,24 @@ public without sharing class DemoDateShifter {
     }
     
     
-    //  Utility to return an ObjectItem given an sObject API name.  Not the most efficient way of doing things, but hopefully there
-    //  are just a few objects in the org that need their dates shifted.
+    //  Utility to return an ObjectItem given an sObject API name.  Not the most efficient way of doing things, but we put a limit on
+    //  the number of objects in the org that can have their dates shifted in the user interface.
     
     private static ObjectItem getObjectItem (String sObjectAPIName) {
         
         Date_Shift_Object__c dso = [SELECT Object_API_Name__c, Weekdays_Only__c, Adjust_Minutes__c FROM Date_Shift_Object__c WHERE Active__c = true AND Object_API_Name__c = :sObjectAPIName LIMIT 1];
         
-        if (dso == null)
-            return null;
-        else {
-            ObjectItem item = new ObjectItem();
-            item.itemId = dso.Id;
-            item.itemAPIName = dso.Object_API_Name__c;
-            item.itemLabel = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabel();
-            item.itemLabelPlural = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabelPlural();
-            item.itemWeekdaysOnly = dso.Weekdays_Only__c;
-            item.itemAdjustMinutes = dso.Adjust_Minutes__c;
-            item.itemLink = URL.getSalesforceBaseUrl().toExternalForm() + '/' + dso.Id;
-            item.itemCount = Database.countQuery('SELECT count() FROM ' + dso.Object_API_Name__c);
-            item.itemRunningTotal = 0;
-            item.itemRemaining = item.itemCount;
-            item.itemPercentage = 0;
-            item.itemToolTip = '';
-            item.itemNumberOfErrors = 0;
-            item.itemShiftFinished = false;
-            return item;
-        }
+        ObjectItem item = new ObjectItem();
+        item.itemId = dso.Id;
+        item.itemAPIName = dso.Object_API_Name__c;
+        item.itemLabel = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabel();
+        item.itemLabelPlural = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabelPlural();
+        item.itemWeekdaysOnly = dso.Weekdays_Only__c;
+        item.itemAdjustMinutes = dso.Adjust_Minutes__c;
+        item.itemCount = Database.countQuery('SELECT count() FROM ' + dso.Object_API_Name__c);
+
+        return item;
+
     }
     
     
