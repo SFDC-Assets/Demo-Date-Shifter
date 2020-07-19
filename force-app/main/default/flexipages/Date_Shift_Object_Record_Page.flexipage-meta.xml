@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
     <flexiPageRegions>
-        <componentInstances>
-            <componentInstanceProperties>
-                <name>collapsed</name>
-                <value>false</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>hideChatterActions</name>
-                <value>false</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>numVisibleActions</name>
-                <value>3</value>
-            </componentInstanceProperties>
-            <componentName>force:highlightsPanel</componentName>
-        </componentInstances>
-        <componentInstances>
-            <componentInstanceProperties>
-                <name>decorate</name>
-                <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>richTextValue</name>
-                <value>&lt;p&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;A &lt;/span&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;Date Shift Object&lt;/b&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; specifies an object whose writeable &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;Date&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; and &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields are to be shifted by the component. If &lt;/span&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;Weekdays Only&lt;/b&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; is selected, then the shifted date is guaranteed to fall on the nearest weekday after the shifted date is calculated for that field. Select &lt;/span&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;Adjust Minutes&lt;/b&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; to adjust minutes in &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields relative to your selection (useful for round-the-clock &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields such as those you would find in objects like Cases); leave unselected for objects to adjust the date portion only (useful for &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields in objects like calendar events that typically start on hour or half-hour boundaries and should remain that way).&lt;/span&gt;&lt;/p&gt;</value>
-            </componentInstanceProperties>
-            <componentName>flexipage:richText</componentName>
-        </componentInstances>
-        <componentInstances>
-            <componentName>force:detailPanel</componentName>
-        </componentInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>collapsed</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>enableActionsConfiguration</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>hideChatterActions</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>numVisibleActions</name>
+                    <value>3</value>
+                </componentInstanceProperties>
+                <componentName>force:highlightsPanel</componentName>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>decorate</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>richTextValue</name>
+                    <value>&lt;p&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;A &lt;/span&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;Date Shift Object&lt;/b&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; specifies an object whose writeable &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;Date&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; and &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields are to be shifted by the component. If &lt;/span&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;Weekdays Only&lt;/b&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; is selected, then the shifted date is guaranteed to fall on the nearest weekday after the shifted date is calculated for that field. Leave &lt;/span&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;Adjust Minutes&lt;/b&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; selected to adjust minutes in &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields relative to your selection (useful for round-the-clock &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields such as those you would find in objects like Cases); deselect for objects to adjust the date portion only (useful for &lt;/span&gt;&lt;span style=&quot;font-size: 14px; font-family: courier;&quot;&gt;DateTime&lt;/span&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt; fields in objects like calendar events that typically start on hour or half-hour boundaries and should remain that way).&lt;/span&gt;&lt;/p&gt;</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:richText</componentName>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>force:detailPanel</componentName>
+            </componentInstance>
+        </itemInstances>
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
