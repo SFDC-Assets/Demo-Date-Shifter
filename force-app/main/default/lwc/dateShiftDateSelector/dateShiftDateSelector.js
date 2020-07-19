@@ -48,18 +48,18 @@ export default class DateShiftDateSelector extends LightningElement {
 	wired_getOrgObjectList({ data, error }) {
 		this.orgObjectList = [];
 		if (data) {
-			this.orgObjectList = [];
 			data.forEach((object) => {
 				this.orgObjectList.push({
 					value: object.apiName,
 					label: object.label
 				});
 			});
-			this.orgObjectList.sort((a, b) => (a.label > b.label ? 1 : -1));
-			this.orgObjectList.unshift({
-				value: "",
-				label: "Select an object"
-			});
+			this.orgObjectList
+				.sort((a, b) => (a.label > b.label ? 1 : -1))
+				.unshift({
+					value: "",
+					label: "Select an object"
+				});
 			getCustomDateShifterSettings()
 				.then((result) => {
 					if (result.settingsFound) {
@@ -89,21 +89,17 @@ export default class DateShiftDateSelector extends LightningElement {
 							this.fieldApiName = "";
 							this.objectApiName = "";
 						}
-					} else {
-						this.fieldApiName = "";
-					}
+					} else this.fieldApiName = "";
 				})
 				.catch((error) => {
 					this.showErrorToast(error, "Could not retrieve saved settings");
 				});
 			this.loading = false;
-		} else if (error) {
-			this.showErrorToast(error, "Could not get a list of objects in the org");
-		}
+		} else if (error) this.showErrorToast(error, "Could not get a list of objects in the org");
 	}
 
 	@wire(getDateTimeFields, { objectApiName: "$objectApiName" })
-	wired_getFieldList({ data, error }) {
+	wired_getGetDateTimeFields({ data, error }) {
 		this.fieldList = [];
 		if (data) {
 			data.forEach((field) => {
@@ -112,13 +108,14 @@ export default class DateShiftDateSelector extends LightningElement {
 					label: field.label
 				});
 			});
-			this.fieldList.sort((a, b) => (a.label > b.label ? 1 : -1)).unshift({
-				value: "",
-				label: "Select a field"
-			});
-		} else if (error) {
+			this.fieldList
+				.sort((a, b) => (a.label > b.label ? 1 : -1))
+				.unshift({
+					value: "",
+					label: "Select a field"
+				});
+		} else if (error)
 			this.showErrorToast(error, `Could not get the Date and DateTime fields for the ${this.objectApiName} object`);
-		}
 	}
 
 	handleObjectChange(event) {

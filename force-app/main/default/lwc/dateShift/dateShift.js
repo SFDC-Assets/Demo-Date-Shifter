@@ -151,9 +151,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 				});
 			});
 			this.objectListIsEmpty = this.objectList.length === 0;
-		} else if (error) {
-			this.showErrorToast(error, "Could not get the list of object items");
-		}
+		} else if (error) this.showErrorToast(error, "Could not get the list of object items");
 	}
 
 	handleDateShiftObjectClick(event) {
@@ -169,12 +167,13 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 				subscribe("/event/Date_Shift_Event__e", -1, this.handleBatchEvent.bind(this)).then((result) => {
 					this.subscription = result;
 				});
+				this.startingDateShift = false;
 				this.shiftInProgress = true;
 			})
 			.catch((error) => {
+				this.startingDateShift = false;
 				this.showErrorToast(error, "Could not shift the dates in the org");
 			});
-		this.startingDateShift = false;
 	}
 
 	handleHelpButton() {
