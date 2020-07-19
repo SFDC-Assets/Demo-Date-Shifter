@@ -38,7 +38,7 @@ The additional fields are as follows:
 
 I am a pre-sales Solutions Engineer for [Salesforce](https://www.salesforce.com) and I develop solutions for my customers to demonstrate the capabilities of the amazing Salesforce platform. *This package represents functionality that I have used for demonstration purposes  and the content herein is definitely not ready for actual production use; specifically, it has not been tested extensively nor has it been written with security and access controls in mind. By installing this package, you assume all risk for any consequences and agree not to hold me or my company liable.*  If you are OK with that ...
 
-[Install the Package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2E000003obpGQAQ)
+[Install the Package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2E000003obuHQAQ)
 
 ## Release History
 
