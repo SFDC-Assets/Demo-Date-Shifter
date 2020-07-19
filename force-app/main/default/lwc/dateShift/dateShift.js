@@ -141,7 +141,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					itemWeekdaysOnly: dso.itemWeekdaysOnly,
 					itemAdjustMinutes: dso.itemAdjustMinutes,
 					itemCount: dso.itemCount,
-					itemLink: `/lightning/r/${dso.itemId}/view`,
+					itemLink: `/lightning/r/Date_Shift_Object__c/${dso.itemId}/view`,
 					itemRunningTotal: 0,
 					itemNumberOfErrors: 0,
 					itemRemaining: dso.itemCount,

@@ -79,8 +79,8 @@ global with sharing class DemoDateShifterBatch implements Database.Batchable<sOb
             if (!result.isSuccess())
                 for (Database.Error error : result.getErrors()) {
                     String id = (String) scope.get(index).get('Id');
-                    errorJSON += '{"id":"' + id + '","name":"' + sObjectLabel + '","link":"' + URL.getSalesforceBaseUrl().toExternalForm() + '/' + id +
-                    '","fields":"' + String.join(error.getFields(),',') + '","message":"' + error.getMessage().escapeEcmaScript() + '"},';
+                    errorJSON += '{"id":"' + id + '","name":"' + sObjectLabel + '","link":"/lightning/r/' + sObjectAPIName + '/' + id + 
+                        '/view","fields":"' + String.join(error.getFields(),',') + '","message":"' + error.getMessage().escapeEcmaScript() + '"},';
                     totalErrors++;
                 }
             index++;
