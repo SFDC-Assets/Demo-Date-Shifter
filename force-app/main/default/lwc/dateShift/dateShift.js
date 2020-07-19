@@ -122,8 +122,6 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		}
 	};
 
-	error;
-
 	connectedCallback() {
 		this[NavigationMixin.GenerateUrl](this.dateShiftObjectListViewSpec).then((url) => {
 			this.dateShiftObjectListViewURL = url;
@@ -143,7 +141,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					itemWeekdaysOnly: dso.itemWeekdaysOnly,
 					itemAdjustMinutes: dso.itemAdjustMinutes,
 					itemCount: dso.itemCount,
-					itemLink: `${this.dateShiftObjectListViewURL}/${dso.itemId}`,
+					itemLink: `/lightning/r/${dso.itemId}/view`,
 					itemRunningTotal: 0,
 					itemNumberOfErrors: 0,
 					itemRemaining: dso.itemCount,

@@ -44,8 +44,6 @@ export default class DateShiftDateSelector extends LightningElement {
 		return this.objectApiName !== "" && this.fieldApiName !== "" && this.dateOfDemoSelected;
 	}
 
-	error;
-
 	@wire(getOrgObjectList)
 	wired_getOrgObjectList({ data, error }) {
 		this.orgObjectList = [];
@@ -96,11 +94,11 @@ export default class DateShiftDateSelector extends LightningElement {
 					}
 				})
 				.catch((error) => {
-					this.showErrorToast(error, "Could not get custom date shifter settings");
+					this.showErrorToast(error, "Could not retrieve saved settings");
 				});
 			this.loading = false;
 		} else if (error) {
-			this.showErrorToast(error, "Could not get the org's list of objects");
+			this.showErrorToast(error, "Could not get a list of objects in the org");
 		}
 	}
 
@@ -114,8 +112,7 @@ export default class DateShiftDateSelector extends LightningElement {
 					label: field.label
 				});
 			});
-			this.fieldList.sort((a, b) => (a.label > b.label ? 1 : -1));
-			this.fieldList.unshift({
+			this.fieldList.sort((a, b) => (a.label > b.label ? 1 : -1)).unshift({
 				value: "",
 				label: "Select a field"
 			});
@@ -153,7 +150,7 @@ export default class DateShiftDateSelector extends LightningElement {
 				this.savedSettingsFound = true;
 			})
 			.catch((error) => {
-				this.showErrorToast(error, "Could not save custom date shifter settings");
+				this.showErrorToast(error, "Could not save settings");
 			});
 	}
 
@@ -169,7 +166,7 @@ export default class DateShiftDateSelector extends LightningElement {
 				this.savedSettingsFound = false;
 			})
 			.catch((error) => {
-				this.showErrorToast(error, "Could not delete custom settings");
+				this.showErrorToast(error, "Could not remove saved settings");
 			});
 	}
 
