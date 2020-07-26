@@ -16,8 +16,8 @@
 		<template if:false={shiftInProgress}>
 			<c-date-shift-date-selector ondatefilterchange={handleDateFilterChange}></c-date-shift-date-selector>
 			<template if:true={objectListIsEmpty}>
-				<section class="slds-p-around_large">
-					<p class="slds-p-vertical_x-small slds-hyphenate">
+				<section class="slds-var-p-around_large">
+					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						<em>
 							You do not have any active date shift objects. You can create new ones from the
 							<lightning-formatted-url
@@ -27,7 +27,7 @@
 							or you can activate existing ones so that they will appear in the list.
 						</em>
 					</p>
-					<div class="slds-align_absolute-center slds-p-top_medium">
+					<div class="slds-align_absolute-center slds-var-p-top_medium">
 						<lightning-button
 							label="Go to the Date Shift Object List"
 							variant="base"
@@ -40,8 +40,8 @@
 			</template>
 			<template if:false={objectListIsEmpty}>
 				<template if:true={tooManyObjects}>
-					<section class="slds-p-around_large">
-						<p class="slds-p-vertical_x-small slds-hyphenate">
+					<section class="slds-var-p-around_large">
+						<p class="slds-var-p-vertical_x-small slds-hyphenate">
 							<em>
 								The maximum number of active date shift objects is {maxDateShiftObjects}. You can disable some from
 								the
@@ -52,7 +52,7 @@
 								>.
 							</em>
 						</p>
-						<div class="slds-align_absolute-center slds-p-top_medium">
+						<div class="slds-align_absolute-center slds-var-p-top_medium">
 							<lightning-button
 								label="Go to the Date Shift Object List"
 								variant="base"
@@ -64,14 +64,14 @@
 					</section>
 				</template>
 				<template if:false={tooManyObjects}>
-					<section class="slds-p-around_medium">
+					<section class="slds-var-p-around_medium">
 						<lightning-datatable
 							columns={objectListColumns}
 							data={objectList}
 							key-field="itemId"
 							hide-checkbox-column="true"
 						></lightning-datatable>
-						<div class="slds-p-top_large slds-align_absolute-center">
+						<div class="slds-var-p-top_large slds-align_absolute-center">
 							<lightning-button
 								variant="destructive"
 								label="Shift the Dates"
@@ -86,9 +86,9 @@
 			</template>
 		</template>
 		<template if:true={shiftInProgress}>
-			<section class="slds-p-horizontal_medium">
+			<section class="slds-var-p-horizontal_medium">
 				<template if:false={dateShiftFinished}>
-					<p class="slds-p-bottom_medium slds-hyphenate">
+					<p class="slds-var-p-bottom_medium slds-hyphenate">
 						All the <code> Date </code> and <code> DateTime </code> fields in the following objects are being shifted
 						{forBack} by &nbsp;<lightning-formatted-number value={minutesToShift}></lightning-formatted-number>&nbsp;
 						minutes (<lightning-formatted-number
@@ -100,12 +100,12 @@
 					</p>
 				</template>
 				<template if:true={dateShiftFinished}>
-					<p class="slds-p-bottom_medium slds-hyphenate">
+					<p class="slds-var-p-bottom_medium slds-hyphenate">
 						Date shifting is now complete. Make sure that you run any Einstein Analytics dataflows that contain the
 						records you shifted so that your dashboards will reflect the updated dates.
 					</p>
 				</template>
-				<div class="slds-p-vertical_medium slds-p-horizontal_x-large">
+				<div class="slds-var-p-vertical_medium slds-var-p-horizontal_x-large">
 					<table class="slds-text-body_small">
 						<tbody>
 							<template for:each={objectList} for:item="dso">
@@ -155,7 +155,7 @@
 								</tr>
 								<tr key={dso.itemAPIName}>
 									<td class="runningProgressBar" colspan="4">
-										<div class="slds-p-bottom_medium">
+										<div class="slds-var-p-bottom_medium">
 											<lightning-progress-bar
 												size="large"
 												value={dso.itemPercentage}
@@ -174,11 +174,11 @@
 				</div>
 				<template if:true={dateShiftFinished}>
 					<template if:true={dateShiftHadErrors}>
-						<p class="slds-p-bottom_medium slds-text-color_error">
+						<p class="slds-var-p-bottom_medium slds-text-color_error">
 							The following errors occurred during the date shift. Only these records were affected and all others
 							were shifted properly.
 						</p>
-						<div class="slds-p-bottom_medium slds-scrollable scrollerSize">
+						<div class="slds-var-p-bottom_medium slds-scrollable scrollerSize">
 							<lightning-datatable
 								columns={errorListColumns}
 								data={errorList}
@@ -191,11 +191,11 @@
 			</section>
 		</template>
 		<template if:true={helpSectionVisible}>
-			<section class="slds-p-horizontal_large">
+			<section class="slds-var-p-horizontal_large">
 				<lightning-tile class="slds-tile_board slds-box slds-theme_shade">
 					<lightning-icon icon-name="utility:info" slot="media"></lightning-icon>
-					<h2 class="slds-p-bottom_small"><strong>Synopsis</strong></h2>
-					<p class="slds-p-vertical_x-small slds-hyphenate">
+					<h2 class="slds-var-p-bottom_small"><strong>Synopsis</strong></h2>
+					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						This Demo Date Shifter tool allows a Salesforce Solution Engineer (SE) to adjust all the
 						<code> Date </code> and <code> DateTime </code> fields that are important to his or her upcoming demo or dry
 						run by an amount that maintains the logic of the original demo creation. For instance, the demo might have
@@ -207,13 +207,13 @@
 						would shift all the dates and times in the objects the SE specifies by exactly the same amount so that they
 						all make sense on the date of the demo.
 					</p>
-					<p class="slds-p-vertical_x-small slds-hyphenate">
+					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						The Demo Date Shifter can fine-tune the date and time shifting beyond the date boundary and also shift dates
 						backwards and forwards by arbitrary amounts. This allows the SE to shift dates forward to the date and time
 						of the actual demo and be able to shift them backwards if any anomalies result.
 					</p>
-					<h2 class="slds-p-vertical_small"><strong>Configuration</strong></h2>
-					<p class="slds-p-vertical_x-small slds-hyphenate">
+					<h2 class="slds-var-p-vertical_small"><strong>Configuration</strong></h2>
+					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						Setting up the objects whose <code> Date </code> and <code> DateTime </code> fields are to be shifted is
 						easy: just navigate to the &nbsp;<lightning-formatted-url
 							label="Date Shift Object tab"
@@ -231,15 +231,15 @@
 						odd-looking times. Finally, you can use a checkbox to specify whether or not the object is active, in case
 						you wanted to deactivate it temporarily without deleting the definition entirely.
 					</p>
-					<p class="slds-p-vertical_x-small slds-hyphenate">
+					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						For each object in the list, the component inspects the object's schema and gathers a list of all
 						<code> Date </code> and <code> DateTime </code> fields that are updateable (certain audit fields such as
 						<code> CreatedDate </code> cannot be modified for security reasons; also, the <code> Case </code> fields
 						<code> SlaStartDate </code> and <code> SlaExitDate </code>
 						will not be shifted to avoid errors concerning entitlements on closed cases).
 					</p>
-					<h2 class="slds-p-vertical_small"><strong>Reference</strong></h2>
-					<p class="slds-p-vertical_x-small slds-hyphenate">
+					<h2 class="slds-var-p-vertical_small"><strong>Reference</strong></h2>
+					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						You can always find the latest version of this component in &nbsp;<lightning-formatted-url
 							label="this GitHub repository"
 							value="https://github.com/johnsfdemo/Demo-Date-Shifter"
