@@ -4,7 +4,7 @@
 //  Contact: john.meyer@salesforce.com
 
 
-global with sharing class DemoDateShifterBatch implements Database.Batchable<sObject>, Database.Stateful, Database.RaisesPlatformEvents {
+global without sharing class DemoDateShifterBatch implements Database.Batchable<sObject>, Database.Stateful, Database.RaisesPlatformEvents {
     
     private Integer minutesToAdd = 0;
     private Integer daysToAdd = 0;
