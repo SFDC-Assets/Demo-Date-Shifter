@@ -1,4 +1,4 @@
-![Creative Commons License](https://img.shields.io/badge/license-Creative%20Commons-success) ![In Development](https://img.shields.io/badge/status-In%20Development-yellow) ![Code Coverage](https://img.shields.io/badge/code%20coverage-93%25-green)
+![Creative Commons License](https://img.shields.io/badge/license-Creative%20Commons-success) ![Released](https://img.shields.io/badge/status-Released-success) ![Code Coverage](https://img.shields.io/badge/code%20coverage-91%25-success)
 
 
 <h1 align="center">DEMO DATE SHIFTER</h1>
@@ -7,6 +7,8 @@ This package contains tabs, Lightning components, and other support to shift `Da
 </p>
 
 ## Summary
+
+As Salesforce SEs, we work hard to get demos just right, aligning cases, tasks, events, and other records so that we can show things like case history, current tasks, and future events in order to tell a great story. Then weeks or months pass, we need to show the demo again, and all of those records are wildly out of date. We need a tool that shifts all of those dates by the same amount relative to the new demo date so that some criterion is satisfied, such as "all case closed dates cannot be later than the date and time of the new demo".
 
 This component was inspired by the Salesforce SDO/CDO Perfect Date Wizard written by Salesforce's amazing Q-Branch staff and used by Salesforce Solutions Engineers, and includes some interesting enhancements:
 
@@ -20,9 +22,13 @@ This component was inspired by the Salesforce SDO/CDO Perfect Date Wizard writte
 
 ## Installation and Setup
 
-Installation is easy: just read the disclaimer below and click on the **Deploy to Salesforce** button. This will install the component, all custom objects, tabs, and page layouts needed to use the component and assign all appropriate visibilities to the System Administrator profile. Simply create an app page using Lightning App Builder and drag the component onto the page where you would like it.
+Installation is easy: just read the disclaimer below and click on the **Install the Package** link. This will install the component, all custom objects, tabs, and page layouts needed to use the component.
 
-Next, as a System Administrator, open the `Date Shift Object` tab using the Lightning App Picker. Create a new **Date Shift Object** and enter the object's API name.
+Make sure you assign the permission set `Demo Shift Dates` to the System Administrator or any other person who is to use the component.
+
+Next, create an app page using Lightning App Builder and drag the component onto the page where you would like it.
+
+Finally, as a System Administrator, open the `Date Shift Object` tab using the Lightning App Picker. Create a new **Date Shift Object** and enter the object's API name.
 
 ![Date Shift Object](/images/DateShiftObject.png)
 
@@ -38,4 +44,8 @@ The additional fields are as follows:
 
 I am a pre-sales Solutions Engineer for [Salesforce](https://www.salesforce.com) and I develop solutions for my customers to demonstrate the capabilities of the amazing Salesforce platform. *This package represents functionality that I have used for demonstration purposes  and the content herein is definitely not ready for actual production use; specifically, it has not been tested extensively nor has it been written with security and access controls in mind. By installing this package, you assume all risk for any consequences and agree not to hold me or my company liable.*  If you are OK with that ...
 
-[Install the Package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2E000003obuMQAQ)
+[Install the Package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2E000003obwSQAQ)
+
+## Maintainer
+
+[John Meyer / johnsfdemo](https://github.com/johnsfdemo)

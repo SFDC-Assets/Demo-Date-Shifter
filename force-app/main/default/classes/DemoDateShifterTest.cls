@@ -75,7 +75,7 @@ private without sharing class DemoDateShifterTest {
         DemoDateShifter.DateShifterSettings setting = DemoDateShifter.getCustomDateShifterSettings();
         System.assert(!setting.settingsFound);
 
-        DemoDateShifter.setCustomDateShifterSettings ('Shipment', 'ExpectedDeliveryDate');
+        DemoDateShifter.setCustomDateShifterSettings ('Shipment', 'ActualDeliveryDate');
         setting = DemoDateShifter.getCustomDateShifterSettings();
         System.assert(setting.settingsFound);
 
@@ -94,7 +94,7 @@ private without sharing class DemoDateShifterTest {
         List<DemoDateShifter.Selector> selectors = DemoDateShifter.getDateTimeFields('Shipment');
         Boolean found = false;
         for (DemoDateShifter.Selector selector : selectors)
-            if (selector.apiName == 'ExpectedDeliveryDate') {
+            if (selector.apiName == 'ActualDeliveryDate') {
                 found = true;
                 break;
             }
@@ -107,9 +107,15 @@ private without sharing class DemoDateShifterTest {
     static void testGetMinutesToShift () {
 
         Test.startTest();
-        DemoDateShifter.DateDifference diff = DemoDateShifter.getMinutesToShift(now.format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'','GMT'),
+
+        DemoDateShifter.DateDifference diff;
+        diff = DemoDateShifter.getMinutesToShift(now.format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'','GMT'),
+            'Shipment', 'ExpectedDeliveryDate');
+        System.assert(!diff.validQuery);
+        diff = DemoDateShifter.getMinutesToShift(now.format('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'','GMT'),
             'Shipment', 'ActualDeliveryDate');
-        System.assert(diff.minutes < 2);
+        System.assert(diff.validQuery);
+
         Test.stopTest();
     }
 

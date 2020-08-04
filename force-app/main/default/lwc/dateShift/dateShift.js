@@ -1,86 +1,86 @@
-import { LightningElement, wire, track, api } from "lwc";
-import { NavigationMixin } from "lightning/navigation";
-import { subscribe, unsubscribe } from "lightning/empApi";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import getDateShiftObjects from "@salesforce/apex/DemoDateShifter.getDateShiftObjects";
-import dateShift from "@salesforce/apex/DemoDateShifter.dateShift";
+import { LightningElement, wire, track, api } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
+import { subscribe, unsubscribe } from 'lightning/empApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getDateShiftObjects from '@salesforce/apex/DemoDateShifter.getDateShiftObjects';
+import dateShift from '@salesforce/apex/DemoDateShifter.dateShift';
 
 export default class DateShift extends NavigationMixin(LightningElement) {
 	objectListColumns = [
 		{
-			label: "Records",
-			fieldName: "itemCount",
-			type: "number",
+			label: 'Records',
+			fieldName: 'itemCount',
+			type: 'number',
 			initialWidth: 100,
-			cellAttributes: { alignment: "right" }
+			cellAttributes: { alignment: 'right' }
 		},
 		{
-			label: "Weekdays Only",
-			fieldName: "itemWeekdaysOnly",
-			type: "boolean",
+			label: 'Weekdays Only',
+			fieldName: 'itemWeekdaysOnly',
+			type: 'boolean',
 			initialWidth: 120,
-			cellAttributes: { alignment: "center" }
+			cellAttributes: { alignment: 'center' }
 		},
 		{
-			label: "Adjust Minutes",
-			fieldName: "itemAdjustMinutes",
-			type: "boolean",
+			label: 'Adjust Minutes',
+			fieldName: 'itemAdjustMinutes',
+			type: 'boolean',
 			initialWidth: 120,
-			cellAttributes: { alignment: "center" }
+			cellAttributes: { alignment: 'center' }
 		},
 		{
-			label: "Object",
-			fieldName: "itemLink",
-			type: "url",
+			label: 'Object',
+			fieldName: 'itemLink',
+			type: 'url',
 			cellAttributes: {
-				iconName: "standard:shift",
-				alignment: "left"
+				iconName: 'standard:shift',
+				alignment: 'left'
 			},
 			typeAttributes: {
-				label: { fieldName: "itemLabel" },
-				tooltip: { fieldName: "itemLabelPlural" },
-				target: "_parent"
+				label: { fieldName: 'itemLabel' },
+				tooltip: { fieldName: 'itemLabelPlural' },
+				target: '_parent'
 			}
 		}
 	];
 	errorListColumns = [
 		{
-			label: "Record",
-			fieldName: "link",
-			type: "url",
+			label: 'Record',
+			fieldName: 'link',
+			type: 'url',
 			initialWidth: 200,
-			iconName: "standard:record",
+			iconName: 'standard:record',
 			cellAttributes: {
-				alignment: "left",
-				iconName: "utility:new_window",
-				iconAlternativeText: "Go To Record"
+				alignment: 'left',
+				iconName: 'utility:new_window',
+				iconAlternativeText: 'Go To Record'
 			},
 			typeAttributes: {
-				label: { fieldName: "name" },
-				tooltip: { fieldName: "id" },
-				target: "_parent"
+				label: { fieldName: 'name' },
+				tooltip: { fieldName: 'id' },
+				target: '_parent'
 			}
 		},
 		{
-			label: "Problem Fields",
-			fieldName: "fields",
-			type: "text",
-			iconName: "standard:first_non_empty",
+			label: 'Problem Fields',
+			fieldName: 'fields',
+			type: 'text',
+			iconName: 'standard:first_non_empty',
 			initialWidth: 200,
 			wrapText: true,
-			cellAttributes: { alignment: "left" }
+			cellAttributes: { alignment: 'left' }
 		},
 		{
-			label: "Error Message",
-			fieldName: "message",
-			type: "text",
-			iconName: "standard:live_chat",
+			label: 'Error Message',
+			fieldName: 'message',
+			type: 'text',
+			iconName: 'standard:live_chat',
 			wrapText: true,
-			cellAttributes: { alignment: "left" }
+			cellAttributes: { alignment: 'left' }
 		}
 	];
 
-	@api cardTitle = "Demo Date Shifter";
+	@api cardTitle = 'Demo Date Shifter';
 
 	@track objectList = [];
 	@track errorList = [];
@@ -94,8 +94,8 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 	returnedDays = 0;
 	minutesToShift = 0;
 	daysToShift = 0;
-	forBack = "";
-	dateOfDemo = "";
+	forBack = '';
+	dateOfDemo = '';
 	dateFilterNotSet = true;
 
 	startingDateShift = false;
@@ -110,15 +110,15 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 
 	subscription = {};
 
-	dateShiftObjectListViewURL = "";
+	dateShiftObjectListViewURL = '';
 	dateShiftObjectListViewSpec = {
-		type: "standard__objectPage",
+		type: 'standard__objectPage',
 		attributes: {
-			objectApiName: "Date_Shift_Object__c",
-			actionName: "list"
+			objectApiName: 'Date_Shift_Object__c',
+			actionName: 'list'
 		},
 		state: {
-			filterName: "All"
+			filterName: 'All'
 		}
 	};
 
@@ -146,12 +146,12 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 					itemNumberOfErrors: 0,
 					itemRemaining: dso.itemCount,
 					itemPercentage: 0,
-					itemToolTip: "",
+					itemToolTip: '',
 					itemShiftFinished: false
 				});
 			});
 			this.objectListIsEmpty = this.objectList.length === 0;
-		} else if (error) this.showErrorToast(error, "Could not get the list of object items");
+		} else if (error) this.showErrorToast(error, 'Could not get the list of object items');
 	}
 
 	handleDateShiftObjectClick(event) {
@@ -164,7 +164,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 		this.startingDateShift = true;
 		dateShift({ minutesToShift: this.returnedMinutes, daysToShift: this.returnedDays })
 			.then(() => {
-				subscribe("/event/Date_Shift_Event__e", -1, this.handleBatchEvent.bind(this)).then((result) => {
+				subscribe('/event/Date_Shift_Event__e', -1, this.handleBatchEvent.bind(this)).then((result) => {
 					this.subscription = result;
 				});
 				this.startingDateShift = false;
@@ -172,7 +172,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			})
 			.catch((error) => {
 				this.startingDateShift = false;
-				this.showErrorToast(error, "Could not shift the dates in the org");
+				this.showErrorToast(error, 'Could not shift the dates in the org');
 			});
 	}
 
@@ -218,24 +218,26 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			});
 			this.dispatchEvent(
 				new ShowToastEvent({
-					mode: "sticky",
-					variant: "info",
-					title: `Dates were shifted ${this.forBack} by ${this.minutesToShift} minutes (${this.daysToShift} days).`,
+					mode: 'sticky',
+					variant: this.dateShiftHadErrors ? 'error' : 'success',
+					title:
+						`Dates were shifted ${this.forBack} by ${this.minutesToShift} minutes (${this.daysToShift} days) ` +
+						(this.dateShiftHadErrors ? 'with errors.' : 'successfully.'),
 					message:
-						"Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates."
+						'Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates.'
 				})
 			);
 		}
 	}
 
 	showErrorToast(error, title) {
-		this.error = "Unknown error";
-		if (Array.isArray(error.body)) this.error = error.body.map((err) => err.message).join(", ");
-		else if (typeof error.body.message === "string") this.error = error.body.message;
+		this.error = 'Unknown error';
+		if (Array.isArray(error.body)) this.error = error.body.map((err) => err.message).join(', ');
+		else if (typeof error.body.message === 'string') this.error = error.body.message;
 		this.dispatchEvent(
 			new ShowToastEvent({
-				mode: "sticky",
-				variant: "error",
+				mode: 'sticky',
+				variant: 'error',
 				title: title,
 				message: this.error
 			})

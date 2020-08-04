@@ -1,13 +1,13 @@
 <template>
 	<template if:true={loading}>
-		<lightning-spinner alternative-text="Retrieving org object list ..."></lightning-spinner>
+		<lightning-spinner variant="brand" alternative-text="Retrieving org object list ..."> </lightning-spinner>
 	</template>
 	<p class="slds-var-p-horizontal_medium slds-hyphenate">
 		This tool shifts all <code> Date </code> and <code> DateTime </code> fields in the objects you specify by the same amount of
-		time so that dates that lined up logically when you first showed the demo can stay lined up when you do your demo again weeks or
-		months later. To determine the amount of the shift, the tool examines the most recent value in a <code> DateTime </code> field
-		of the object that you choose below and calculates how much time separates it from the date and time you choose in the picker.
-		Dates can be shifted backwards as well as forwards.
+		time so that dates that lined up logically when you first showed the demo can stay lined up when you do your demo again
+		weeks or months later. To determine the amount of the shift, the tool examines the most recent value in a
+		<code> DateTime </code> field of the object that you choose below and calculates how much time separates it from the date
+		and time you choose in the picker. Dates can be shifted backwards as well as forwards.
 	</p>
 	<lightning-layout>
 		<lightning-layout-item size="6" padding="around-medium">
@@ -42,11 +42,13 @@
 						icon-position="left"
 						disabled={saveSettingsButtonDisabled}
 						onclick={handleSaveSettingsButton}
-					></lightning-button>
+					>
+					</lightning-button>
 					<lightning-helptext
 						content="Saves the object and field entries that you selected above so that you do not need to enter them again."
 						icon-name="utility:info_alt"
-					></lightning-helptext>
+					>
+					</lightning-helptext>
 				</template>
 				<template if:false={showSaveSettingsButton}>
 					<lightning-button
@@ -55,11 +57,13 @@
 						icon-name="utility:clear"
 						icon-position="left"
 						onclick={handleClearSettingsButton}
-					></lightning-button>
+					>
+					</lightning-button>
 					<lightning-helptext
 						content="Clear the object and field entries you previously saved and re-activate the object and field selectors above."
 						icon-name="utility:info_alt"
-					></lightning-helptext>
+					>
+					</lightning-helptext>
 				</template>
 			</div>
 		</lightning-layout-item>
@@ -70,7 +74,8 @@
 				value={dateOfDemo}
 				onchange={handleDateChange}
 				label="Choose a Date and Time for Your Demo or Dry Run"
-			></lightning-input>
+			>
+			</lightning-input>
 			<template if:true={shiftAmountVisible}>
 				<lightning-layout horizontal-align="spread" vertical-align="center" class="slds-var-p-top_medium">
 					<lightning-layout-item size="5">
@@ -80,7 +85,8 @@
 									<lightning-formatted-number
 										value={returnedMinutes}
 										class="slds-text-heading_large slds-text-color_destructive"
-									></lightning-formatted-number>
+									>
+									</lightning-formatted-number>
 								</strong>
 							</div>
 							<div class="slds-theme_shade slds-var-p-vertical_xxx-small">
@@ -100,7 +106,8 @@
 									<lightning-formatted-number
 										value={returnedDays}
 										class="slds-text-heading_large slds-text-color_destructive"
-									></lightning-formatted-number>
+									>
+									</lightning-formatted-number>
 								</strong>
 							</div>
 							<div class="slds-theme_shade slds-var-p-vertical_xxx-small">
@@ -112,6 +119,7 @@
 			</template>
 		</lightning-layout-item>
 	</lightning-layout>
+
 	<template if:true={shiftAmountVisible}>
 		<div class="slds-var-p-horizontal_medium">
 			<section class="slds-box slds-theme_shade">
@@ -119,61 +127,59 @@
 					Here is what will happen:
 				</p>
 				<p class="slds-var-p-bottom_small slds-hyphenate">
-					The difference between the most recent <code>{fieldApiName}</code> field of the <code>{objectApiName}</code> object in
-					your org (<lightning-formatted-date-time
+					The difference between the most recent <code> {fieldApiName} </code> field of the
+					<code> {objectApiName} </code> object in your org (
+					<lightning-formatted-date-time
 						value={mostRecent}
 						year="numeric"
 						day="2-digit"
 						month="2-digit"
 						hour="numeric"
 						minute="2-digit"
-					></lightning-formatted-date-time
-					>) and the date and time you have selected (<lightning-formatted-date-time
+					>
+					</lightning-formatted-date-time>
+					) and the date and time you have selected (
+					<lightning-formatted-date-time
 						value={dateOfDemo}
 						year="numeric"
 						day="2-digit"
 						month="2-digit"
 						hour="numeric"
 						minute="2-digit"
-					></lightning-formatted-date-time
-					>) is
+					>
+					</lightning-formatted-date-time>
+					) is&nbsp;
 					<strong>
-						&nbsp;<lightning-formatted-number
-							value={minutesToShift}
-							class="slds-text-color_destructive"
-						></lightning-formatted-number
-						>&nbsp;
+						<lightning-formatted-number value={minutesToShift} class="slds-text-color_destructive">
+						</lightning-formatted-number>
 					</strong>
-					minutes. So ...
+					&nbsp;minutes. So ...
 				</p>
 				<ul class="slds-list_dotted slds-hyphenate">
 					<li>
 						All <code> DateTime </code> fields in all records for each of the objects in the list below will be shifted
-						<strong> {forBack} </strong> by
+						<strong> {forBack} </strong> by&nbsp;
 						<strong>
-							&nbsp;<lightning-formatted-number
-								value={minutesToShift}
-								class="slds-text-color_destructive"
-							></lightning-formatted-number
-							>&nbsp;
+							<lightning-formatted-number value={minutesToShift} class="slds-text-color_destructive">
+							</lightning-formatted-number>
 						</strong>
-						minutes. If the <strong>Adjust Minutes</strong> checkbox for the object is unchecked, then the
+						&nbsp;minutes. If the <strong>Adjust Minutes</strong> checkbox for the object is unchecked, then the
 						<code> DateTime </code> fields will be shifted by the nearest number of whole days.
 					</li>
 					<li>
 						All <code> Date </code> fields in all records for each of the objects in the list below will be shifted
-						<strong> {forBack} </strong> by
+						<strong> {forBack} </strong> by&nbsp;
 						<strong>
-							&nbsp;<lightning-formatted-number value={daysToShift} class="slds-text-color_destructive"></lightning-formatted-number
-							>&nbsp;
+							<lightning-formatted-number value={daysToShift} class="slds-text-color_destructive">
+							</lightning-formatted-number>
 						</strong>
-						days.
+						&nbsp;days.
 					</li>
 					<li>
-						If the <strong>Weekdays Only</strong> checkbox for the object is checked, then the shifted dates will be further
-						adjusted so that they do not fall on weekends. If the shifted date falls on a Saturday, it will be further adjusted one
-						whole day to fall on the previous Friday; if the shifted date falls on a Sunday, it will be further adjusted one whole
-						day to fall on the following Monday.
+						If the <strong> Weekdays Only </strong> checkbox for the object is checked, then the shifted dates will be
+						further adjusted so that they do not fall on weekends. If the shifted date falls on a Saturday, it will be
+						further adjusted one whole day to fall on the previous Friday; if the shifted date falls on a Sunday, it
+						will be further adjusted one whole day to fall on the following Monday.
 					</li>
 				</ul>
 			</section>

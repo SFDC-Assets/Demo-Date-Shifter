@@ -21,6 +21,7 @@ public without sharing class DemoDateShifter {
     }
 
     public class DateDifference {
+        @AuraEnabled public Boolean validQuery;
         @AuraEnabled public DateTime mostRecent;
         @AuraEnabled public Integer minutes;
     }
@@ -158,13 +159,15 @@ public without sharing class DemoDateShifter {
         diff.mostRecent = null;
 
         if (dateOfDemo != '' && objectApiName != '' && fieldApiName != '') {
-            sObject record = Database.query('SELECT ' + fieldApiName + ' FROM ' + objectApiName + ' WHERE ' + fieldApiName + ' != null ORDER BY ' + fieldApiName + ' DESC LIMIT 1');
-            if (record != null) {
-                if (record.get(fieldApiName) instanceof DateTime) {
-                    dateOfDemo = dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19);
-                    diff.mostRecent = (DateTime) record.get(fieldApiName);
-                    diff.minutes = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
-                }
+            List<sObject> records = Database.query('SELECT ' + fieldApiName + ' FROM ' + objectApiName + ' WHERE ' + fieldApiName + ' != null ORDER BY ' + fieldApiName + ' DESC LIMIT 1');
+            if (records.isEmpty()) {
+                diff.validQuery = false;
+            } else {
+                diff.validQuery = true;
+                sObject record = records[0];
+                dateOfDemo = dateOfDemo.substring(0,4) + '-' + dateOfDemo.substring(5,7) + '-' + dateOfDemo.substring(8,10) + ' ' + dateOfDemo.substring(11,13) + ':' + dateOfDemo.substring(14,16) + ':' + dateOfDemo.substring(17,19);
+                diff.mostRecent = (DateTime) record.get(fieldApiName);
+                diff.minutes = (Integer) (Math.round((Decimal) (DateTime.valueOfGMT(dateOfDemo).getTime() - ((DateTime) record.get(fieldApiName)).getTime()) / 1000.0 / 60.0));
             }
         }
 

@@ -12,5 +12,19 @@ package.xml
 # LWC Jest
 **/__tests__/**
 
-**/uncrustify.cfg
-**/.uncrustify.cfg.swp
+force-app/main/default/applications/standard__LightningSales.app-meta.xml
+standard__LightningSales.app
+Demo_Reset_Tools.flexipage
+Demo_Reset_Tools.tab
+force-app/main/default/profiles/Admin.profile-meta.xml
+Admin.profile
+force-app/main/default/profiles/Custom%3A Marketing Profile.profile-meta.xml
+Custom%3A Marketing Profile.profile
+force-app/main/default/profiles/Custom%3A Sales Profile.profile-meta.xml
+Custom%3A Sales Profile.profile
+force-app/main/default/profiles/Custom%3A Support Profile.profile-meta.xml
+Custom%3A Support Profile.profile
+force-app/main/default/objects/Account/listViews/All.listView-meta.xml
+force-app/main/default/objects/Contact/listViews/All.listView-meta.xml
+Account.All.listView
+Contact.All.listView
