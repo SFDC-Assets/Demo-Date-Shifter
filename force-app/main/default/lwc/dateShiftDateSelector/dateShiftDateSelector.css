@@ -7,3 +7,6 @@ code {
 	-webkit-hyphens: none;
 	hyphens: none;
 }
+.dayminuteinput {
+	font-size: 2rem;
+}

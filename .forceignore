@@ -12,6 +12,7 @@ package.xml
 # LWC Jest
 **/__tests__/**
 
+force-app/main/default/settings/Security.settings-meta.xml
 force-app/main/default/applications/standard__LightningSales.app-meta.xml
 standard__LightningSales.app
 Demo_Reset_Tools.flexipage

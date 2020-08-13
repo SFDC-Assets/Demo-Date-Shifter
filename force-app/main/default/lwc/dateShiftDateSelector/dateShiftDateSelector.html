@@ -9,116 +9,188 @@
 		<code> DateTime </code> field of the object that you choose below and calculates how much time separates it from the date
 		and time you choose in the picker. Dates can be shifted backwards as well as forwards.
 	</p>
-	<lightning-layout>
-		<lightning-layout-item size="6" padding="around-medium">
-			<lightning-combobox
-				name="object"
-				label="Select an Object on Which to Base the Date Shift"
-				options={orgObjectList}
-				value={objectApiName}
-				placeholder="Select an object"
-				disabled={objectSelectorDisabled}
-				onchange={handleObjectChange}
-			>
-			</lightning-combobox>
-			<lightning-combobox
-				name="field"
-				data-id="field"
-				label="Select a DateTime field within the Object"
-				options={fieldList}
-				value={fieldApiName}
-				placeholder="Select a field"
-				disabled={fieldSelectorDisabled}
-				onchange={handleFieldChange}
-				class="slds-var-p-top_medium"
-			>
-			</lightning-combobox>
-			<div class="slds-var-p-top_medium">
-				<template if:true={showSaveSettingsButton}>
-					<lightning-button
-						label="Save object and field settings"
-						variant="base"
-						icon-name="utility:save"
-						icon-position="left"
-						disabled={saveSettingsButtonDisabled}
-						onclick={handleSaveSettingsButton}
-					>
-					</lightning-button>
-					<lightning-helptext
-						content="Saves the object and field entries that you selected above so that you do not need to enter them again."
-						icon-name="utility:info_alt"
-					>
-					</lightning-helptext>
+
+	<p class="slds-p-horizontal_medium slds-var-p-top_small slds-hyphenate">
+		How would you like to calculate the amount of time to shift the records?
+	</p>
+	<div class="slds-var-p-vertical_small slds-p-horizontal_medium slds-align_absolute-center">
+		<lightning-radio-group
+			name="howToShift"
+			label="Select a method for choosing the amount of time to shift"
+			options={shiftOptions}
+			type="button"
+			variant="label-hidden"
+			onchange={handleHowToShift}
+		>
+		</lightning-radio-group>
+	</div>
+
+	<template if:true={shiftByMinutes}>
+		<lightning-layout vertical-align="end">
+			<lightning-layout-item size="3" padding="horizontal-medium">
+				<lightning-input
+					class="dayminuteinput"
+					type="number"
+					name="daysToShift"
+					label="Days"
+					oncommit={handleDaysInput}
+				>
+				</lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="3" padding="horizontal-medium">
+				<lightning-input
+					class="dayminuteinput"
+					type="number"
+					name="hoursToShift"
+					label="Hours"
+					min="0"
+					max="23"
+					message-when-range-underflow="0-23"
+					message-when-range-overflow="0-23"
+					oncommit={handleHoursInput}
+				>
+				</lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="3" padding="horizontal-medium">
+				<lightning-input
+					class="dayminuteinput"
+					type="number"
+					name="minutesToShift"
+					label="Minutes"
+					min="0"
+					max="59"
+					message-when-range-underflow="0-59"
+					message-when-range-overflow="0-59"
+					oncommit={handleMinutesInput}
+				>
+				</lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="3" padding="horizontal-medium">
+				<lightning-radio-group
+					name="forwardBackward"
+					label="Forward or Backward"
+					options={forwardBackwardOptions}
+					type="button"
+					variant="label-hidden"
+					onchange={handleForwardBackwardInput}
+				>
+				</lightning-radio-group>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
+
+	<template if:true={shiftByReference}>
+		<lightning-layout>
+			<lightning-layout-item size="6" padding="around-medium">
+				<lightning-combobox
+					name="object"
+					label="Select an Object on Which to Base the Date Shift"
+					options={orgObjectList}
+					value={objectApiName}
+					placeholder="Select an object"
+					disabled={objectSelectorDisabled}
+					onchange={handleObjectChange}
+				>
+				</lightning-combobox>
+				<lightning-combobox
+					name="field"
+					data-id="field"
+					label="Select a DateTime field within the Object"
+					options={fieldList}
+					value={fieldApiName}
+					placeholder="Select a field"
+					disabled={fieldSelectorDisabled}
+					onchange={handleFieldChange}
+					class="slds-var-p-top_medium"
+				>
+				</lightning-combobox>
+				<div class="slds-var-p-top_medium">
+					<template if:true={showSaveSettingsButton}>
+						<lightning-button
+							label="Save object and field settings"
+							variant="base"
+							icon-name="utility:save"
+							icon-position="left"
+							disabled={saveSettingsButtonDisabled}
+							onclick={handleSaveSettingsButton}
+						>
+						</lightning-button>
+						<lightning-helptext
+							content="Saves the object and field entries that you selected above so that you do not need to enter them again."
+							icon-name="utility:info_alt"
+						>
+						</lightning-helptext>
+					</template>
+					<template if:false={showSaveSettingsButton}>
+						<lightning-button
+							label="Clear saved object and field settings"
+							variant="base"
+							icon-name="utility:clear"
+							icon-position="left"
+							onclick={handleClearSettingsButton}
+						>
+						</lightning-button>
+						<lightning-helptext
+							content="Clear the object and field entries you previously saved and re-activate the object and field selectors above."
+							icon-name="utility:info_alt"
+						>
+						</lightning-helptext>
+					</template>
+				</div>
+			</lightning-layout-item>
+			<lightning-layout-item size="6" padding="around-medium">
+				<lightning-input
+					type="datetime"
+					date-style="long"
+					value={dateOfDemo}
+					onchange={handleDateChange}
+					label="Choose a Date and Time for Your Demo or Dry Run"
+				>
+				</lightning-input>
+				<template if:true={shiftAmountVisible}>
+					<lightning-layout horizontal-align="spread" vertical-align="center" class="slds-var-p-top_medium">
+						<lightning-layout-item size="5">
+							<div class="slds-box slds-text-align_center slds-p-around_none">
+								<div class="slds-var-p-vertical_xx-small">
+									<strong>
+										<lightning-formatted-number
+											value={returnedMinutes}
+											class="slds-text-heading_large slds-text-color_destructive"
+										>
+										</lightning-formatted-number>
+									</strong>
+								</div>
+								<div class="slds-theme_shade slds-var-p-vertical_xxx-small">
+									Minutes
+								</div>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item size="2">
+							<div class="slds-align_absolute-center">
+								or
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item size="5">
+							<div class="slds-box slds-text-align_center slds-p-around_none">
+								<div class="slds-var-p-vertical_xx-small">
+									<strong>
+										<lightning-formatted-number
+											value={returnedDays}
+											class="slds-text-heading_large slds-text-color_destructive"
+										>
+										</lightning-formatted-number>
+									</strong>
+								</div>
+								<div class="slds-theme_shade slds-var-p-vertical_xxx-small">
+									Days
+								</div>
+							</div>
+						</lightning-layout-item>
+					</lightning-layout>
 				</template>
-				<template if:false={showSaveSettingsButton}>
-					<lightning-button
-						label="Clear saved object and field settings"
-						variant="base"
-						icon-name="utility:clear"
-						icon-position="left"
-						onclick={handleClearSettingsButton}
-					>
-					</lightning-button>
-					<lightning-helptext
-						content="Clear the object and field entries you previously saved and re-activate the object and field selectors above."
-						icon-name="utility:info_alt"
-					>
-					</lightning-helptext>
-				</template>
-			</div>
-		</lightning-layout-item>
-		<lightning-layout-item size="6" padding="around-medium">
-			<lightning-input
-				type="datetime"
-				date-style="long"
-				value={dateOfDemo}
-				onchange={handleDateChange}
-				label="Choose a Date and Time for Your Demo or Dry Run"
-			>
-			</lightning-input>
-			<template if:true={shiftAmountVisible}>
-				<lightning-layout horizontal-align="spread" vertical-align="center" class="slds-var-p-top_medium">
-					<lightning-layout-item size="5">
-						<div class="slds-box slds-text-align_center slds-p-around_none">
-							<div class="slds-var-p-vertical_xx-small">
-								<strong>
-									<lightning-formatted-number
-										value={returnedMinutes}
-										class="slds-text-heading_large slds-text-color_destructive"
-									>
-									</lightning-formatted-number>
-								</strong>
-							</div>
-							<div class="slds-theme_shade slds-var-p-vertical_xxx-small">
-								Minutes
-							</div>
-						</div>
-					</lightning-layout-item>
-					<lightning-layout-item size="2">
-						<div class="slds-align_absolute-center">
-							or
-						</div>
-					</lightning-layout-item>
-					<lightning-layout-item size="5">
-						<div class="slds-box slds-text-align_center slds-p-around_none">
-							<div class="slds-var-p-vertical_xx-small">
-								<strong>
-									<lightning-formatted-number
-										value={returnedDays}
-										class="slds-text-heading_large slds-text-color_destructive"
-									>
-									</lightning-formatted-number>
-								</strong>
-							</div>
-							<div class="slds-theme_shade slds-var-p-vertical_xxx-small">
-								Days
-							</div>
-						</div>
-					</lightning-layout-item>
-				</lightning-layout>
-			</template>
-		</lightning-layout-item>
-	</lightning-layout>
+			</lightning-layout-item>
+		</lightning-layout>
+	</template>
 
 	<template if:true={shiftAmountVisible}>
 		<div class="slds-var-p-horizontal_medium">

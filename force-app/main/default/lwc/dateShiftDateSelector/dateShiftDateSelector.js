@@ -8,6 +8,37 @@ import getDateTimeFields from '@salesforce/apex/DemoDateShifter.getDateTimeField
 import getMinutesToShift from '@salesforce/apex/DemoDateShifter.getMinutesToShift';
 
 export default class DateShiftDateSelector extends LightningElement {
+	shiftOptions = [
+		{
+			label: 'By identifying a record in the org',
+			value: 'byData'
+		},
+		{
+			label: 'By explicitly specifying the amount of time',
+			value: 'byMinute'
+		}
+	];
+	howToShift;
+	get shiftByMinutes() {
+		return this.howToShift === 'byMinute';
+	}
+	daysInput = 0;
+	hoursInput = 0;
+	minutesInput = 0;
+	get shiftByReference() {
+		return this.howToShift === 'byData';
+	}
+	forwardBackwardOptions = [
+		{
+			label: 'forward',
+			value: 'forward'
+		},
+		{
+			label: 'backward',
+			value: 'backward'
+		}
+	];
+
 	@track orgObjectList = [];
 	objectApiName = '';
 	get objectSelectorDisabled() {
@@ -119,6 +150,30 @@ export default class DateShiftDateSelector extends LightningElement {
 			this.showErrorToast(error, `Could not get the Date and DateTime fields for the ${this.objectApiName} object`);
 	}
 
+	handleHowToShift(event) {
+		this.howToShift = event.target.value;
+	}
+
+	handleDaysInput(event) {
+		this.daysInput = parseInt(event.target.value, 10);
+		this.calculateShift();
+	}
+
+	handleHoursInput(event) {
+		this.hoursInput = parseInt(event.target.value, 10);
+		this.calculateShift();
+	}
+
+	handleMinutesInput(event) {
+		this.minutesInput = parseInt(event.target.value, 10);
+		this.calculateShift();
+	}
+
+	handleForwardBackwardInput(event) {
+		this.forBack = event.target.value === 'forward' ? 'forward' : 'backward';
+		this.calculateShift();
+	}
+
 	handleObjectChange(event) {
 		this.objectApiName = event.target.value;
 		this.fieldApiName = '';
@@ -169,31 +224,46 @@ export default class DateShiftDateSelector extends LightningElement {
 	}
 
 	calculateShift() {
-		if (this.fieldApiName !== '' && this.dateOfDemoSelected) {
-			getMinutesToShift({ dateOfDemo: this.dateOfDemo, objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
-				.then((result) => {
-					this.validQuery = result.validQuery;
-					if (result.validQuery) {
-						this.mostRecent = result.mostRecent;
-						this.returnedMinutes = result.minutes;
-						this.returnedDays = Math.round(this.returnedMinutes / 60 / 24);
-						this.minutesToShift = Math.abs(this.returnedMinutes);
-						this.daysToShift = Math.round(Math.abs(this.returnedMinutes) / 60 / 24);
-						this.forBack = this.returnedMinutes < 0 ? 'backward' : 'forward';
-						this.notifyParent(this.shiftAmountVisible);
-					} else {
-						this.dispatchEvent(
-							new ShowToastEvent({
-								mode: 'sticky',
-								variant: 'error',
-								message: `Could not find any "${this.objectApiName}" records with a non-empty "${this.fieldApiName}" field value.`
-							})
-						);
-					}
-				})
-				.catch((error) => {
-					this.showErrorToast(error, 'Could not calculate the time shift');
-				});
+		switch (this.howToShift) {
+			case 'byMinute':
+				this.minutesToShift = this.daysInput * 24 * 60 + this.hoursInput * 60 + this.minutesInput;
+				this.returnedMinutes = this.minutesToShift * (this.forBack === 'backward' ? -1 : 1);
+				this.daysToShift = Math.round(this.minutesToShift / 60 / 24);
+				this.returnedDays = this.daysToShift * (this.forBack === 'backward' ? -1 : 1);
+				console.log(`Returned minutes: ${this.returnedMinutes}, Returned days: ${this.returnedDays}`);
+				break;
+			case 'byData':
+				if (this.fieldApiName !== '' && this.dateOfDemoSelected) {
+					getMinutesToShift({
+						dateOfDemo: this.dateOfDemo,
+						objectApiName: this.objectApiName,
+						fieldApiName: this.fieldApiName
+					})
+						.then((result) => {
+							this.validQuery = result.validQuery;
+							if (result.validQuery) {
+								this.mostRecent = result.mostRecent;
+								this.returnedMinutes = result.minutes;
+								this.returnedDays = Math.round(this.returnedMinutes / 60 / 24);
+								this.minutesToShift = Math.abs(this.returnedMinutes);
+								this.daysToShift = Math.round(Math.abs(this.returnedMinutes) / 60 / 24);
+								this.forBack = this.returnedMinutes < 0 ? 'backward' : 'forward';
+								this.notifyParent(this.shiftAmountVisible);
+							} else {
+								this.dispatchEvent(
+									new ShowToastEvent({
+										mode: 'sticky',
+										variant: 'error',
+										message: `Could not find any "${this.objectApiName}" records with a non-empty "${this.fieldApiName}" field value.`
+									})
+								);
+							}
+						})
+						.catch((error) => {
+							this.showErrorToast(error, 'Could not calculate the time shift');
+						});
+				}
+				break;
 		}
 	}
 
