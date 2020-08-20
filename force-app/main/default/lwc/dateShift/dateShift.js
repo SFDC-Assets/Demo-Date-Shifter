@@ -32,14 +32,10 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			label: 'Object',
 			fieldName: 'itemLink',
 			type: 'url',
-			cellAttributes: {
-				iconName: 'standard:shift',
-				alignment: 'left'
-			},
 			typeAttributes: {
 				label: { fieldName: 'itemLabel' },
 				tooltip: { fieldName: 'itemLabelPlural' },
-				target: '_parent'
+				target: '_blank'
 			}
 		}
 	];
@@ -162,7 +158,10 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 
 	handleShiftDatesButton() {
 		this.startingDateShift = true;
-		dateShift({ minutesToShift: this.returnedMinutes, daysToShift: this.returnedDays })
+		dateShift({
+			minutesToShift: this.returnedMinutes,
+			daysToShift: this.returnedDays
+		})
 			.then(() => {
 				subscribe('/event/Date_Shift_Event__e', -1, this.handleBatchEvent.bind(this)).then((result) => {
 					this.subscription = result;

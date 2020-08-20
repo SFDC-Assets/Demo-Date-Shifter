@@ -1,3 +1,8 @@
+//  Javascript controller for the Demo Date Shifter component.
+//
+//  This code is provided AS IS, with no warranty or guarantee of suitability for use.
+//  Contact: john.meyer@salesforce.com
+
 import { LightningElement, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCustomDateShifterSettings from '@salesforce/apex/DemoDateShifter.getCustomDateShifterSettings';
@@ -10,7 +15,7 @@ import getMinutesToShift from '@salesforce/apex/DemoDateShifter.getMinutesToShif
 export default class DateShiftDateSelector extends LightningElement {
 	shiftOptions = [
 		{
-			label: 'By identifying a record in the org',
+			label: 'By basing it off of the most recent record',
 			value: 'byData'
 		},
 		{
@@ -18,7 +23,7 @@ export default class DateShiftDateSelector extends LightningElement {
 			value: 'byMinute'
 		}
 	];
-	howToShift;
+	howToShift = 'byData';
 	get shiftByMinutes() {
 		return this.howToShift === 'byMinute';
 	}
@@ -30,11 +35,11 @@ export default class DateShiftDateSelector extends LightningElement {
 	}
 	forwardBackwardOptions = [
 		{
-			label: 'forward',
+			label: 'Shift Dates Forward',
 			value: 'forward'
 		},
 		{
-			label: 'backward',
+			label: 'Shift Dates Backward',
 			value: 'backward'
 		}
 	];
@@ -49,6 +54,10 @@ export default class DateShiftDateSelector extends LightningElement {
 	fieldApiName = '';
 	get fieldSelectorDisabled() {
 		return this.savedSettingsFound || this.objectApiName === '';
+	}
+
+	get saveSelectionToggleDisabled() {
+		return this.objectApiName === '' || this.fieldApiName === '';
 	}
 
 	savedSettingsFound = false;
@@ -70,10 +79,12 @@ export default class DateShiftDateSelector extends LightningElement {
 	returnedDays = 0;
 	minutesToShift = 0;
 	daysToShift = 0;
-	forBack = '';
+	forBack = 'forward';
 
 	get shiftAmountVisible() {
-		return this.objectApiName !== '' && this.fieldApiName !== '' && this.dateOfDemoSelected && this.validQuery;
+		return this.shiftByReference
+			? this.objectApiName !== '' && this.fieldApiName !== '' && this.dateOfDemoSelected && this.validQuery
+			: this.minutesToShift !== 0;
 	}
 
 	@wire(getOrgObjectList)
@@ -124,7 +135,7 @@ export default class DateShiftDateSelector extends LightningElement {
 					} else this.fieldApiName = '';
 				})
 				.catch((error) => {
-					this.showErrorToast(error, 'Could not retrieve saved settings');
+					this.showErrorToast(error, 'Could not retrieve saved selections');
 				});
 			this.loading = false;
 		} else if (error) this.showErrorToast(error, 'Could not get a list of objects in the org');
@@ -140,32 +151,39 @@ export default class DateShiftDateSelector extends LightningElement {
 					label: field.label
 				});
 			});
-			this.fieldList
-				.sort((a, b) => (a.label > b.label ? 1 : -1))
-				.unshift({
+			if (this.fieldList.length === 0)
+				this.fieldList.push({
 					value: '',
-					label: 'Select a field'
+					label: `${this.objectApiName} object has no updateable DateTime fields`
 				});
+			else
+				this.fieldList
+					.sort((a, b) => (a.label > b.label ? 1 : -1))
+					.unshift({
+						value: '',
+						label: 'Select a field'
+					});
 		} else if (error)
 			this.showErrorToast(error, `Could not get the Date and DateTime fields for the ${this.objectApiName} object`);
 	}
 
 	handleHowToShift(event) {
 		this.howToShift = event.target.value;
+		this.notifyParent(false);
 	}
 
 	handleDaysInput(event) {
-		this.daysInput = parseInt(event.target.value, 10);
+		this.daysInput = Math.abs(parseInt(event.target.value, 10));
 		this.calculateShift();
 	}
 
 	handleHoursInput(event) {
-		this.hoursInput = parseInt(event.target.value, 10);
+		this.hoursInput = Math.abs(parseInt(event.target.value, 10));
 		this.calculateShift();
 	}
 
 	handleMinutesInput(event) {
-		this.minutesInput = parseInt(event.target.value, 10);
+		this.minutesInput = Math.abs(parseInt(event.target.value, 10));
 		this.calculateShift();
 	}
 
@@ -192,35 +210,35 @@ export default class DateShiftDateSelector extends LightningElement {
 	}
 
 	handleSaveSettingsButton(event) {
-		setCustomDateShifterSettings({ objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
-			.then(() => {
-				this.dispatchEvent(
-					new ShowToastEvent({
-						variant: 'success',
-						message: 'Your settings have been saved.'
-					})
-				);
-				this.savedSettingsFound = true;
-			})
-			.catch((error) => {
-				this.showErrorToast(error, 'Could not save settings');
-			});
-	}
-
-	handleClearSettingsButton(event) {
-		deleteCustomDateShifterSettings()
-			.then(() => {
-				this.dispatchEvent(
-					new ShowToastEvent({
-						variant: 'success',
-						message: 'Your saved settings have been removed.'
-					})
-				);
-				this.savedSettingsFound = false;
-			})
-			.catch((error) => {
-				this.showErrorToast(error, 'Could not remove saved settings');
-			});
+		if (event.detail.checked) {
+			setCustomDateShifterSettings({ objectApiName: this.objectApiName, fieldApiName: this.fieldApiName })
+				.then(() => {
+					this.dispatchEvent(
+						new ShowToastEvent({
+							variant: 'success',
+							message: 'Your selections have been saved.'
+						})
+					);
+					this.savedSettingsFound = true;
+				})
+				.catch((error) => {
+					this.showErrorToast(error, 'Could not save selections');
+				});
+		} else {
+			deleteCustomDateShifterSettings()
+				.then(() => {
+					this.dispatchEvent(
+						new ShowToastEvent({
+							variant: 'success',
+							message: 'Your saved selections have been removed.'
+						})
+					);
+					this.savedSettingsFound = false;
+				})
+				.catch((error) => {
+					this.showErrorToast(error, 'Could not remove saved selections');
+				});
+		}
 	}
 
 	calculateShift() {
@@ -230,7 +248,8 @@ export default class DateShiftDateSelector extends LightningElement {
 				this.returnedMinutes = this.minutesToShift * (this.forBack === 'backward' ? -1 : 1);
 				this.daysToShift = Math.round(this.minutesToShift / 60 / 24);
 				this.returnedDays = this.daysToShift * (this.forBack === 'backward' ? -1 : 1);
-				console.log(`Returned minutes: ${this.returnedMinutes}, Returned days: ${this.returnedDays}`);
+				this.validQuery = true;
+				this.notifyParent(this.minutesToShift !== 0);
 				break;
 			case 'byData':
 				if (this.fieldApiName !== '' && this.dateOfDemoSelected) {

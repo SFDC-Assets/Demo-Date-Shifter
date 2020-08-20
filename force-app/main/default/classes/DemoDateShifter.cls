@@ -76,40 +76,30 @@ public without sharing class DemoDateShifter {
 
     @AuraEnabled
     public static void deleteCustomDateShifterSettings () {
-        Date_Shifter_Saved_Settings__c setting = [SELECT Id FROM Date_Shifter_Saved_Settings__c WHERE SetupOwnerId = :UserInfo.getUserId() LIMIT 1];
-        if (setting != null)
-            delete setting;
+        List<Date_Shifter_Saved_Settings__c> settings = [SELECT Id FROM Date_Shifter_Saved_Settings__c WHERE SetupOwnerId = :UserInfo.getUserId() LIMIT 1];
+        if (!settings.isEmpty())
+            delete settings;
     }
     
     
-    //  Get the list of objects in the org that have at least one updateable DateTime field.
+    //  Get the list of objects in the org.
 
     @AuraEnabled(cacheable=true)
     public static List<Selector> getOrgObjectList () {
 
-        List<Selector> osList = new List<Selector>();
+        List<Selector> objectList = new List<Selector>();
 
         for (Schema.SObjectType sot : Schema.getGlobalDescribe().values()) {
             Schema.DescribeSObjectResult dsor = sot.getDescribe();
             if (dsor.isUpdateable()) {
-                Boolean foundOne = false;
-                for (Schema.SObjectField field : dsor.fields.getMap().values()) {
-                    Schema.DescribeFieldResult dfr = field.getDescribe();
-                    if (dfr.isUpdateable() && dfr.getType().name() == 'DateTime') {
-                        foundOne = true;
-                        break;
-                    }
-                }
-                if (foundOne) {
-                    Selector s = new Selector();
-                    s.apiName = dsor.getName();
-                    s.label = dsor.getLabel();
-                    osList.add(s);
-                }
+                Selector s = new Selector();
+                s.apiName = dsor.getName();
+                s.label = dsor.getLabel();
+                objectList.add(s);
             }
         }
 
-        return osList;
+        return objectList;
     }
 
 
