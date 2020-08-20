@@ -4,8 +4,8 @@
             "path": "force-app",
             "default": true,
             "package": "Demo Date Shifter",
-            "versionName": "Version 1.4",
-            "versionNumber": "1.4.0.0"
+            "versionName": "Version 1.5",
+            "versionNumber": "1.5.0.0"
         }
     ],
     "namespace": "",
