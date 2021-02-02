@@ -15,11 +15,12 @@ for (Integer i = 0; i < 1000; i++)
     ));
 insert tasks;
 
-List<Shipment> shipments = new List<Shipment>();
+List<Event> events = new List<Event>();
 for (Integer i = 0; i < 8000; i++)
-    shipments.add(new Shipment(
-        ShipToName = 'John',
-        ActualDeliveryDate = nowTime.addMinutes(-Math.round(Math.random() * 60 * 24 * 7 * 12)),
-        Status = 'Delivered'
+    events.add(new Event(
+        OwnerId = me,
+        Subject = 'Event ' + i,
+        StartDateTime = nowTime.addMinutes(-Math.round(Math.random() * 60 * 24 * 7 * 12)),
+        DurationInMinutes = 30
     ));
-insert shipments;
+insert events;

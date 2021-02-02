@@ -9,7 +9,7 @@ insert new Date_Shift_Object__c (
 
 insert new Date_Shift_Object__c (
     Active__c = true,
-    Object_API_Name__c = 'Shipment',
+    Object_API_Name__c = 'Event',
     Weekdays_Only__c = false,
     Adjust_Minutes__c = true
 );

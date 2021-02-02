@@ -143,13 +143,13 @@
 							</g>
 						  </g>
 						</g>
-					  </svg>
+					</svg>
 					<div class="slds-var-p-around_large slds-text-longform">
 						<h3 class="slds-text-heading_medium">You have a little work to do</h3>
 						<div class="slds-var-p-bottom_medium slds-text-body_regular slds-text-align_center">
 							You do not have any active Date Shift Objects, so I don't know which objects to shift.
 							<br />
-							You can create new items or re-activate any that you may already have from the Dtae Shift Objects tab.
+							You can create new items or re-activate any that you may already have from the Date Shift Objects tab.
 						</div>
 						<lightning-button
 							variant="brand"
@@ -278,7 +278,7 @@
 								</g>
 							  </g>
 							</g>
-						  </svg>
+						</svg>
 						<div class="slds-var-p-around_large slds-text-longform">
 							<h3 class="slds-text-heading_medium">You have an embarrassment of riches</h3>
 							<div class="slds-var-p-bottom_medium slds-text-body_regular slds-text-align_center">
@@ -357,8 +357,8 @@
 				</template>
 				<template if:true={dateShiftFinished}>
 					<p class="slds-var-p-bottom_medium slds-hyphenate">
-						Date shifting is now complete. Make sure that you run any Einstein Analytics dataflows that contain the
-						records you shifted so that your dashboards will reflect the updated dates.
+						Date shifting is now complete. Make sure that you run any Tableau CRM dataflows that contain the records you
+						shifted so that your dashboards will reflect the updated dates.
 					</p>
 				</template>
 				<div class="slds-var-p-vertical_medium slds-p-horizontal_x-large">
@@ -457,9 +457,9 @@
 						working case, and a number of tasks or calendar appointments in the future. This tool allows the SE to shift
 						all the dates in those objects relative to a reference record in the org. As an example, the SE might want
 						to shift all the dates so that the last case was closed no later than the date and time of next week's demo.
-						This tool would then calculate the amount of time between that last case and the date and time of the
-						upcoming demo. It then would shift all the dates and times in the objects the SE specifies by exactly the
-						same amount so that they all make sense on the date of the demo.
+						This tool would then calculate the amount of time between that last case closed date and time and the date
+						and time of the upcoming demo. It then would shift all the dates and times in the objects the SE specifies
+						by exactly that same amount so that they all make sense when the demo is presented.
 					</p>
 					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						The Demo Date Shifter can fine-tune the date and time shifting beyond the date boundary and also shift dates
@@ -473,8 +473,7 @@
 						to the&nbsp;
 						<lightning-formatted-url label="Date Shift Object tab" value={dateShiftObjectListViewURL} target="_blank">
 						</lightning-formatted-url>
-						&nbsp;and create as many records for objects as you need. Each one requires the API name of the object
-						whose&nbsp;
+						&nbsp;and create as many records as you need. Each one requires the API name of the object whose&nbsp;
 						<span class="slds-text-font_monospace">Date</span> &nbsp;and&nbsp;
 						<span class="slds-text-font_monospace">DateTime</span> &nbsp;fields you want to shift. Additionally, you can
 						can check a box specifying whether to ensure that a date falls on a weekday when it's shifted (if the
@@ -482,11 +481,11 @@
 						falls on a Sunday, it will be further adjusted to fall on the following Monday). This can be useful in demo
 						scenarios in which, say, cases can come in any time during the week but calendar events are only scheduled
 						with people on weekdays. To adjust the minutes as well as the date (useful for objects like Cases), check
-						the the <strong> Adjust Minutes </strong> box; leave it unchecked so that&nbsp;
-						<span class="slds-text-font_monospace">DateTime</span> &nbsp;fields in objects like calendar events that
-						typically begin and end on hour or half-hour boundaries won't wind up with odd-looking times. Finally, you
-						can use a checkbox to specify whether or not the object is active, in case you wanted to deactivate it
-						temporarily without deleting the definition entirely.
+						the&nbsp; <span class="slds-text-font_monospace">Adjust Minutes</span> &nbsp;box; leave it unchecked so
+						that&nbsp; <span class="slds-text-font_monospace">DateTime</span> &nbsp;fields in objects like calendar
+						events that typically begin and end on hour or half-hour boundaries won't wind up with odd-looking times.
+						Finally, you can use a checkbox to specify whether or not the object is active, in case you wanted to
+						deactivate it temporarily without deleting the definition entirely.
 					</p>
 					<p class="slds-var-p-vertical_x-small slds-hyphenate">
 						For each object in the list, the component inspects the object's schema and gathers a list of all&nbsp;
@@ -512,5 +511,4 @@
 			</section>
 		</template>
 	</lightning-card>
-
 </template>

@@ -15,7 +15,7 @@ import getMinutesToShift from '@salesforce/apex/DemoDateShifter.getMinutesToShif
 export default class DateShiftDateSelector extends LightningElement {
 	shiftOptions = [
 		{
-			label: 'By basing it off of the most recent record',
+			label: 'By basing it off of a most recent record',
 			value: 'byData'
 		},
 		{

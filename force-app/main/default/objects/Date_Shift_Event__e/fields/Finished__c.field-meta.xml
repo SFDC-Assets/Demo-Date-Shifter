@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Finished__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>True if the date shifting for this Date Shift Object is finished, false otherwise.</description>
+    <externalId>false</externalId>
+    <isFilteringDisabled>false</isFilteringDisabled>
+    <isNameField>false</isNameField>
+    <isSortingDisabled>false</isSortingDisabled>
+    <label>Finished</label>
+    <type>Checkbox</type>
+</CustomField>

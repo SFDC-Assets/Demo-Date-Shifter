@@ -198,7 +198,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 			if (dso.itemAPIName === event.data.payload.SObject_API_Name__c) {
 				dso.itemRunningTotal = event.data.payload.Running_Total__c;
 				dso.itemNumberOfErrors = event.data.payload.Errors__c;
-				dso.itemShiftFinished = dso.itemRunningTotal >= dso.itemCount;
+				dso.itemShiftFinished = event.data.payload.Finished__c;
 				dso.itemRemaining = dso.itemCount - dso.itemRunningTotal;
 				dso.itemPercentage = Math.round((100 * dso.itemRunningTotal) / dso.itemCount);
 				dso.itemToolTip = `Completed ${dso.itemRunningTotal} / ${dso.itemCount} (${dso.itemPercentage}%)`;
@@ -223,7 +223,7 @@ export default class DateShift extends NavigationMixin(LightningElement) {
 						`Dates were shifted ${this.forBack} by ${this.minutesToShift} minutes (${this.daysToShift} days) ` +
 						(this.dateShiftHadErrors ? 'with errors.' : 'successfully.'),
 					message:
-						'Make sure that you run any Einstein Analytics dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates.'
+						'Make sure that you run any Tableau CRM dataflows that contain the records you shifted so that your dashboards will reflect the shifted dates.'
 				})
 			);
 		}

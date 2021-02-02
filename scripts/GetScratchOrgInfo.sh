@@ -4,4 +4,4 @@ readonly devHubOrgAlias="MyComponents"
 
 sfdx force:data:soql:query \
     --targetusername "$devHubOrgAlias" \
-    --query "SELECT ScratchOrg, Name, OrgName, Status, UserName, ExpirationDate FROM ScratchOrgInfo"
+    --query "SELECT ScratchOrg, Name, OrgName, ExpirationDate FROM ScratchOrgInfo WHERE Status = 'Active'"

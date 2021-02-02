@@ -40,22 +40,22 @@ public without sharing class DemoDateShifter {
     @AuraEnabled(cacheable=true)
     public static DateShifterSettings getCustomDateShifterSettings () {
 
-        Date_Shifter_Saved_Settings__c s = Date_Shifter_Saved_Settings__c.getInstance();
-        DateShifterSettings dssettings = new DateShifterSettings();
+        Date_Shifter_Saved_Settings__c savedSettings = Date_Shifter_Saved_Settings__c.getInstance();
+        DateShifterSettings dsSettings = new DateShifterSettings();
 
-        if (s.Object_API_Name__c == null) {
-            dssettings.settingsFound = false;
-            dssettings.objectApiNameIsValid = false;
-            dssettings.fieldApiNameIsValid = false;
+        if (savedSettings.Object_API_Name__c == null) {
+            dsSettings.settingsFound = false;
+            dsSettings.objectApiNameIsValid = false;
+            dsSettings.fieldApiNameIsValid = false;
         } else {
-            dssettings.objectApiName = s.Object_API_Name__c;
-            dssettings.fieldApiName = s.Field_API_Name__c;
-            dssettings.settingsFound = true;
-            dssettings.objectApiNameIsValid = true;
-            dssettings.fieldApiNameIsValid = Schema.getGlobalDescribe().get(s.Object_API_Name__c).getDescribe().fields.getMap().get(s.Field_API_Name__c) != null;
+            dsSettings.objectApiName = savedSettings.Object_API_Name__c;
+            dsSettings.fieldApiName = savedSettings.Field_API_Name__c;
+            dsSettings.settingsFound = true;
+            dsSettings.objectApiNameIsValid = true;
+            dsSettings.fieldApiNameIsValid = Schema.getGlobalDescribe().get(savedSettings.Object_API_Name__c).getDescribe().fields.getMap().get(savedSettings.Field_API_Name__c) != null;
         }
 
-        return dssettings;
+        return dsSettings;
     }
 
 
@@ -92,10 +92,10 @@ public without sharing class DemoDateShifter {
         for (Schema.SObjectType sot : Schema.getGlobalDescribe().values()) {
             Schema.DescribeSObjectResult dsor = sot.getDescribe();
             if (dsor.isUpdateable()) {
-                Selector s = new Selector();
-                s.apiName = dsor.getName();
-                s.label = dsor.getLabel();
-                objectList.add(s);
+                Selector sel = new Selector();
+                sel.apiName = dsor.getName();
+                sel.label = dsor.getLabel();
+                objectList.add(sel);
             }
         }
 
@@ -114,10 +114,10 @@ public without sharing class DemoDateShifter {
             for (Schema.SObjectField field : Schema.getGlobalDescribe().get(objectAPIName).getDescribe().fields.getMap().values()) {
                 Schema.DescribeFieldResult dfr = field.getDescribe();
                 if (dfr.isUpdateable() && dfr.getType().name() == 'DateTime') {
-                    Selector s = new Selector();
-                    s.apiName = dfr.getName();
-                    s.label = dfr.getLabel();
-                    fieldList.add(s);
+                    Selector sel = new Selector();
+                    sel.apiName = dfr.getName();
+                    sel.label = dfr.getLabel();
+                    fieldList.add(sel);
                 }
             }
         }
@@ -180,12 +180,13 @@ public without sharing class DemoDateShifter {
     private static ObjectItem getObjectItem (String sObjectAPIName) {
         
         Date_Shift_Object__c dso = [SELECT Object_API_Name__c, Weekdays_Only__c, Adjust_Minutes__c FROM Date_Shift_Object__c WHERE Active__c = true AND Object_API_Name__c = :sObjectAPIName LIMIT 1];        
+        Schema.DescribeSObjectResult dsor = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe();
         ObjectItem item = new ObjectItem();
  
         item.itemId = dso.Id;
         item.itemAPIName = dso.Object_API_Name__c;
-        item.itemLabel = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabel();
-        item.itemLabelPlural = Schema.getGlobalDescribe().get(dso.Object_API_Name__c).getDescribe().getLabelPlural();
+        item.itemLabel = dsor.getLabel();
+        item.itemLabelPlural = dsor.getLabelPlural();
         item.itemWeekdaysOnly = dso.Weekdays_Only__c;
         item.itemAdjustMinutes = dso.Adjust_Minutes__c;
         item.itemCount = Database.countQuery('SELECT count() FROM ' + dso.Object_API_Name__c);
@@ -202,7 +203,8 @@ public without sharing class DemoDateShifter {
 
         for (Schema.SObjectField field : Schema.getGlobalDescribe().get(sObjectAPIName).getDescribe().fields.getMap().values()) {
             Schema.DescribeFieldResult dfr = field.getDescribe();
-            if (dfr.isUpdateable() && (dfr.getType().name() == 'Date' || dfr.getType().name() == 'DateTime'))
+            String typeName = dfr.getType().name();
+            if (dfr.isUpdateable() && (typeName == 'Date' || typeName == 'DateTime'))
                 dateFieldNames.add(dfr.getName());
         }
         dateFieldNames.removeAll(new List<String> {'SlaStartDate', 'SlaExitDate'});			//  Special case: never return these
