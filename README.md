@@ -3,7 +3,7 @@
 
 <h1 align="center">DEMO DATE SHIFTER</h1>
 <p align="center">
-This package contains tabs, Lightning components, and other support to shift `Date` and `DateTime` fields in selected objects. The user specifies which objects whose date fields are to be adjusted, a reference field in an object that tells how the dates are to be relatively shifted, and a date and time to shift to.
+This package contains tabs, Lightning components, and other support to shift <code>Date</code> and <code>DateTime</code> fields in selected objects. The user specifies which objects whose date fields are to be adjusted, a reference field in an object that tells how the dates are to be relatively shifted, and a date and time to shift to.
 </p>
 
 ## Summary
